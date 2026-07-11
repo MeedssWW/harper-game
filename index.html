@@ -1,0 +1,62 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#0a0a0f">
+    <meta name="description" content="HARPER — телефонный хоррор-триллер о номере убитой девушки, закрытой компании друзей и правде, которую все пытаются пережить.">
+    <title>HARPER</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2310b981'/%3E%3Cpath d='M18 20h28v19H31l-8 7v-7h-5z' fill='none' stroke='white' stroke-width='5' stroke-linejoin='round'/%3E%3C/svg%3E">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="index.css?v=109">
+</head>
+<body>
+    <div id="app">
+        <!-- Phone frame -->
+        <div id="phone-frame">
+            <!-- Status bar -->
+            <div id="status-bar">
+                <span id="status-time">21:37</span>
+                <div id="status-icons">
+                    <svg class="status-icon" viewBox="0 0 24 24" width="14" height="14"><path fill="currentColor" d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg>
+                    <svg class="status-icon" viewBox="0 0 24 24" width="14" height="14"><path fill="currentColor" d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4zM13 18h-2v-2h2v2zm0-4h-2V9h2v5z"/></svg>
+                    <span id="status-battery">87%</span>
+                </div>
+            </div>
+
+            <!-- Screen container -->
+            <div id="screen-container">
+                <!-- Screens will be dynamically injected here -->
+            </div>
+
+            <!-- Notification toast -->
+            <div id="notification-toast" class="hidden">
+                <div class="notif-icon" aria-hidden="true"></div>
+                <div class="notif-content">
+                    <div class="notif-title"></div>
+                    <div class="notif-text"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Glitch overlay -->
+    <div id="glitch-overlay" class="hidden"></div>
+
+    <script>
+        window.setTimeout(function () {
+            var container = document.getElementById('screen-container');
+            if (!container || container.children.length > 0) return;
+
+            container.innerHTML = '<div class="boot-error"><div class="boot-error-card"><div class="boot-error-mark">!</div><strong>Игра не запустилась</strong><p>Не открывай index.html двойным кликом. Запусти файл START_GAME.cmd — он откроет игру правильно.</p></div></div>';
+        }, 1400);
+    </script>
+    <script type="module" src="main.js?v=109"></script>
+</body>
+</html>
+
+
