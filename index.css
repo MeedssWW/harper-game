@@ -9836,3 +9836,51 @@ body {
         transition-duration: .01ms !important;
     }
 }
+
+/* Keep every rendered game screen inside the physical phone viewport.
+   Some legacy full-screen rules resolve absolute offsets against the page. */
+#phone-frame #screen-container {
+    position: relative !important;
+    width: 100% !important;
+    height: 100% !important;
+    min-width: 0;
+    min-height: 0;
+}
+
+#phone-frame #screen-container > .screen {
+    position: absolute !important;
+    inset: 0 auto auto 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    max-width: 100% !important;
+    max-height: 100% !important;
+}
+
+#phone-frame #screen-container > .screen.active {
+    transform: none !important;
+}
+
+.lock-screen-inner {
+    inset: 0 !important;
+    max-width: 100%;
+    overflow: hidden;
+}
+
+.lock-notifications {
+    width: min(85%, 350px);
+    max-width: calc(100% - 32px);
+}
+
+.lock-notif {
+    min-width: 0;
+    overflow: hidden;
+}
+
+.lock-notif-header {
+    min-width: 0;
+}
+
+.lock-notif-time {
+    margin-left: auto;
+    white-space: nowrap;
+}

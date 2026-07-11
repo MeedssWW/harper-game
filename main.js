@@ -51,6 +51,9 @@ const STORY_CONTINUATION_FLAGS = new Set([
 
 // ---- Initialize ----
 function init() {
+    document.documentElement.dataset.harperReady = 'true';
+    document.querySelector('.boot-error')?.remove();
+
     updateStatusBarTime();
     setInterval(updateStatusBarTime, 30000);
 
