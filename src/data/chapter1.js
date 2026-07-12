@@ -1,7 +1,7 @@
 import { miaLateSceneBeats } from './miaLateScene.js?v=70';
 import { chapter1FinaleBeats } from './chapter1Finale.js?v=70';
 import { introRewriteBeats } from './introRewrite.js?v=1';
-import { oliviaIntroRewriteBeats } from './oliviaIntroRewrite.js?v=1';
+import { oliviaIntroFinalBeats } from './oliviaIntroFinal.js?v=1';
 
 const legacyChapter1 = {
   id: "act1",
@@ -502,7 +502,7 @@ const legacyChapter1 = {
       chat: "private_mia",
       trigger: "flag:caseIntroCompleted",
       messages: [
-        { type: "note_auto", id: "harper_intro_summary", appendTo: "harper_intro_summary", title: "Харпер Вэнс", text: "Оливия написала мне после того, как группа развалилась. Она не знает, связан ли я с Харпер, но не собирается обвинять меня только из-за номера.\n\nХарпер редко просила о помощи и умела делать вид, что всё нормально. Перед исчезновением она стала более дёрганой и часто смотрела по сторонам, хотя Оливия не уверена, что это что-то значит.\n\nОливия создала маленький чат Larks — только для нас с Мией. Миа вспомнила что-то о Харпер, но пока не уверена, важно ли это.", noteCompleteFlag: "postCaseNoteWritten", notificationText: "Записать новые мысли по делу", skipIfFlag: "postCaseNoteWritten", delay: 700 },
+        { type: "note_auto", id: "harper_intro_summary", appendTo: "harper_intro_summary", title: "Харпер Вэнс", text: "Оливия написала мне после того, как группа развалилась. Она не знает, связан ли я с Харпер, но не собирается обвинять меня только из-за номера.\n\nХарпер редко просила о помощи и умела делать вид, что всё нормально. Перед исчезновением она стала более дёрганой и часто смотрела по сторонам, хотя Оливия не уверена, что это что-то значит.\n\nМиа тоже написала позже. Похоже, исчезновение Харпер усилило старое напряжение между её друзьями, особенно между Дереком и Брук.", noteCompleteFlag: "postCaseNoteWritten", notificationText: "Записать новые мысли по делу", skipIfFlag: "postCaseNoteWritten", delay: 700 },
         { type: "wait_flag", flag: "postCaseNoteWritten", delay: 700 },
         { type: "navigate", screen: "transition", params: { title: "02:14", lines: ["Ночь прошла.", "Следующее утро."], duration: 5200 }, delay: 5400 },
         { type: "navigate", screen: "home", delay: 700 }
@@ -846,9 +846,10 @@ const legacyChapter1 = {
         { type: "chats", id: "group_larks" }
       ],
       messages: [
-        { from: "olivia", text: "Я напишу в Larks.", delay: 900 },
-        { from: "olivia", text: "Сначала спокойно спросим Мию.", delay: 1000 },
-        { from: "olivia", text: "Без догадок. Только то, что она помнит.", delay: 1100 }
+        { from: "olivia", text: "Я создам маленький чат.", delay: 1000 },
+        { from: "olivia", text: "Только ты, я и Миа.", delay: 1000 },
+        { from: "olivia", text: "Без догадок.", delay: 900 },
+        { from: "olivia", text: "Просто посмотрим, кто что помнит.", delay: 1200 }
       ]
     },
     {
@@ -857,6 +858,9 @@ const legacyChapter1 = {
       trigger: "after:morning_olivia_larks_group",
       identify: ["mia", "olivia"],
       messages: [
+        { from: "narrator", text: "Оливия создала группу «Larks».", delay: 900 },
+        { from: "narrator", text: "Оливия добавила {player}.", delay: 700 },
+        { from: "narrator", text: "Оливия добавила Миа.", delay: 700 },
         { type: "system", text: "Миа в сети", delay: 800, characterStatus: { id: "mia", online: true } },
         { from: "mia", text: "Оливия?", delay: 800 },
         { from: "mia", text: "Привет, {player}.", delay: 900 },
@@ -3240,14 +3244,14 @@ const legacyChapter1 = {
   ]
 };
 
-const firstPostOliviaBeat = legacyChapter1.beats.findIndex(beat => beat.id === 'intro_case_sort_task');
+const firstPostOliviaBeat = legacyChapter1.beats.findIndex(beat => beat.id === 'intro_mia_private');
 
 export const chapter1 = {
   ...legacyChapter1,
   title: "Акт 1: Номер Харпер",
   beats: [
     ...introRewriteBeats,
-    ...oliviaIntroRewriteBeats,
+    ...oliviaIntroFinalBeats,
     ...legacyChapter1.beats.slice(firstPostOliviaBeat)
   ]
 };
