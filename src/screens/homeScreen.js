@@ -13,7 +13,7 @@ export function renderHomeScreen({ onAppOpen }) {
     const apps = [
         { id: 'messenger', label: 'Чаты', action: 'messenger', icon: iconMessenger(), badge: unreadCount },
         { id: 'contacts', label: 'Контакты', action: 'contacts', icon: iconContacts() },
-        { id: 'notes', label: 'Заметки', action: 'notes', icon: iconNotes(), badge: getNotesBadge() },
+        { id: 'notes', label: 'Заметки', action: 'notes', icon: iconNotes(), badge: getNotesBadge(), attention: isNotesMechanicPending() },
         { id: 'casefile', label: 'Дело', action: 'caseFile', icon: iconClues(), badge: getCaseBadge(), visible: isCaseFileVisible() },
         { id: 'map', label: 'Карта', action: 'map', icon: iconMap(), visible: isMapAppVisible() },
         { id: 'browser', label: 'Браузер', action: 'browser', icon: iconBrowser() },
@@ -22,7 +22,7 @@ export function renderHomeScreen({ onAppOpen }) {
 
     const appsHTML = apps.map(app => `
         <button
-            class="phone-app ${app.action ? '' : 'phone-app-muted'}"
+            class="phone-app ${app.action ? '' : 'phone-app-muted'} ${app.attention ? 'phone-app-attention' : ''}"
             ${app.action ? `data-app="${app.action}"` : ''}
             type="button"
             aria-label="${app.label}"
@@ -174,6 +174,10 @@ function getUnreadCount() {
 
 function getNotesBadge() {
     return stateManager.hasFlag('notesUnread') ? 1 : 0;
+}
+
+function isNotesMechanicPending() {
+    return stateManager.hasFlag('notesMechanicPending') && !stateManager.hasFlag('caseIntroCompleted');
 }
 
 function isCaseFileVisible() {

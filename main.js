@@ -7,7 +7,7 @@ import { storyEngine } from './src/engine/storyEngine.js?v=81';
 import { screenManager } from './src/screens/screenManager.js';
 import { renderLockScreen } from './src/screens/lockScreen.js?v=70';
 import { renderNameScreen } from './src/screens/nameScreen.js';
-import { renderHomeScreen } from './src/screens/homeScreen.js?v=108';
+import { renderHomeScreen } from './src/screens/homeScreen.js?v=115';
 import { CHATS, renderChatList } from './src/screens/messenger/chatList.js?v=108';
 import { ChatView } from './src/screens/messenger/chatView.js?v=108';
 import { renderTransitionScreen } from './src/screens/transitionScreen.js?v=70';
@@ -19,7 +19,7 @@ import { renderMiaPhone } from './src/screens/miaPhone/miaPhone.js?v=84';
 import { renderBrowser } from './src/screens/browser/browser.js?v=70';
 import { renderSocial } from './src/screens/social/social.js';
 import { renderClues } from './src/screens/clues/clues.js';
-import { renderCaseIntroTask } from './src/screens/caseFile/caseIntroTask.js?v=82';
+import { renderCaseIntroTask } from './src/screens/caseFile/caseIntroTask.js?v=115';
 import { renderFrameAnalysis } from './src/screens/frameAnalysis/frameAnalysis.js?v=70';
 import { renderLizaPhone } from './src/screens/lizaPhone/lizaPhone.js';
 import { renderSettings } from './src/screens/settings/settings.js?v=79';
@@ -28,14 +28,13 @@ import { renderPoliceDecision } from './src/screens/policeDecision/policeDecisio
 import { renderChapterEnd } from './src/screens/chapterEnd/chapterEnd.js?v=70';
 import { audioEngine } from './src/engine/audioEngine.js?v=73';
 import { characters } from './src/data/characters.js';
-import { chapter1 } from './src/data/chapter1.js?v=114';
+import { chapter1 } from './src/data/chapter1.js?v=115';
 
 // ---- App State ----
 let activeChatView = null;
 let currentViewingChat = null;
 
 const STORY_CONTINUATION_FLAGS = new Set([
-    'caseIntroCompleted',
     'ravenwoodMapAddedToCase',
     'remoteSessionInterrupted',
     'unknownOfflineAfterCall',
@@ -143,7 +142,11 @@ function registerScreens() {
                         screenManager.navigate('gallery');
                         break;
                     case 'notes':
-                        screenManager.navigate('notes');
+                        if (stateManager.hasFlag('notesMechanicPending') && !stateManager.hasFlag('caseIntroCompleted')) {
+                            screenManager.navigate('caseIntroTask');
+                        } else {
+                            screenManager.navigate('notes');
+                        }
                         break;
                     case 'map':
                         screenManager.navigate('map');

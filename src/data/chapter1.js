@@ -493,15 +493,19 @@ const legacyChapter1 = {
       id: "intro_case_sort_task",
       chat: "private_mia",
       trigger: "after:intro_olivia_larks_shell|intro_mia_goodnight",
+      setFlags: {
+        notesMechanicPending: true,
+        notesUnread: true
+      },
       messages: [
         { type: "pause", delay: 1800 },
-        { type: "navigate", screen: "caseIntroTask", delay: 500 }
+        { type: "navigate", screen: "home", delay: 500 }
       ]
     },
     {
       id: "intro_post_case_notes",
       chat: "private_mia",
-      trigger: "flag:caseIntroCompleted",
+      trigger: "flag:nextMorningUnlocked",
       messages: [
         { type: "note_auto", id: "harper_intro_summary", appendTo: "harper_intro_summary", title: "Харпер Вэнс", text: "Оливия написала мне после того, как группа развалилась. Она не знает, связан ли я с Харпер, но не собирается обвинять меня только из-за номера.\n\nХарпер редко просила о помощи и умела делать вид, что всё нормально. Перед исчезновением она стала более дёрганой и часто смотрела по сторонам, хотя Оливия не уверена, что это что-то значит.\n\nМиа тоже написала позже. Похоже, исчезновение Харпер усилило старое напряжение между её друзьями, особенно между Дереком и Брук.", noteCompleteFlag: "postCaseNoteWritten", notificationText: "Записать новые мысли по делу", skipIfFlag: "postCaseNoteWritten", delay: 700 },
         { type: "wait_flag", flag: "postCaseNoteWritten", delay: 700 },

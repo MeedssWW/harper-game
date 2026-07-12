@@ -10,39 +10,98 @@ const CARDS = [
     {
         id: 'harper_missing_two_days',
         text: 'Харпер пропала два дня назад.',
-        answer: 'confirmed'
+        answer: 'confirmed',
+        detail: 'Харпер Вэнс пропала два дня назад.\nИсточник: Дерек, Оливия, Миа.'
+    },
+    {
+        id: 'missing_report_filed',
+        text: 'Заявление о пропаже уже подано.',
+        answer: 'confirmed',
+        detail: 'Дерек обратился в полицию.\nПоиски Харпер уже ведутся.'
+    },
+    {
+        id: 'derek_received_player_number',
+        text: 'Утром Дереку пришло сообщение с номером игрока.',
+        answer: 'confirmed',
+        detail: 'Сообщение пришло с телефона Харпер.\nВ сообщении был только номер игрока.\nИсточник: Дерек.'
+    },
+    {
+        id: 'player_never_in_ravenwood',
+        text: 'Игрок раньше не был в Рейвенвуде.',
+        answer: 'confirmed',
+        detail: 'Игрок живёт в другом городе.\nРаньше он не бывал в Рейвенвуде.'
+    },
+    {
+        id: 'player_does_not_know_harper',
+        text: 'Игрок не знает Харпер.',
+        answer: 'confirmed',
+        detail: 'Игрок не узнаёт Харпер на фотографии.\nДо сообщения Дерека он о ней не слышал.'
     },
     {
         id: 'harper_sent_number_herself',
         text: 'Харпер сама отправила номер игрока.',
-        answer: 'unknown'
+        answer: 'unknown',
+        wrongConfirmed: 'Неизвестно, кто держал телефон Харпер в момент отправки.'
     },
     {
-        id: 'olivia_last_saw',
-        text: 'Последней Харпер видела Оливия.',
-        answer: 'confirmed'
+        id: 'someone_else_has_phone',
+        text: 'Телефон Харпер находится у другого человека.',
+        answer: 'unknown',
+        wrongConfirmed: 'Это возможно, но пока никто не доказал, что телефоном пользовался другой человек.'
     },
     {
-        id: 'derek_knows_everything',
-        text: 'Дерек знает всё о последнем дне Харпер.',
-        answer: 'unknown'
+        id: 'harper_left_voluntarily',
+        text: 'Харпер ушла добровольно.',
+        answer: 'unknown',
+        wrongConfirmed: 'Полиция рассматривает эту возможность, но местонахождение Харпер неизвестно.'
     },
     {
-        id: 'cafe_phone_call',
-        text: 'Харпер была в кафе и ушла после телефонного звонка.',
-        answer: 'confirmed'
+        id: 'player_connected_to_harper',
+        text: 'Игрок как-то связан с Харпер.',
+        answer: 'unknown',
+        wrongConfirmed: 'Единственная известная связь — номер игрока в сообщении.'
     },
     {
-        id: 'harper_meeting_after_cafe',
-        text: 'Харпер собиралась встретиться с кем-то после кафе.',
-        answer: 'unknown'
+        id: 'number_random',
+        text: 'Номер игрока выбрали случайно.',
+        answer: 'unknown',
+        wrongConfirmed: 'Случайность пока нельзя ни подтвердить, ни исключить.'
     },
     {
-        id: 'number_sent_from_phone',
-        text: 'С телефона Харпер был отправлен номер игрока.',
-        answer: 'confirmed'
+        id: 'message_request_for_help',
+        text: 'Сообщение было просьбой о помощи.',
+        answer: 'unknown',
+        wrongConfirmed: 'В сообщении не было текста. Только номер.'
+    },
+    {
+        id: 'player_intentionally_involved',
+        text: 'Кто-то намеренно втянул игрока в исчезновение Харпер.',
+        answer: 'unknown',
+        wrongConfirmed: 'Пока неизвестно, зачем номер отправили Дереку.'
     }
 ];
+
+const COMPLETED_NOTE_TEXT = `ПОДТВЕРЖДЕНО:
+
+• Харпер пропала два дня назад.
+• Полиция уже занимается её исчезновением.
+• С телефона Харпер Дереку пришёл номер игрока.
+• Игрок никогда не был в Рейвенвуде.
+• Игрок не знает Харпер и не узнаёт её на фотографии.
+
+ВЕРСИИ:
+
+• Сообщение отправила сама Харпер.
+• Телефоном воспользовался другой человек.
+• Харпер ушла добровольно.
+• Игрок связан с Харпер.
+• Номер был выбран случайно.
+• Сообщение было просьбой о помощи.
+• Игрока втянули намеренно.
+
+ГЛАВНЫЙ ВОПРОС:
+
+Почему с телефона Харпер отправили именно мой номер?`;
 
 export function renderCaseIntroTask({ onDone, onFrameAnalysis } = {}) {
     if (!stateManager.hasFlag('caseIntroTaskUnlocked')) {
@@ -63,9 +122,10 @@ export function renderCaseIntroTask({ onDone, onFrameAnalysis } = {}) {
 
     wrapper.innerHTML = `
         <header class="case-task-header">
-            <div class="case-kicker">расследование</div>
-            <h1>ДЕЛО ХАРПЕР ВЭНС</h1>
-            <p>Разделите известные сведения на факты и неподтверждённые версии.</p>
+            <div class="case-kicker">новая страница</div>
+            <h1>ДЕЛО: ХАРПЕР ВЭНС</h1>
+            <p>Раздели то, что уже известно, и то, что персонажи пока только предполагают.</p>
+            <p class="case-task-rule">Даже уверенно сказанная фраза не становится фактом без подтверждения.</p>
         </header>
 
         <main class="case-task-body">
@@ -75,17 +135,18 @@ export function renderCaseIntroTask({ onDone, onFrameAnalysis } = {}) {
                     <strong id="confirmed-count">0</strong>
                 </div>
                 <div class="case-column unknown">
-                    <span>НЕИЗВЕСТНО / ВЕРСИЯ</span>
+                    <span>ПОКА ТОЛЬКО ВЕРСИЯ</span>
                     <strong id="unknown-count">0</strong>
                 </div>
             </section>
 
+            <div class="case-task-feedback" id="case-feedback" aria-live="polite"></div>
+
             <section class="case-card-list" aria-label="Утверждения">
-                ${CARDS.map(card => renderCard(card)).join('')}
+                ${CARDS.map((card, index) => renderCard(card, index)).join('')}
             </section>
 
-            <div class="case-task-feedback" id="case-feedback" aria-live="polite"></div>
-            <button class="case-check-btn" id="case-check" type="button" disabled>Проверить</button>
+            <button class="case-check-btn" id="case-check" type="button" disabled>Завершить разбор</button>
         </main>
     `;
 
@@ -95,6 +156,7 @@ export function renderCaseIntroTask({ onDone, onFrameAnalysis } = {}) {
             const value = button.dataset.value;
             assignments.set(cardId, value);
             updateCardState(wrapper, assignments);
+            showPlacementFeedback(wrapper, cardId, value);
         });
     });
 
@@ -103,7 +165,8 @@ export function renderCaseIntroTask({ onDone, onFrameAnalysis } = {}) {
         const feedback = wrapper.querySelector('#case-feedback');
 
         if (!allCorrect) {
-            feedback.textContent = 'Проверь формулировки. Факт — только то, что уже прозвучало прямо.';
+            const firstWrong = CARDS.find(card => assignments.get(card.id) !== card.answer);
+            feedback.textContent = firstWrong?.wrongConfirmed || 'Это уже подтверждено несколькими прямыми сведениями.';
             feedback.classList.add('visible', 'error');
             return;
         }
@@ -114,16 +177,33 @@ export function renderCaseIntroTask({ onDone, onFrameAnalysis } = {}) {
     return wrapper;
 }
 
-function renderCard(card) {
+function renderCard(card, index) {
     return `
         <article class="case-sort-card" data-card="${card.id}">
+            <span class="case-card-number">${String(index + 1).padStart(2, '0')}</span>
             <p>${card.text}</p>
             <div class="case-card-actions">
-                <button class="case-card-action" data-card="${card.id}" data-value="confirmed" type="button">Факт</button>
-                <button class="case-card-action" data-card="${card.id}" data-value="unknown" type="button">Версия</button>
+                <button class="case-card-action" data-card="${card.id}" data-value="confirmed" type="button">Подтверждено</button>
+                <button class="case-card-action" data-card="${card.id}" data-value="unknown" type="button">Только версия</button>
             </div>
         </article>
     `;
+}
+
+function showPlacementFeedback(wrapper, cardId, value) {
+    const card = CARDS.find(item => item.id === cardId);
+    const feedback = wrapper.querySelector('#case-feedback');
+    if (!card || !feedback) return;
+
+    if (value !== card.answer) {
+        feedback.textContent = card.wrongConfirmed || 'Это уже подтверждено тем, что известно из разговоров.';
+        feedback.classList.add('visible', 'error');
+        return;
+    }
+
+    feedback.textContent = card.detail || (value === 'unknown' ? 'Пока это нельзя считать доказанным фактом.' : 'Подтверждено.');
+    feedback.classList.add('visible');
+    feedback.classList.remove('error');
 }
 
 function updateCardState(wrapper, assignments) {
@@ -148,49 +228,73 @@ function updateCardState(wrapper, assignments) {
     wrapper.querySelector('#unknown-count').textContent = String(unknown);
     wrapper.querySelector('#case-check').disabled = assignments.size !== CARDS.length;
 
-    const feedback = wrapper.querySelector('#case-feedback');
-    feedback.textContent = '';
-    feedback.classList.remove('visible', 'error');
 }
 
 function completeCaseIntro(wrapper, onDone) {
     if (stateManager.hasFlag('caseIntroCompleted')) return;
 
     stateManager.setFlag('caseMechanicUnlocked', true);
+    stateManager.setFlag('notesMechanicPending', false);
+    stateManager.setFlag('notesUnread', false);
     stateManager.setFlag('caseIntroCompleted', true);
+    stateManager.setNote('harper_case_notes', {
+        title: 'ДЕЛО: ХАРПЕР ВЭНС',
+        text: COMPLETED_NOTE_TEXT,
+        time: 'Закреплено',
+        type: 'case'
+    });
     stateManager.addCaseEntry({
         id: 'question_harper_number_sender',
         type: 'question',
         title: 'ВОПРОС',
-        text: 'Кто отправил номер игрока с телефона Харпер?'
+        text: 'Почему с телефона Харпер отправили именно мой номер?'
     });
 
     wrapper.innerHTML = renderCompleted(true);
+    wrapper.scrollTop = 0;
     revealSystemLines(wrapper, onDone);
 }
 
 function renderCompleted(animate = false) {
     return `
         <header class="case-task-header completed">
-            <div class="case-kicker">дело обновлено</div>
-            <h1>ДЕЛО ХАРПЕР ВЭНС</h1>
-            <p>Первые сведения разложены. Дальше важны не только факты, но и противоречия.</p>
+            <div class="case-kicker">заметка сохранена</div>
+            <h1>ДЕЛО: ХАРПЕР ВЭНС</h1>
+            <p>Факты отделены от предположений.</p>
         </header>
 
         <main class="case-task-body completed">
-            <section class="case-system-log ${animate ? 'is-animating' : 'is-visible'}">
-                <div class="case-system-line">Новая механика разблокирована.</div>
-                <div class="case-system-line">Заметки по делу.</div>
-                <div class="case-system-line">Собирайте факты, версии и противоречия.</div>
-                <div class="case-system-line">Позже собранные сведения можно будет сопоставлять между собой.</div>
+            <section class="case-system-log case-notes-summary ${animate ? 'is-animating' : 'is-visible'}">
+                <div class="case-system-line">
+                    <b>ПОДТВЕРЖДЕНО</b>
+                    <ul>
+                        <li>Харпер пропала два дня назад.</li>
+                        <li>Полиция уже занимается её исчезновением.</li>
+                        <li>С телефона Харпер Дереку пришёл номер игрока.</li>
+                        <li>Игрок никогда не был в Рейвенвуде.</li>
+                        <li>Игрок не знает Харпер и не узнаёт её на фотографии.</li>
+                    </ul>
+                </div>
+                <div class="case-system-line">
+                    <b>ВЕРСИИ</b>
+                    <ul>
+                        <li>Сообщение отправила сама Харпер.</li>
+                        <li>Телефоном воспользовался другой человек.</li>
+                        <li>Харпер ушла добровольно.</li>
+                        <li>Игрок связан с Харпер.</li>
+                        <li>Номер был выбран случайно.</li>
+                        <li>Сообщение было просьбой о помощи.</li>
+                        <li>Игрока втянули намеренно.</li>
+                    </ul>
+                </div>
             </section>
 
             <article class="case-question-card ${animate ? '' : 'visible'}">
-                <span>ВОПРОС</span>
-                <p>Кто отправил номер игрока с телефона Харпер?</p>
+                <span>ГЛАВНЫЙ ВОПРОС</span>
+                <p>Почему с телефона Харпер отправили именно мой номер?</p>
             </article>
 
-            <button class="case-done-btn ${animate ? '' : 'visible'}" id="case-done" type="button">К телефону</button>
+            <button class="case-done-btn ${animate ? '' : 'visible'}" id="case-done" type="button">Закрыть заметки</button>
         </main>
     `;
 }
@@ -439,12 +543,12 @@ function revealSystemLines(wrapper, onDone) {
 
     setTimeout(() => {
         wrapper.querySelector('.case-question-card')?.classList.add('visible');
-    }, 4400);
+    }, 2300);
 
     setTimeout(() => {
         wrapper.querySelector('.case-done-btn')?.classList.add('visible');
         attachDone(wrapper, onDone);
-    }, 5700);
+    }, 3200);
 }
 
 function attachDone(wrapper, onDone) {
