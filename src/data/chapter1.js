@@ -2,6 +2,7 @@ import { miaLateSceneBeats } from './miaLateScene.js?v=70';
 import { chapter1FinaleBeats } from './chapter1Finale.js?v=70';
 import { introRewriteBeats } from './introRewrite.js?v=1';
 import { oliviaIntroFinalBeats } from './oliviaIntroFinal.js?v=1';
+import { miaIntroRewriteBeats } from './miaIntroRewrite.js?v=1';
 
 const legacyChapter1 = {
   id: "act1",
@@ -3244,7 +3245,7 @@ const legacyChapter1 = {
   ]
 };
 
-const firstPostOliviaBeat = legacyChapter1.beats.findIndex(beat => beat.id === 'intro_mia_private');
+const firstPostMiaBeat = legacyChapter1.beats.findIndex(beat => beat.id === 'intro_case_sort_task');
 
 export const chapter1 = {
   ...legacyChapter1,
@@ -3252,6 +3253,7 @@ export const chapter1 = {
   beats: [
     ...introRewriteBeats,
     ...oliviaIntroFinalBeats,
-    ...legacyChapter1.beats.slice(firstPostOliviaBeat)
+    ...miaIntroRewriteBeats,
+    ...legacyChapter1.beats.slice(firstPostMiaBeat)
   ]
 };
