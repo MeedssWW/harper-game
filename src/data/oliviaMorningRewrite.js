@@ -260,19 +260,17 @@ export const oliviaMorningRewriteBeats = [
     trigger: "after:morning_olivia_intentional_frame|morning_olivia_just_photo|morning_olivia_often_followed",
     messages: [
       O("Миа виделась с Харпер на следующий день."),
-      O("Я хочу показать фотографию ей."),
+      O("Я хочу показать ей фотографию."),
       O("Может, Харпер и при ней постоянно оглядывалась."),
-      O("Или тоже говорила про машину."),
+      O("Или говорила что-нибудь похожее."),
       O("Я могу написать ей отдельно."),
-      O("Но тогда придётся пересказывать всё сначала."),
-      O("И ты уже тоже видел фотографию."),
-      O("Поэтому я подумала..."),
+      O("Но ты уже тоже видел снимок."),
+      O("Поэтому подумала..."),
       O("Можно создать небольшой чат?"),
       O("Ты, я и Миа."),
       C([
         option("Да. Создавай.", "morning_olivia_group_yes"),
-        option("А почему не спросить Мию без меня?", "morning_olivia_group_why_me"),
-        option("Хорошо.", "morning_olivia_group_warn_first")
+        option("Нет.", "morning_olivia_group_decline_first")
       ])
     ]
   },
@@ -283,51 +281,54 @@ export const oliviaMorningRewriteBeats = [
     messages: [O("Хорошо.")]
   },
   {
-    id: "morning_olivia_group_why_me",
+    id: "morning_olivia_group_decline_first",
     chat: "private_olivia",
     trigger: "choice:morning_olivia_group_offer:1",
-    messages: [
-      O("Можно и без тебя."),
-      O("Просто если она вспомнит что-то важное, потом всё равно придётся рассказывать тебе отдельно."),
-      O("Но я не буду добавлять тебя, если ты не хочешь."),
-      C([
-        option("Ладно. Добавляй.", "morning_olivia_group_add_after_all"),
-        option("Нет. Лучше потом просто расскажи.", "morning_olivia_group_declined")
-      ])
-    ]
-  },
-  {
-    id: "morning_olivia_group_add_after_all",
-    chat: "private_olivia",
-    trigger: "choice:morning_olivia_group_why_me:0",
-    messages: [O("Хорошо.")]
+    messages: [C([option("Лучше поговори с Мией сама, а потом расскажи мне.", "morning_olivia_group_declined")])]
   },
   {
     id: "morning_olivia_group_declined",
     chat: "private_olivia",
-    trigger: "choice:morning_olivia_group_why_me:1",
-    setFlags: { oliviaGroupInviteDeclined: true },
-    messages: [O("Ладно."), O("Тогда сначала поговорю с ней сама.")]
+    trigger: "choice:morning_olivia_group_decline_first:0",
+    setFlags: { oliviaGroupInviteDeclined: true, larksCreated: false, separateChatsRoute: true },
+    messages: [
+      O("Ладно."),
+      O("Понимаю."),
+      O("Тогда сначала поговорю с ней сама."),
+      O("Если она вспомнит что-то конкретное, напишу тебе."),
+      O("И добавлять тебя никуда не буду."),
+      C([
+        option("Спасибо.", "morning_olivia_decline_thanks"),
+        option("Просто после прошлого чата не хочется сразу лезть в новый.", "morning_olivia_decline_reason")
+      ])
+    ]
   },
   {
-    id: "morning_olivia_group_warn_first",
+    id: "morning_olivia_decline_thanks",
     chat: "private_olivia",
-    trigger: "choice:morning_olivia_group_offer:2",
-    messages: [C([option("Только никого больше без предупреждения.", "morning_olivia_group_warn")])]
+    trigger: "choice:morning_olivia_group_declined:0",
+    messages: [O("Не за что."), O("Я сама обещала сначала спрашивать.")]
   },
   {
-    id: "morning_olivia_group_warn",
+    id: "morning_olivia_decline_reason",
     chat: "private_olivia",
-    trigger: "choice:morning_olivia_group_warn_first:0",
-    messages: [O("Не добавлю."), O("Я как раз поэтому сначала спрашиваю.")]
+    trigger: "choice:morning_olivia_group_declined:1",
+    messages: [O("Я понимаю."), O("Тогда не будем.")]
+  },
+  {
+    id: "morning_olivia_decline_end",
+    chat: "private_olivia",
+    trigger: "after:morning_olivia_decline_thanks|morning_olivia_decline_reason",
+    messages: [O("Я напишу Мие."), O("До связи.")]
   },
   {
     id: "morning_olivia_larks_group",
     chat: "private_olivia",
-    trigger: "after:morning_olivia_group_yes|morning_olivia_group_add_after_all|morning_olivia_group_warn",
+    trigger: "after:morning_olivia_group_yes",
+    setFlags: { larksCreated: true, oliviaGroupInviteDeclined: false, separateChatsRoute: false },
     unlock: [{ type: "chats", id: "group_larks" }],
     messages: [
-      O("Тогда сейчас создам."),
+      O("Тогда сейчас."),
       O("Назову Larks."),
       O("Чтобы долго не думать.")
     ]

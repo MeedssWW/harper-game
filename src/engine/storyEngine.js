@@ -182,6 +182,14 @@ class StoryEngine {
             return stateManager.hasFlag(flagName);
         }
 
+        // flagAfter:flagName:beatId|beatId2 — flag and one completed story beat are both required
+        if (beat.trigger.startsWith('flagAfter:')) {
+            const parts = beat.trigger.split(':');
+            const flagName = parts[1];
+            const beatIds = (parts[2] || '').split('|').map(id => id.trim()).filter(Boolean);
+            return stateManager.hasFlag(flagName) && beatIds.some(id => stateManager.isBeatCompleted(id));
+        }
+
         // choice:beatId:optionIndex
         if (beat.trigger.startsWith('choice:')) {
             const parts = beat.trigger.split(':');

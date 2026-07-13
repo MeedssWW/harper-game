@@ -12,8 +12,8 @@ const TASKS = [
     {
         id: 'riverwalk',
         title: 'Riverwalk',
-        text: 'На следующий день Миа встретила Харпер у старого моста.',
-        confirmed: 'Подтверждено: Миа видела Харпер у Riverwalk на следующий день после фотографии.'
+        text: 'За три дня до исчезновения Харпер была здесь вместе с Мией.',
+        confirmed: 'Подтверждено: Харпер была у старого моста с Мией за три дня до исчезновения.'
     }
 ];
 
@@ -128,7 +128,7 @@ function renderTask(wrapper, onBack, onDone) {
             <div>
                 <span class="map-kicker">Дело Харпер Вэнс</span>
                 <h1>Карта Рейвенвуда</h1>
-                <p>Отметьте подтверждённые места, где Харпер была в последние дни.</p>
+                <p>Добавьте две подтверждённые точки. События произошли в разные дни.</p>
             </div>
         </header>
 
@@ -254,20 +254,14 @@ function renderResult(wrapper, onDone, animate) {
             <span>Подтверждено</span>
             <ul>
                 <li><strong>Larks</strong> — за четыре дня до исчезновения.</li>
-                <li><strong>Riverwalk</strong> — на следующий день после этого.</li>
+                <li><strong>Riverwalk — старый мост</strong> — за три дня до исчезновения.</li>
             </ul>
             <div class="map-observation">
-                <strong>Наблюдение</strong>
-                <p>Между Larks и Riverwalk примерно 18 минут пешком.</p>
-                <em>Это не доказывает, что Харпер шла этим маршрутом. Это только расстояние между известными точками.</em>
+                <strong>Предупреждение</strong>
+                <p>События произошли в разные дни.</p>
+                <em>Это не подтверждённый маршрут Харпер.</em>
             </div>
-            <div class="map-unknowns">
-                <strong>Неизвестно</strong>
-                <p>Почему Харпер заметила тёмно-зелёный седан?</p>
-                <p>Кому она писала с телефона Мии?</p>
-                <p>Связаны ли Larks и Riverwalk с её исчезновением?</p>
-            </div>
-            <button class="map-add-case-btn" id="map-add-case" type="button">Продолжить</button>
+            <button class="map-add-case-btn" id="map-add-case" type="button">${stateManager.hasFlag('larksCreated') ? 'Вернуться в Larks' : 'Закрыть карту'}</button>
         </article>
     `;
 
@@ -275,7 +269,7 @@ function renderResult(wrapper, onDone, animate) {
 
     result.querySelector('#map-add-case')?.addEventListener('click', () => {
         addMapCaseEntries(true);
-        showTimePassage(wrapper, onDone);
+        if (onDone) onDone();
     });
 }
 
@@ -290,19 +284,13 @@ function addMapCaseEntries(continueStory = true) {
         id: 'fact_harper_riverwalk_mia',
         type: 'fact',
         title: 'Riverwalk',
-        text: 'На следующий день Миа встретила Харпер у Riverwalk.'
+        text: 'Харпер была у старого моста вместе с Мией за три дня до исчезновения.'
     });
     stateManager.addCaseEntry({
         id: 'fact_green_sedan_question',
         type: 'clue',
         title: 'Тёмно-зелёный седан',
         text: 'Харпер спрашивала Мию о тёмно-зелёном седане.'
-    });
-    stateManager.addCaseEntry({
-        id: 'thread_mia_old_phone',
-        type: 'thread',
-        title: 'Вечером',
-        text: 'Миа проверит старый телефон.'
     });
     if (continueStory) {
         stateManager.setFlag('ravenwoodMapAddedToCase', true);

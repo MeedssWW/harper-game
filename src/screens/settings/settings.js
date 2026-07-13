@@ -4,10 +4,10 @@
 
 import { audioEngine } from '../../engine/audioEngine.js?v=73';
 import { stateManager } from '../../engine/stateManager.js';
-import { chapter1 } from '../../data/chapter1.js?v=117';
+import { chapter1 } from '../../data/chapter1.js?v=118';
 
 const STATE_KEY = 'harper_act1_v4';
-const STORY_VERSION = 'harper_act1_olivia_morning_2026_07_13_v10';
+const STORY_VERSION = 'harper_act1_larks_routes_2026_07_13_v11';
 
 const CHECKPOINTS = [
     {

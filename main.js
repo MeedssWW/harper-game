@@ -3,7 +3,7 @@
 // ============================================
 
 import { stateManager } from './src/engine/stateManager.js';
-import { storyEngine } from './src/engine/storyEngine.js?v=81';
+import { storyEngine } from './src/engine/storyEngine.js?v=118';
 import { screenManager } from './src/screens/screenManager.js';
 import { renderLockScreen } from './src/screens/lockScreen.js?v=70';
 import { renderNameScreen } from './src/screens/nameScreen.js';
@@ -14,7 +14,7 @@ import { renderTransitionScreen } from './src/screens/transitionScreen.js?v=70';
 import { renderContactList, renderContactProfile } from './src/screens/contacts/contacts.js';
 import { renderGallery } from './src/screens/gallery/gallery.js';
 import { renderNotes } from './src/screens/notes/notes.js?v=71';
-import { renderMap } from './src/screens/map/map.js?v=76';
+import { renderMap } from './src/screens/map/map.js?v=118';
 import { renderMiaPhone } from './src/screens/miaPhone/miaPhone.js?v=84';
 import { renderBrowser } from './src/screens/browser/browser.js?v=70';
 import { renderSocial } from './src/screens/social/social.js';
@@ -28,7 +28,7 @@ import { renderPoliceDecision } from './src/screens/policeDecision/policeDecisio
 import { renderChapterEnd } from './src/screens/chapterEnd/chapterEnd.js?v=70';
 import { audioEngine } from './src/engine/audioEngine.js?v=73';
 import { characters } from './src/data/characters.js';
-import { chapter1 } from './src/data/chapter1.js?v=117';
+import { chapter1 } from './src/data/chapter1.js?v=118';
 
 // ---- App State ----
 let activeChatView = null;
@@ -262,8 +262,12 @@ function registerScreens() {
     screenManager.register('map', (params = {}) => {
         return renderMap({
             mode: params.mode || (params.sourceChatId ? 'task' : 'viewer'),
-            onBack: () => screenManager.navigate(params.sourceChatId ? 'chatList' : 'home'),
-            onDone: () => screenManager.navigate('chatList')
+            onBack: () => params.sourceChatId
+                ? screenManager.navigate('chat', { chatId: params.sourceChatId })
+                : screenManager.navigate('home'),
+            onDone: () => params.sourceChatId
+                ? screenManager.navigate('chat', { chatId: params.sourceChatId })
+                : screenManager.navigate('chatList')
         });
     });
 
