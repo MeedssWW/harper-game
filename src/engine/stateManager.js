@@ -3,7 +3,7 @@
 // ============================================
 
 const STATE_KEY = 'harper_act1_v4';
-const STORY_VERSION = 'harper_act1_backup_hack_2026_07_13_v12';
+const STORY_VERSION = 'harper_act1_post_leak_finale_2026_07_13_v13';
 
 const defaultState = {
     storyVersion: STORY_VERSION,

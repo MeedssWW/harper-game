@@ -81,6 +81,9 @@ export function renderBrowser({ onBack }) {
         const flags = stateManager.get('flags') || {};
         const playerPhoto = flags.playerHackPhoto || flags.playerFrontCameraPhoto || '';
         const playerPhoneNumber = flags.playerPhoneNumber || '+1 (503) 555-0172';
+        const chatNames = flags.larksCreated
+            ? ['Larks', 'Оливия', 'Миа', 'Дерек']
+            : ['Оливия', 'Миа', 'Дерек'];
 
         if (playerPhoto && !flags.playerHackPhoto) {
             stateManager.setFlag('playerHackPhoto', playerPhoto);
@@ -99,18 +102,24 @@ export function renderBrowser({ onBack }) {
                     </header>
                     <div class="ravenfeed-post-text">
                         <p><strong>@ravenwood_watch</strong> · Только что</p>
-                        <p>Этот номер появился на телефоне Харпер Вэнс перед её исчезновением.</p>
+                        <p><b>ПОСЛЕДНИЙ КОНТАКТ ХАРПЕР ВЭНС</b></p>
+                        <p>Его номер был последним сообщением, отправленным с телефона Харпер.</p>
+                        <p>Он утверждает, что никогда её не знал и не был в Рейвенвуде. При этом несколько дней общался с её друзьями и получал материалы расследования.</p>
+                        <p>Почему человек из другого города оказался последним контактом пропавшей девушки?</p>
                         <p><b>${playerPhoneNumber}</b></p>
-                        <p>Человек не из Рейвенвуда.</p>
-                        <p>Кто-нибудь знает, почему он оказался связан с Харпер?</p>
                     </div>
                     ${playerPhoto
                         ? `<img class="ravenfeed-image" src="${playerPhoto}" alt="Фото игрока с фронтальной камеры">`
                         : `<div class="ravenfeed-image" style="height:260px;display:grid;place-items:center;color:#94a3b8;">фото недоступно</div>`}
+                    <div class="ravenfeed-image" style="padding:18px;background:#080d16;color:#e5e7eb;display:grid;gap:10px;">
+                        <small style="color:#94a3b8;">Список чатов игрока</small>
+                        ${chatNames.map(name => `<div style="padding:10px 12px;border-radius:12px;background:#151c28;font-weight:800;">${name}</div>`).join('')}
+                    </div>
                     <div class="ravenfeed-comments">
-                        <div><b>@rivergirl:</b> Это тот человек, которого Дерек добавил в чат?</div>
-                        <div><b>@unknown_local:</b> Почему его номер вообще был у Харпер?</div>
-                        <div><b>@hollowstreet:</b> Он ведь даже не из Рейвенвуда.</div>
+                        <div><b>@rivergirl:</b> Это он?</div>
+                        <div><b>@unknown_local:</b> Почему полиция молчит?</div>
+                        <div><b>@hollowstreet:</b> Он следил за ними через телефон?</div>
+                        <div><b>@local503:</b> Номер настоящий. Я проверил.</div>
                     </div>
                 </article>
             </section>
@@ -122,6 +131,11 @@ export function renderBrowser({ onBack }) {
     input.addEventListener('keydown', (event) => {
         if (event.key === 'Enter') runSearch(input.value);
     });
+
+    if (stateManager.hasFlag('act1ViralPost') && !stateManager.hasFlag('ravenwatchPostPublished')) {
+        input.value = 'ravenfeed';
+        renderRavenFeed();
+    }
 
     fragment.appendChild(wrapper);
     return fragment;

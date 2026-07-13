@@ -16,7 +16,7 @@ import { renderGallery } from './src/screens/gallery/gallery.js';
 import { renderNotes } from './src/screens/notes/notes.js?v=71';
 import { renderMap } from './src/screens/map/map.js?v=118';
 import { renderMiaPhone } from './src/screens/miaPhone/miaPhone.js?v=119';
-import { renderBrowser } from './src/screens/browser/browser.js?v=70';
+import { renderBrowser } from './src/screens/browser/browser.js?v=120';
 import { renderSocial } from './src/screens/social/social.js';
 import { renderClues } from './src/screens/clues/clues.js';
 import { renderCaseIntroTask } from './src/screens/caseFile/caseIntroTask.js?v=116';
@@ -28,7 +28,7 @@ import { renderPoliceDecision } from './src/screens/policeDecision/policeDecisio
 import { renderChapterEnd } from './src/screens/chapterEnd/chapterEnd.js?v=70';
 import { audioEngine } from './src/engine/audioEngine.js?v=73';
 import { characters } from './src/data/characters.js';
-import { chapter1 } from './src/data/chapter1.js?v=119';
+import { chapter1 } from './src/data/chapter1.js?v=120';
 
 // ---- App State ----
 let activeChatView = null;

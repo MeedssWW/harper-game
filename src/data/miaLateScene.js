@@ -2,7 +2,7 @@ export const miaLateSceneBeats = [
   {
     id: "mia_late_evening_start",
     chat: "private_mia",
-    trigger: "after:mason_after_tyler_end",
+    trigger: "afterTrustFlag:postleak_mason_police|postleak_mason_climb|postleak_mason_trust:miaTrust:2:miaPrivacyViolated:false",
     identify: ["mia"],
     messages: [
       { type: "pause", delay: 6500 },
@@ -415,5 +415,38 @@ export const miaLateSceneBeats = [
         ]
       }
     ]
-  }
+  },
+  {
+    id: "mia_late_low_trust_olivia",
+    chat: "private_olivia",
+    trigger: "afterNotTrustFlag:postleak_mason_police|postleak_mason_climb|postleak_mason_trust:miaTrust:2:miaPrivacyViolated:false",
+    setFlags: { miaRememberedDerekArgument: true, oliviaWillQuestionDerek: true },
+    messages: [
+      { type: "pause", delay: 4200 },
+      { type: "system", text: "Оливия в сети.", delay: 500, characterStatus: { id: "olivia", online: true } },
+      { from: "olivia", text: "Миа вспомнила ещё одну деталь.", delay: 850 },
+      { from: "olivia", text: "Перед встречей у моста Харпер поссорилась с Дереком.", delay: 950 },
+      { from: "olivia", text: "И сказала Мие, что не хочет с ним разговаривать.", delay: 950 },
+      { type: "choice", options: [
+        { text: "Миа сама будет говорить с Дереком?", loyalty: {}, next: "mia_late_low_who" },
+        { text: "Тогда сообщение с её телефона могло быть не ему.", loyalty: {}, next: "mia_late_low_message" },
+        { text: "Похоже, Миа всё ещё вспоминает тот день по кускам.", loyalty: {}, next: "mia_late_low_memory" }
+      ] }
+    ]
+  },
+  { id: "mia_late_low_who", chat: "private_olivia", trigger: "choice:mia_late_low_trust_olivia:0", messages: [
+    { from: "olivia", text: "Нет. Она не хочет сейчас с ним спорить.", delay: 900 },
+    { from: "olivia", text: "Я напишу ему сама.", delay: 800 },
+    { type: "choice", options: [{ text: "Хорошо.", loyalty: {}, sendMessage: false, setFlag: "derekConversationUnlocked" }] }
+  ] },
+  { id: "mia_late_low_message", chat: "private_olivia", trigger: "choice:mia_late_low_trust_olivia:1", messages: [
+    { from: "olivia", text: "Да. Раньше Миа была уверена в обратном.", delay: 900 },
+    { from: "olivia", text: "Я спрошу Дерека о ссоре.", delay: 850 },
+    { type: "choice", options: [{ text: "Хорошо.", loyalty: {}, sendMessage: false, setFlag: "derekConversationUnlocked" }] }
+  ] },
+  { id: "mia_late_low_memory", chat: "private_olivia", trigger: "choice:mia_late_low_trust_olivia:2", messages: [
+    { from: "olivia", text: "Да. И каждый раз винит себя, что не вспомнила раньше.", delay: 950 },
+    { from: "olivia", text: "Я спрошу Дерека о ссоре. Без обвинений.", delay: 850 },
+    { type: "choice", options: [{ text: "Хорошо.", loyalty: {}, sendMessage: false, setFlag: "derekConversationUnlocked" }] }
+  ] }
 ];

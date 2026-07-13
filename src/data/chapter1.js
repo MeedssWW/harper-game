@@ -1,5 +1,5 @@
-import { miaLateSceneBeats } from './miaLateScene.js?v=70';
-import { chapter1FinaleBeats } from './chapter1Finale.js?v=70';
+import { miaLateSceneBeats } from './miaLateScene.js?v=120';
+import { chapter1FinaleRewriteBeats as chapter1FinaleBeats } from './chapter1FinaleRewrite.js?v=1';
 import { introRewriteBeats } from './introRewrite.js?v=1';
 import { oliviaIntroFinalBeats } from './oliviaIntroFinal.js?v=1';
 import { miaIntroRewriteBeats } from './miaIntroRewrite.js?v=1';
@@ -7,6 +7,7 @@ import { derekMorningRewriteBeats } from './derekMorningRewrite.js?v=1';
 import { oliviaMorningRewriteBeats } from './oliviaMorningRewrite.js?v=1';
 import { postOliviaRoutesRewriteBeats } from './postOliviaRoutesRewrite.js?v=1';
 import { backupFoundRewriteBeats } from './backupFoundRewrite.js?v=1';
+import { postLeakRewriteBeats } from './postLeakRewrite.js?v=1';
 
 const legacyChapter1 = {
   id: "act1",
@@ -3320,6 +3321,8 @@ const firstPostMiaBeat = legacyChapter1.beats.findIndex(beat => beat.id === 'int
 const firstLegacyDerekMorningBeat = legacyChapter1.beats.findIndex(beat => beat.id === 'morning_derek_photos');
 const firstMiaRemoteBeat = legacyChapter1.beats.findIndex(beat => beat.id === 'mia_remote_phone_start');
 const firstUnknownAfterHackBeat = legacyChapter1.beats.findIndex(beat => beat.id === 'unknown_after_hack_start');
+const firstDerekAfterBrookeBeat = legacyChapter1.beats.findIndex(beat => beat.id === 'derek_after_brooke_start');
+const firstMiaLateBeat = legacyChapter1.beats.findIndex(beat => beat.id === 'mia_late_evening_start');
 
 export const chapter1 = {
   ...legacyChapter1,
@@ -3333,6 +3336,8 @@ export const chapter1 = {
     ...oliviaMorningRewriteBeats,
     ...postOliviaRoutesRewriteBeats,
     ...backupFoundRewriteBeats,
-    ...legacyChapter1.beats.slice(firstUnknownAfterHackBeat)
+    ...legacyChapter1.beats.slice(firstUnknownAfterHackBeat, firstDerekAfterBrookeBeat),
+    ...postLeakRewriteBeats,
+    ...legacyChapter1.beats.slice(firstMiaLateBeat)
   ]
 };
