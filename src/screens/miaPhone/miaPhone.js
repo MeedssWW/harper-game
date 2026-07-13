@@ -4,103 +4,50 @@ const DEVICE_CHATS = [
     {
         id: 'mom',
         title: 'Мама',
-        meta: '2 дня назад · 21:16',
+        meta: 'День встречи · 21:16',
         messages: [
-            ['Мама', 'Ты уже дома?'],
-            ['Миа', 'Да, только пришла.'],
-            ['Мама', 'Нормально добралась?'],
-            ['Миа', 'Да.'],
-            ['Мама', 'Ты весь день какая-то тихая.'],
-            ['Миа', 'Просто устала.'],
-            ['Мама', 'Поешь хоть что-нибудь.'],
-            ['Миа', 'Потом.'],
-            ['Мама', 'Миа.'],
-            ['Миа', 'Хорошо. Поем.']
+            ['Мама', 'Ты опять не поела?'],
+            ['Миа', 'Поела.'],
+            ['Мама', 'Фотографию пришли.'],
+            ['Миа', 'Ты не веришь мне на слово?'],
+            ['Мама', 'Нет.'],
+            ['Миа', 'Очень поддерживающие отношения.']
         ]
     },
     {
-        id: 'sophie',
-        title: 'Софи',
-        meta: '2 дня назад · 19:48',
+        id: 'leya',
+        title: 'Лея',
+        meta: 'День встречи · 19:48',
         messages: [
-            ['Софи', 'Ты завтра после трёх свободна?'],
-            ['Миа', 'Пока не знаю.'],
-            ['Софи', 'Мы же хотели сходить в кино.'],
-            ['Миа', 'Я помню.'],
-            ['Софи', 'В Orpheum всё равно ничего нет, он закрыт сто лет.'],
-            ['Миа', 'Я знаю.'],
-            ['Софи', 'Тогда в нормальное кино.'],
-            ['Миа', 'Посмотрим.'],
-            ['Софи', 'Ты опять пропадёшь, да?'],
-            ['Миа', 'Не хочу обещать.']
-        ]
-    },
-    {
-        id: 'seaside',
-        title: 'Seaside Grill | смена',
-        meta: '2 дня назад · 17:33',
-        messages: [
-            ['Лиза', 'Миа, ты сегодня закрываешь?'],
-            ['Миа', 'Да.'],
-            ['Лиза', 'Тогда проверь, пожалуйста, холодильник у бара.'],
-            ['Миа', 'Опять течёт?'],
-            ['Лиза', 'Немного.'],
-            ['Миа', 'Ладно.'],
-            ['Лиза', 'И не забудь про поставку утром.'],
-            ['Миа', 'Я записала.'],
-            ['Лиза', 'Спасибо.'],
-            ['Миа', 'Не за что.']
-        ]
-    },
-    {
-        id: 'media',
-        title: 'Учёба / медиа',
-        meta: '2 дня назад · 16:05',
-        messages: [
-            ['Макс', 'Кто забрал штатив из аудитории?'],
-            ['Миа', 'Не я.'],
-            ['Софи', 'Он был там утром.'],
-            ['Макс', 'Сейчас его нет.'],
-            ['Миа', 'Может, преподаватель взял?'],
-            ['Макс', 'Уже спросил. Не он.'],
-            ['Софи', 'Завтра найдётся.'],
-            ['Макс', 'Очень надеюсь.'],
-            ['Миа', 'Напишите, если не найдёте. Я посмотрю в кладовой.'],
-            ['Макс', 'Спасибо.']
-        ]
-    },
-    {
-        id: 'home',
-        title: 'Дом, 4 этаж',
-        meta: '2 дня назад · 15:12',
-        messages: [
-            ['Нина', 'У кого-то опять пакет у лифта.'],
-            ['Миа', 'Это не мой.'],
-            ['Софи', 'Я видела его утром.'],
-            ['Нина', 'Там вроде вещи.'],
-            ['Миа', 'Может, кто-то переезжает.'],
-            ['Нина', 'Тогда почему он стоит третий день?'],
-            ['Софи', 'Не трогайте, вдруг чужое.'],
-            ['Миа', 'Я напишу консьержу.'],
-            ['Нина', 'Спасибо.'],
-            ['Миа', 'Уже написала.']
+            ['Лея', 'Ты ему всё-таки ответила?'],
+            ['Миа', 'Нет.'],
+            ['Лея', 'Миа.'],
+            ['Миа', 'Я не знаю, что ему говорить.'],
+            ['Лея', 'Хотя бы не исчезай на неделю.'],
+            ['Миа', 'Я не исчезаю.'],
+            ['Лея', 'Ты буквально исчезла на неделю.']
         ]
     },
     {
         id: 'harper',
         title: 'Харпер',
-        meta: '2 дня назад · 14:58',
+        meta: 'День встречи у старого моста',
         messages: [
+            ['Миа', 'Ты уже там?'],
+            ['Харпер', 'Да.'],
+            ['Миа', 'Я буду минут через десять.'],
+            ['Харпер', 'Хорошо.'],
+            ['Миа', 'Всё нормально?'],
+            ['Харпер', 'Да.'],
+            ['Харпер', 'Просто приходи.'],
             ['Миа', 'Ты дошла?'],
             ['Харпер', 'Да.'],
-            ['Миа', 'Точно всё нормально?'],
-            ['Харпер', 'Я в порядке. Правда.'],
-            ['Миа', 'Ты странно себя вела у моста.'],
-            ['Харпер', 'Прости.'],
-            ['Миа', 'Просто скажи, если тебе нужна помощь.'],
-            ['Харпер', 'Я справлюсь.'],
-            ['Миа', 'Не обязательно всё решать одной.'],
-            ['Харпер', 'Я знаю.']
+            ['Миа', 'Точно?'],
+            ['Харпер', 'Точно.'],
+            ['Миа', 'Ты сегодня была какая-то странная.'],
+            ['Харпер', 'Я просто устала.'],
+            ['Миа', 'Напишешь завтра?'],
+            ['Харпер', 'Да.']
         ]
     }
 ];
@@ -108,10 +55,15 @@ const DEVICE_CHATS = [
 export function renderMiaPhone({ onDone } = {}) {
     stateManager.setFlag('remoteAccessUnlocked', true);
     stateManager.setFlag('miaPhoneOpened', true);
+    stateManager.setFlag('backupOpened', true);
 
     const wrapper = document.createElement('div');
     wrapper.className = 'mia-remote-screen';
-    renderDeviceList(wrapper, onDone);
+    if (stateManager.hasFlag('playerDeclinedBackupAccess')) {
+        openRecoveredChat(wrapper, onDone, true);
+    } else {
+        renderDeviceList(wrapper, onDone);
+    }
     return wrapper;
 }
 
@@ -119,19 +71,20 @@ function renderDeviceList(wrapper, onDone) {
     wrapper.innerHTML = `
         <header class="mia-device-header">
             <div>
-                <span>Устройство Мии</span>
-                <h1>Удалённый доступ</h1>
+                <span>Устройство: MIA-OLD</span>
+                <h1>Резервная копия</h1>
             </div>
             <div class="mia-device-status">
                 <strong>только просмотр</strong>
-                <span id="remote-status">Подключение: активно</span>
+                <span id="remote-status">За два дня до исчезновения Харпер</span>
             </div>
         </header>
         <main class="mia-device-body">
             <section class="mia-archive-note">
-                Архив устройства восстановлен частично.<br>
-                Доступны последние сообщения.
+                Владелец увидит историю открытых разделов.<br>
+                Некоторые данные восстановлены частично.
             </section>
+            <section class="mia-recovered-block"><span>Разделы</span><small>Чаты · Фотографии · Файлы · Восстановленные данные · Сведения о копии</small></section>
             <section class="mia-phone-chat-list">
                 ${DEVICE_CHATS.map(chat => renderDeviceRow(chat)).join('')}
             </section>
@@ -140,12 +93,12 @@ function renderDeviceList(wrapper, onDone) {
                 <button class="mia-recovered-row" id="recovered-row" type="button">
                     <div class="mia-damaged-icon">!</div>
                     <div>
-                        <strong>+1 (503) 555-0189</strong>
-                        <p>1 вложение</p>
-                        <em>2 дня назад · 18:42</em>
+                        <strong>Неизвестный чат</strong>
+                        <p>1 удалённый чат · 1 удалённое вложение</p>
+                        <em>День встречи · 18:46</em>
                     </div>
                 </button>
-                <small>Данные восстановлены частично</small>
+                <small>14 изображений · 3 временных файла · 1 чат · 1 вложение</small>
             </section>
         </main>
     `;
@@ -177,9 +130,10 @@ function renderDeviceRow(chat) {
 }
 
 function openDeviceChat(wrapper, chat, onDone) {
-    incrementPrivateChatsOpened();
     if (chat.id === 'harper') {
         stateManager.setFlag('harperChatViewed', true);
+    } else {
+        incrementPrivateChatsOpened();
     }
 
     wrapper.innerHTML = `
@@ -198,10 +152,7 @@ function openDeviceChat(wrapper, chat, onDone) {
                     <p>${escapeHtml(text)}</p>
                 </div>
             `).join('')}
-            <div class="mia-archive-footer">
-                <strong>Загрузка более ранних сообщений...</strong>
-                <span>Архив ещё не восстановлен.</span>
-            </div>
+            ${chat.id === 'harper' ? '<div class="mia-archive-footer"><strong>Последнее сообщение прочитано Харпер.</strong><span>В этот день с устройства был удалён ещё один чат.</span></div>' : '<div class="mia-archive-footer"><strong>Личная переписка Мии.</strong><span>Она не относится к делу Харпер.</span></div>'}
         </main>
         <footer class="mia-view-only">Режим просмотра. Ответить нельзя.</footer>
     `;
@@ -219,25 +170,27 @@ function openDeviceChat(wrapper, chat, onDone) {
     });
 }
 
-function openRecoveredChat(wrapper, onDone) {
+function openRecoveredChat(wrapper, onDone, restricted = false) {
+    stateManager.setFlag('deletedChatFound', true);
+    stateManager.setFlag('vid1842Found', true);
     wrapper.innerHTML = `
         <header class="mia-device-chat-header">
-            <button class="mia-device-back" type="button">‹</button>
+            ${restricted ? '' : '<button class="mia-device-back" type="button">‹</button>'}
             <div>
-                <h1>+1 (503) 555-0189</h1>
-                <span>Данные восстановлены частично.</span>
+                <h1>Неизвестный чат</h1>
+                <span>Контакт не сохранён · номер повреждён</span>
             </div>
         </header>
         <main class="mia-device-chat-log recovered">
-            <div class="mia-time-chip">18:42</div>
+            <div class="mia-time-chip">Создан 18:46 · удалён 18:49</div>
             <div class="mia-recovered-message">
-                <p>Исходный текст сообщения недоступен.</p>
+                <p>Исходящие сообщения: текст не восстановлен.</p>
                 <div class="mia-video-file">
                     <span>Вложение</span>
                     <strong>VID_1842.mp4</strong>
-                    <em>19,4 МБ · Отправлено с этого устройства</em>
+                    <em>Локальная копия отсутствует · источник: внешний сервер</em>
                 </div>
-                <button class="mia-open-file" id="open-video-file" type="button">Открыть вложение</button>
+                <button class="mia-open-file" id="open-video-file" type="button">Открыть VID_1842.mp4</button>
             </div>
         </main>
         <footer class="mia-view-only">Режим просмотра. Ответить нельзя.</footer>
@@ -249,6 +202,8 @@ function openRecoveredChat(wrapper, onDone) {
 
 function startDownload(wrapper, onDone) {
     stateManager.setFlag('suspiciousFileOpened', true);
+    stateManager.setFlag('deletedChatFound', true);
+    stateManager.setFlag('vid1842Found', true);
 
     wrapper.innerHTML = `
         <section class="mia-download-screen">
@@ -263,7 +218,8 @@ function startDownload(wrapper, onDone) {
     `;
 
     updateProgress(wrapper, 0);
-    setTimeout(() => updateProgress(wrapper, 12), 900);
+    setTimeout(() => updateProgress(wrapper, 7), 700);
+    setTimeout(() => updateProgress(wrapper, 18), 1250);
     setTimeout(() => updateProgress(wrapper, 31), 1800);
     setTimeout(() => runTakeover(wrapper, onDone), 2600);
 }
@@ -325,6 +281,9 @@ async function runTakeover(wrapper, onDone) {
 
     stateManager.setFlag('playerPhoneCompromised', true);
     stateManager.setFlag('cameraCaptureTriggered', true);
+    stateManager.setFlag('playerHackPhotoCreated', true);
+    stateManager.setFlag('unknownFirstContact', true);
+    stateManager.setFlag('videoPartialSavedByUnknown', true);
     stateManager.setFlag('externalConnectionBlocked', true);
     stateManager.setFlag('unknownChatUnlocked', true);
     stateManager.setFlag('hackSequencePending', false);

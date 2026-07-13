@@ -190,6 +190,26 @@ class StoryEngine {
             return stateManager.hasFlag(flagName) && beatIds.some(id => stateManager.isBeatCompleted(id));
         }
 
+        // flagValueAfter:beatId|beatId2:flagName:true|false — exact boolean flag state after a beat
+        if (beat.trigger.startsWith('flagValueAfter:')) {
+            const parts = beat.trigger.split(':');
+            const beatIds = (parts[1] || '').split('|').map(id => id.trim()).filter(Boolean);
+            const flagName = parts[2];
+            const expected = parts[3] !== 'false';
+            return beatIds.some(id => stateManager.isBeatCompleted(id)) && stateManager.hasFlag(flagName) === expected;
+        }
+
+        // flagsValueAfter:beatId:flag:true:flag:false — multiple exact boolean states
+        if (beat.trigger.startsWith('flagsValueAfter:')) {
+            const parts = beat.trigger.split(':');
+            const beatIds = (parts[1] || '').split('|').map(id => id.trim()).filter(Boolean);
+            if (!beatIds.some(id => stateManager.isBeatCompleted(id))) return false;
+            for (let i = 2; i < parts.length; i += 2) {
+                if (stateManager.hasFlag(parts[i]) !== (parts[i + 1] !== 'false')) return false;
+            }
+            return true;
+        }
+
         // choice:beatId:optionIndex
         if (beat.trigger.startsWith('choice:')) {
             const parts = beat.trigger.split(':');

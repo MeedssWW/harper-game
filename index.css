@@ -7785,8 +7785,18 @@ body,
     display: flex;
     justify-content: space-between;
     gap: 34px;
-    max-width: 300px;
+    max-width: 330px;
     margin-top: 24px;
+}
+
+.call-action.wait span {
+    background: rgba(255, 255, 255, 0.18);
+    border: 1px solid rgba(255, 255, 255, 0.24);
+}
+
+.call-action.wait b {
+    max-width: 82px;
+    line-height: 1.2;
 }
 
 .call-action {

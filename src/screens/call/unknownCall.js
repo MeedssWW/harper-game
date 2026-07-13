@@ -55,6 +55,10 @@ export function renderUnknownCall({ onDone } = {}) {
                     <span>✓</span>
                     <b>Принять</b>
                 </button>
+                <button class="call-action wait" id="call-wait" type="button">
+                    <span>…</span>
+                    <b>Подождать и ответить</b>
+                </button>
             </div>
         </section>
     `;
@@ -71,6 +75,12 @@ export function renderUnknownCall({ onDone } = {}) {
         stateManager.setFlag('unknownCallAnswered', false);
         stateManager.setFlag('unknownCallVoicemailReceived', true);
         renderDeclinedCall(wrapper, onDone);
+    });
+
+    wrapper.querySelector('#call-wait')?.addEventListener('click', () => {
+        audioEngine.stopIncomingCall();
+        stateManager.setFlag('unknownCallAnsweredAfterWaiting', true);
+        setTimeout(() => renderAcceptedCall(wrapper, onDone), 2200);
     });
 
     return wrapper;
@@ -193,11 +203,28 @@ function finishCall(wrapper, onDone) {
     audioEngine.stopIncomingCall();
     audioEngine.stopCallAmbience();
     stateManager.setFlag('unknownCallCompleted', true);
+    stateManager.setFlag('anonymousCallReceived', true);
     stateManager.setFlag('unknownOfflineAfterCall', true);
     stateManager.setCharacterOnline('unknown', false);
 
-    setTimeout(() => {
+    wrapper.innerHTML = `
+        <section class="call-declined-panel">
+            <div class="call-ended-mark">Запись сохранена: call_unknown_01.m4a</div>
+            <div class="voicemail-card">
+                <strong>Что сделать с записью?</strong>
+                <button id="call-send-police" type="button"><b>Отправить полиции</b></button>
+                <button id="call-write-unknown" type="button"><b>Написать Неизвестному</b></button>
+                <button id="call-save-only" type="button"><b>Пока только сохранить</b></button>
+            </div>
+        </section>`;
+
+    const complete = flag => {
+        stateManager.setFlag(flag, true);
+        stateManager.setFlag('callDispositionChosen', true);
         audioEngine.resumeBGMForScene(!!wrapper?._resumeMusic);
         if (onDone) onDone();
-    }, 1100);
+    };
+    wrapper.querySelector('#call-send-police')?.addEventListener('click', () => complete('callSentToPolice'));
+    wrapper.querySelector('#call-write-unknown')?.addEventListener('click', () => complete('unknownContactedAfterCall'));
+    wrapper.querySelector('#call-save-only')?.addEventListener('click', () => complete('callSavedOnly'));
 }

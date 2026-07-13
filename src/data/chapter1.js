@@ -6,6 +6,7 @@ import { miaIntroRewriteBeats } from './miaIntroRewrite.js?v=1';
 import { derekMorningRewriteBeats } from './derekMorningRewrite.js?v=1';
 import { oliviaMorningRewriteBeats } from './oliviaMorningRewrite.js?v=1';
 import { postOliviaRoutesRewriteBeats } from './postOliviaRoutesRewrite.js?v=1';
+import { backupFoundRewriteBeats } from './backupFoundRewrite.js?v=1';
 
 const legacyChapter1 = {
   id: "act1",
@@ -1511,11 +1512,12 @@ const legacyChapter1 = {
         { type: "system", text: "Перезагрузка устройства…", delay: 500 },
         { type: "system", text: "Устройство включено.", delay: 900 },
         { type: "system", text: "Новое сообщение.", delay: 900 },
-        { from: "unknown", text: "Не подключайся к телефону Мии снова.", delay: 1100 },
+        { from: "unknown", text: "Не открывай файл снова.", delay: 900 },
+        { from: "unknown", text: "Я оборвал подключение.", delay: 850 },
         { type: "choice", options: [
-          { text: "Кто ты вообще такой?", loyalty: {}, next: "unknown_after_hack_who" },
-          { text: "Что ты сделал с моим телефоном?", loyalty: {}, next: "unknown_after_hack_phone" },
-          { text: "Ты был у меня в телефоне?", loyalty: {}, next: "unknown_after_hack_inside" }
+          { text: "Кто ты?", loyalty: {}, next: "unknown_after_hack_who" },
+          { text: "Что только что произошло?", loyalty: {}, next: "unknown_after_hack_phone" },
+          { text: "Это ты залез в мой телефон?", loyalty: {}, next: "unknown_after_hack_inside" }
         ]}
       ]
     },
@@ -1837,13 +1839,14 @@ const legacyChapter1 = {
       messages: [
         { type: "system", text: "Несколько секунд спустя.", delay: 1600 },
         { type: "system", text: "Миа в сети.", delay: 900, characterStatus: { id: "mia", online: true } },
-        { from: "mia", text: "Ты тут?", delay: 900 },
-        { from: "mia", text: "У меня появилось уведомление, что доступ к телефону отключился.", delay: 1200 },
-        { from: "mia", text: "Всё нормально?", delay: 900 },
+        { from: "mia", text: "Что случилось?", delay: 800 },
+        { from: "mia", text: "Доступ резко оборвался.", delay: 850 },
+        { from: "mia", text: "У меня программа закрылась.", delay: 850 },
+        { from: "mia", text: "Ты успел открыть видео?", delay: 900 },
         { type: "choice", options: [
-          { text: "Не совсем. Мне написал незнакомец.", loyalty: {}, next: "mia_after_hack_reveal_unknown" },
-          { text: "Кто-то пытался получить доступ к моему телефону.", loyalty: {}, trust: { miaTrust: 1 }, next: "mia_after_hack_attack" },
-          { text: "Доступ просто оборвался. Я ничего не успел найти.", loyalty: {}, trust: { miaTrust: -1 }, next: "mia_after_hack_cover_story" }
+          { text: "Да. Файл взломал мой телефон. Потом написал человек, который остановил подключение.", loyalty: {}, next: "mia_after_hack_reveal_unknown" },
+          { text: "Да. Файл взломал телефон, но я не знаю, кто это сделал.", loyalty: {}, trust: { miaTrust: 1 }, next: "mia_after_hack_attack" },
+          { text: "Нет. Просто всё зависло и закрылось.", loyalty: {}, trust: { miaTrust: -1 }, next: "mia_after_hack_cover_story" }
         ]}
       ]
     },
@@ -1954,7 +1957,7 @@ const legacyChapter1 = {
       id: "mia_after_hack_reveal_common",
       chat: "private_mia",
       trigger: "after:mia_after_hack_unknown_reboot|mia_after_hack_unknown_knew_file|mia_after_hack_unknown_after_reboot|mia_after_hack_unknown_cant_ignore|mia_after_hack_unknown_trust_reboot|mia_after_hack_unknown_trust_more|mia_after_hack_unknown_trust_understand",
-      setFlags: { unknownRevealedToMia: true },
+      setFlags: { unknownRevealedToMia: true, miaKnowsAboutHack: true },
       messages: [
         { from: "mia", text: "Мне это совсем не нравится.", delay: 1000 }
       ]
@@ -2063,7 +2066,7 @@ const legacyChapter1 = {
       id: "mia_after_hack_attack_common",
       chat: "private_mia",
       trigger: "after:mia_after_hack_attack_chat_file|mia_after_hack_attack_cut|mia_after_hack_attack_too_fast|mia_after_hack_attack_glitched|mia_after_hack_attack_notes|mia_after_hack_attack_scrolled|mia_after_hack_attack_dont_know",
-      setFlags: { unknownKeptSecret: true, miaKnowsAboutAttack: true },
+      setFlags: { unknownKeptSecret: true, miaKnowsAboutAttack: true, miaKnowsAboutHack: true, unknownRevealedToMia: false },
       messages: [
         { from: "mia", text: "Значит, телефон пока лучше не трогать.", delay: 1000 }
       ]
@@ -2072,7 +2075,7 @@ const legacyChapter1 = {
       id: "mia_after_hack_cover_story",
       chat: "private_mia",
       trigger: "choice:mia_after_hack_start:2",
-      setFlags: { unknownKeptSecret: true, miaKnowsAboutAttack: false },
+      setFlags: { unknownKeptSecret: true, miaKnowsAboutAttack: false, miaKnowsAboutHack: false, unknownRevealedToMia: false, playerHidHackFromMia: true },
       messages: [
         { from: "mia", text: "Странно.", delay: 800 },
         { from: "mia", text: "Он же работал всего минуту назад.", delay: 1000 },
@@ -2171,12 +2174,50 @@ const legacyChapter1 = {
       ]
     },
     {
+      id: "mia_privacy_respected",
+      chat: "private_mia",
+      trigger: "flagsValueAfter:mia_after_hack_end:miaBackupAccessGranted:true:miaPrivateChatsOpened:false",
+      setFlags: { miaRespectedPrivacy: true },
+      messages: [
+        { from: "mia", text: "И... я вижу историю доступа.", delay: 800 },
+        { from: "mia", text: "Ты правда не полез в мои личные переписки.", delay: 850 },
+        { type: "choice", options: [
+          { text: "Ты попросила этого не делать.", loyalty: {}, trust: { miaTrust: 1 }, next: "mia_privacy_good_request" },
+          { text: "Они не относятся к Харпер.", loyalty: {}, trust: { miaTrust: 1 }, next: "mia_privacy_good_case" },
+          { text: "Я вообще-то умею соблюдать чужие границы.", loyalty: {}, trust: { miaTrust: 1 }, next: "mia_privacy_good_boundaries" }
+        ] }
+      ]
+    },
+    { id: "mia_privacy_good_request", chat: "private_mia", trigger: "choice:mia_privacy_respected:0", messages: [{ from: "mia", text: "Да. Просто не все останавливаются после просьбы.", delay: 900 }] },
+    { id: "mia_privacy_good_case", chat: "private_mia", trigger: "choice:mia_privacy_respected:1", messages: [{ from: "mia", text: "Спасибо. Серьёзно.", delay: 850 }] },
+    { id: "mia_privacy_good_boundaries", chat: "private_mia", trigger: "choice:mia_privacy_respected:2", messages: [{ from: "mia", text: "Хорошо. Буду знать.", delay: 850 }] },
+    {
+      id: "mia_privacy_violated",
+      chat: "private_mia",
+      trigger: "flagsValueAfter:mia_after_hack_end:miaBackupAccessGranted:true:miaPrivateChatsOpened:true",
+      setFlags: { miaPrivacyViolated: true, miaRemoteAccessBlocked: true },
+      messages: [
+        { from: "mia", text: "Подожди.", delay: 650 },
+        { from: "mia", text: "В истории доступа написано, что ты открывал мои переписки.", delay: 950 },
+        { from: "mia", text: "Не чат с Харпер. Мои.", delay: 800 },
+        { type: "choice", options: [
+          { text: "Я хотел проверить, не писала ли Харпер с твоего аккаунта кому-то ещё.", loyalty: {}, trust: { miaTrust: -2 }, next: "mia_privacy_bad_excuse" },
+          { text: "Да. Я открыл их. Извини.", loyalty: {}, trust: { miaTrust: -2 }, next: "mia_privacy_bad_apology" },
+          { text: "Ты всё равно дала мне доступ.", loyalty: {}, trust: { miaTrust: -3 }, next: "mia_privacy_bad_entitled" }
+        ] }
+      ]
+    },
+    { id: "mia_privacy_bad_excuse", chat: "private_mia", trigger: "choice:mia_privacy_violated:0", messages: [{ from: "mia", text: "В чате с моей мамой? Серьёзно? Не надо придумывать оправдание.", delay: 1050 }] },
+    { id: "mia_privacy_bad_apology", chat: "private_mia", trigger: "choice:mia_privacy_violated:1", messages: [{ from: "mia", text: "Я прямо попросила тебя не лезть туда. Я не хочу сейчас продолжать этот разговор.", delay: 1100 }] },
+    { id: "mia_privacy_bad_entitled", chat: "private_mia", trigger: "choice:mia_privacy_violated:2", messages: [{ from: "mia", text: "К копии. Не к моей личной жизни. Больше доступа не будет.", delay: 1100 }] },
+    { id: "mia_privacy_not_applicable", chat: "private_mia", trigger: "flagAfter:playerDeclinedBackupAccess:mia_after_hack_end", messages: [] },
+    {
       id: "mia_after_hack_case_update",
       chat: "private_mia",
-      trigger: "after:mia_after_hack_end",
+      trigger: "after:mia_privacy_good_request|mia_privacy_good_case|mia_privacy_good_boundaries|mia_privacy_bad_excuse|mia_privacy_bad_apology|mia_privacy_bad_entitled|mia_privacy_not_applicable",
       messages: [
         { type: "pause", delay: 1200 },
-        { type: "note_auto", id: "harper_mia_phone_hack", appendTo: "harper_intro_summary", title: "Харпер Вэнс", time: "21:24", text: "21:24 — ОБНОВЛЕНИЕ\n\nСТАРЫЙ ТЕЛЕФОН МИИ\n• Найден восстановленный чат с неизвестным номером.\n• В чате было вложение: VID_1842.mp4.\n\nЧТО ПРОИЗОШЛО\n• Во время загрузки файла кто-то получил доступ к моему телефону.\n• Файл не открылся.\n• Неизвестный утверждает, что оборвал подключение.\n\nНУЖНО ПОНЯТЬ\n• Кто оставил вложение.\n• Почему оно сработало именно при открытии.\n• Что успели увидеть в моих данных.\n\nРИСК\n• Миа пока не должна включать старый телефон.", noteCompleteFlag: "miaHackUpdateWritten", notificationText: "Обновить дело после взлома", skipIfFlag: "miaHackUpdateWritten", delay: 700 },
+        { type: "note_auto", id: "harper_mia_phone_hack", appendTo: "harper_intro_summary", title: "Харпер Вэнс", time: "21:24", text: "21:24 — НОВЫЕ СВЕДЕНИЯ\n\nПОДТВЕРЖДЕНО\n• На ноутбуке Мии сохранилась резервная копия старого телефона.\n• Копия создана после встречи у старого моста.\n• Найден удалённый чат с неизвестным контактом.\n• Чат создан в период, когда телефон находился у Харпер.\n• В чате было вложение VID_1842.mp4.\n• Сохранилась ссылка на внешний сервер, а не сам видеофайл.\n• После открытия ссылки кто-то получил доступ к чатам, заметкам и фронтальной камере игрока.\n• Создан файл playerHackPhoto.jpg.\n\nПОКАЗАНИЯ\n• Миа говорит, что телефоном в это время пользовалась Харпер.\n• Миа не видела получателя и содержимое сообщения.\n• Неизвестный утверждает, что остановил подключение и сохранил часть видео.\n\nПОКА ТОЛЬКО ВЕРСИЯ\n• Удалённый чат создала Харпер.\n• Харпер отправила VID_1842.mp4.\n• Получатель видео связан с исчезновением.\n• Неизвестный действительно пытался помочь.\n• Фотография игрока успела попасть к нападавшему.\n\nНОВЫЕ ВОПРОСЫ\n• Что находится на VID_1842.mp4?\n• Кому Харпер отправила видео?\n• Почему она использовала телефон Мии?\n• Кто изменил ссылку?\n• Кто такой Неизвестный?\n• Что успели скопировать?", noteCompleteFlag: "miaHackUpdateWritten", notificationText: "Добавлены сведения о резервной копии", skipIfFlag: "miaHackUpdateWritten", delay: 700 },
         { type: "wait_flag", flag: "miaHackUpdateWritten", delay: 300 },
         { type: "pause", delay: 15000 },
         { type: "navigate", screen: "unknownCall", delay: 300 }
@@ -2185,7 +2226,7 @@ const legacyChapter1 = {
     {
       id: "unknown_call_report_start",
       chat: "private_unknown",
-      trigger: "flag:unknownCallNoteWritten",
+      trigger: "flag:unknownContactedAfterCall",
       messages: [
         { type: "pause", delay: 700 },
         { type: "system", text: "Неизвестный не в сети.", delay: 500, characterStatus: { id: "unknown", online: false } },
@@ -2256,9 +2297,34 @@ const legacyChapter1 = {
       ]
     },
     {
+      id: "brooke_after_call_separate_start",
+      chat: "private_brooke",
+      trigger: "flagsValueAfter:mia_after_hack_case_update:separateChatsRoute:true:callDispositionChosen:true",
+      identify: ["brooke"],
+      messages: [
+        { type: "pause", delay: 4500 },
+        { type: "system", text: "Брук в сети.", delay: 500, characterStatus: { id: "brooke", online: true } },
+        { from: "brooke", text: "Это что?", delay: 700 },
+        { from: "brooke", text: "Значит, отдельную группу вы не создали.", delay: 850 },
+        { from: "brooke", text: "Просто решили обсуждать Харпер с тобой по личкам.", delay: 950 },
+        { from: "brooke", text: "Намного лучше.", delay: 650 },
+        { type: "choice", options: [
+          { text: "Они сами мне написали.", loyalty: {}, next: "brooke_separate_they_wrote" },
+          { text: "Мы не обсуждаем ничего за вашей спиной.", loyalty: {}, next: "brooke_separate_not_behind" },
+          { text: "Откуда у тебя этот скриншот?", loyalty: {}, next: "brooke_separate_source" }
+        ] }
+      ]
+    },
+    { id: "brooke_separate_they_wrote", chat: "private_brooke", trigger: "choice:brooke_after_call_separate_start:0", messages: [{ from: "brooke", text: "И ты, конечно, просто случайно оказался в центре всего.", delay: 950 }] },
+    { id: "brooke_separate_not_behind", chat: "private_brooke", trigger: "choice:brooke_after_call_separate_start:1", messages: [{ from: "brooke", text: "Тогда почему я узнаю об этих разговорах из анонимного сообщения?", delay: 1000 }] },
+    { id: "brooke_separate_source", chat: "private_brooke", trigger: "choice:brooke_after_call_separate_start:2", messages: [
+      { from: "brooke", text: "Его прислали с неизвестного номера.", delay: 850 },
+      { from: "brooke", text: "Без текста. Только картинка.", delay: 800 }
+    ] },
+    {
       id: "brooke_after_call_start",
       chat: "private_brooke",
-      trigger: "flag:unknownCallReportedToUnknown",
+      trigger: "flagsValueAfter:mia_after_hack_case_update:larksCreated:true:callDispositionChosen:true",
       identify: ["brooke"],
       messages: [
         { type: "pause", delay: 4500 },
@@ -2308,7 +2374,7 @@ const legacyChapter1 = {
     {
       id: "brooke_after_call_common_one",
       chat: "private_brooke",
-      trigger: "after:brooke_after_call_your_business|brooke_after_call_who_sent|brooke_after_call_one_screen",
+      trigger: "after:brooke_after_call_your_business|brooke_after_call_who_sent|brooke_after_call_one_screen|brooke_separate_they_wrote|brooke_separate_not_behind|brooke_separate_source",
       messages: [
         { from: "brooke", text: "Я не знаю, что именно вы там обсуждаете.", delay: 1000 },
         { from: "brooke", text: "Но со стороны это выглядит так, будто часть людей уже решила говорить отдельно.", delay: 1300 },
@@ -2440,9 +2506,9 @@ const legacyChapter1 = {
       id: "brooke_after_call_end",
       chat: "private_brooke",
       trigger: "after:brooke_after_call_you_left|brooke_after_call_what_to_do|brooke_after_call_found_nothing",
-      setFlags: { brookeConfrontedPrivateChats: true },
+      setFlags: { brookeConfrontedPrivateChats: true, brookeReceivedLeak: true, derekKnowsAboutPrivateCoordination: true },
       messages: [
-        { from: "brooke", text: "Я скажу Дереку, что у вас есть этот чат.", delay: 1100 },
+        { from: "brooke", text: "Я уже отправила скрин Дереку.", delay: 1100 },
         { from: "brooke", text: "Не потому что хочу устроить ссору.", delay: 1000 },
         { from: "brooke", text: "Просто он всё равно узнает.", delay: 1000 },
         { from: "brooke", text: "И лучше не от кого-то ещё.", delay: 900 },
@@ -3253,6 +3319,7 @@ const legacyChapter1 = {
 const firstPostMiaBeat = legacyChapter1.beats.findIndex(beat => beat.id === 'intro_case_sort_task');
 const firstLegacyDerekMorningBeat = legacyChapter1.beats.findIndex(beat => beat.id === 'morning_derek_photos');
 const firstMiaRemoteBeat = legacyChapter1.beats.findIndex(beat => beat.id === 'mia_remote_phone_start');
+const firstUnknownAfterHackBeat = legacyChapter1.beats.findIndex(beat => beat.id === 'unknown_after_hack_start');
 
 export const chapter1 = {
   ...legacyChapter1,
@@ -3265,6 +3332,7 @@ export const chapter1 = {
     ...derekMorningRewriteBeats,
     ...oliviaMorningRewriteBeats,
     ...postOliviaRoutesRewriteBeats,
-    ...legacyChapter1.beats.slice(firstMiaRemoteBeat)
+    ...backupFoundRewriteBeats,
+    ...legacyChapter1.beats.slice(firstUnknownAfterHackBeat)
   ]
 };
