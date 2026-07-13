@@ -3,7 +3,7 @@
 // ============================================
 
 import { stateManager } from '../../engine/stateManager.js';
-import { storyEngine } from '../../engine/storyEngine.js?v=81';
+import { storyEngine } from '../../engine/storyEngine.js?v=121';
 import { getCharacter, getCharacterColor } from '../../data/characters.js';
 
 // Chat definitions

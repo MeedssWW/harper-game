@@ -4,8 +4,8 @@
 
 import { stateManager } from '../../engine/stateManager.js';
 import { getCharacter, getCharacterColor } from '../../data/characters.js';
-import { CHATS, getActiveGroupMembers } from './chatList.js?v=81';
-import { storyEngine } from '../../engine/storyEngine.js?v=81';
+import { CHATS, getActiveGroupMembers } from './chatList.js?v=121';
+import { storyEngine } from '../../engine/storyEngine.js?v=121';
 
 export class ChatView {
     constructor(chatId, container, onBack, onOpenDocument = null) {
