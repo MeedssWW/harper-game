@@ -20,7 +20,7 @@ export function renderLockScreen(onUnlock) {
         <div class="lock-notifications">
             <div class="lock-notif" style="animation-delay: 0.3s">
                 <div class="lock-notif-header">
-                    <span class="lock-notif-app">💬 МЕССЕНДЖЕР</span>
+                    <span class="lock-notif-app"><img src="src/assets/icons/lucide/message-circle.svg" alt="" /> МЕССЕНДЖЕР</span>
                     <span class="lock-notif-time">сейчас</span>
                 </div>
                 <div class="lock-notif-title">Дерек Миллер</div>
@@ -28,7 +28,7 @@ export function renderLockScreen(onUnlock) {
             </div>
             <div class="lock-notif" style="animation-delay: 0.6s">
                 <div class="lock-notif-header">
-                    <span class="lock-notif-app">💬 МЕССЕНДЖЕР</span>
+                    <span class="lock-notif-app"><img src="src/assets/icons/lucide/message-circle.svg" alt="" /> МЕССЕНДЖЕР</span>
                     <span class="lock-notif-time">5 мин назад</span>
                 </div>
                 <div class="lock-notif-title">Дерек Миллер</div>

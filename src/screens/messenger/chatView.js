@@ -128,6 +128,7 @@ export class ChatView {
 
         stateManager.identifyContact(charId);
         const relationship = this._getRelationshipTone(charId);
+        const gallery = Array.isArray(char.gallery) ? char.gallery : [char.socialPhoto || char.avatarImage].filter(Boolean);
         const overlay = document.createElement('div');
         overlay.className = 'profile-overlay social-profile-overlay';
 
@@ -162,12 +163,35 @@ export class ChatView {
                         <strong>${relationship.revealsSecret && char.secret ? this._escapeHtml(char.secret) : '???'}</strong>
                     </div>
                 </div>
+                ${gallery.length ? `
+                    <section class="social-profile-gallery" aria-label="Фотографии ${this._escapeHtml(char.name)}">
+                        <div class="social-profile-gallery-head">
+                            <strong>Моменты</strong>
+                            <span>${gallery.length} фото</span>
+                        </div>
+                        <div class="social-profile-photo-grid">
+                            ${gallery.map((photo, index) => `<button type="button" data-profile-photo="${index}" aria-label="Открыть фотографию ${index + 1}"><img src="${photo}" alt="" /></button>`).join('')}
+                        </div>
+                    </section>
+                ` : ''}
             </div>
         `;
 
         overlay.querySelector('#close-profile').addEventListener('click', () => {
             overlay.remove();
             this.render();
+        });
+        overlay.querySelectorAll('[data-profile-photo]').forEach(button => {
+            button.addEventListener('click', () => {
+                const photo = gallery[Number(button.dataset.profilePhoto)];
+                const viewer = document.createElement('button');
+                viewer.type = 'button';
+                viewer.className = 'social-profile-photo-viewer';
+                viewer.setAttribute('aria-label', 'Закрыть фотографию');
+                viewer.innerHTML = `<img src="${photo}" alt="" /><span>×</span>`;
+                viewer.addEventListener('click', () => viewer.remove());
+                overlay.appendChild(viewer);
+            });
         });
         const overlayHost = document.getElementById('screen-container') || this.container;
         overlayHost.appendChild(overlay);

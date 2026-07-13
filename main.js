@@ -6,6 +6,7 @@ import { stateManager } from './src/engine/stateManager.js';
 import { storyEngine } from './src/engine/storyEngine.js?v=121';
 import { screenManager } from './src/screens/screenManager.js';
 import { renderLockScreen } from './src/screens/lockScreen.js?v=70';
+import { renderBootScreen } from './src/screens/bootScreen.js?v=122';
 import { renderNameScreen } from './src/screens/nameScreen.js';
 import { renderHomeScreen } from './src/screens/homeScreen.js?v=115';
 import { CHATS, renderChatList } from './src/screens/messenger/chatList.js?v=121';
@@ -68,20 +69,18 @@ function init() {
     setupStoryEngine();
     setupInvestigationCallbacks();
 
-    // Determine starting screen
-    if (stateManager.get('started') && stateManager.getPlayerName()) {
-        screenManager.navigate('home');
-        // Resume story playback
-        storyEngine.loadAct(chapter1);
-        setTimeout(() => storyEngine.start(), 1000);
-    } else {
-        screenManager.navigate('lock');
-    }
+    // Always begin with the branded audio/visual handshake.
+    document.body.classList.add('harper-booting');
+    screenManager.navigate('boot', {
+        resume: Boolean(stateManager.get('started') && stateManager.getPlayerName())
+    }, false);
 
     // Unlock browser audio on first interaction.
     const startAudio = () => {
         audioEngine.unlock();
-        audioEngine.playBGM();
+        if (screenManager.getCurrentScreen()?.id !== 'boot') {
+            audioEngine.playBGM();
+        }
         document.removeEventListener('click', startAudio);
         document.removeEventListener('touchstart', startAudio);
         document.removeEventListener('keydown', startAudio);
@@ -101,6 +100,23 @@ function setupInvestigationCallbacks() {
 
 // ---- Register Screens ----
 function registerScreens() {
+    screenManager.register('boot', (params = {}) => {
+        return renderBootScreen({
+            onBegin: () => audioEngine.playBootSequence(),
+            onComplete: () => {
+                document.body.classList.remove('harper-booting');
+                audioEngine.finishBootSequence();
+                if (params.resume) {
+                    screenManager.navigate('home', {}, false);
+                    storyEngine.loadAct(chapter1);
+                    setTimeout(() => storyEngine.start(), 900);
+                } else {
+                    screenManager.navigate('lock', {}, false);
+                }
+            }
+        });
+    });
+
     // Lock Screen
     screenManager.register('lock', () => {
         return renderLockScreen(() => {

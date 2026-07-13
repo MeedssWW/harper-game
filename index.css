@@ -10006,3 +10006,431 @@ body {
     margin-left: auto;
     white-space: nowrap;
 }
+/* ============================================================
+   HARPER v2 — unified obsidian interface, branded boot & profiles
+   ============================================================ */
+:root {
+    --harper-black: #05070a;
+    --harper-surface: #0b0f15;
+    --harper-elevated: #111720;
+    --harper-line: rgba(255,255,255,.09);
+    --harper-text: #f4f7fb;
+    --harper-muted: #8792a3;
+    --harper-accent: #5a83ff;
+}
+
+body.harper-booting #status-bar,
+body.harper-booting #notification-toast {
+    opacity: 0 !important;
+    pointer-events: none !important;
+}
+
+.boot-screen {
+    z-index: 300 !important;
+    background: #030507 !important;
+}
+
+.harper-boot {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 38px 28px 34px;
+    color: #f7f9fc;
+    background:
+        radial-gradient(circle at 50% 30%, rgba(77, 112, 162, .2), transparent 24%),
+        radial-gradient(circle at 50% 72%, rgba(88, 20, 33, .15), transparent 35%),
+        linear-gradient(160deg, #080c12 0%, #020305 72%);
+    isolation: isolate;
+}
+
+.harper-boot::before,
+.harper-boot::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+}
+
+.harper-boot::before {
+    opacity: .38;
+    background: repeating-linear-gradient(180deg, transparent 0 3px, rgba(255,255,255,.018) 3px 4px);
+    mix-blend-mode: screen;
+}
+
+.harper-boot::after {
+    inset: 8%;
+    border: 1px solid rgba(255,255,255,.055);
+    border-radius: 48% 52% 45% 55%;
+    filter: blur(.2px);
+    animation: harperBootOrbit 9s linear infinite;
+}
+
+.harper-boot-noise {
+    position: absolute;
+    inset: -20%;
+    opacity: .06;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.7'/%3E%3C/svg%3E");
+    animation: harperNoise .28s steps(2) infinite;
+}
+
+.harper-boot-signal {
+    position: relative;
+    width: 142px;
+    height: 142px;
+    display: grid;
+    place-items: center;
+    margin-bottom: 32px;
+}
+
+.harper-boot-signal::before {
+    content: '';
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: #e9f1ff;
+    box-shadow: 0 0 18px rgba(195,217,255,.9), 0 0 44px rgba(82,127,206,.65);
+}
+
+.harper-boot-signal i {
+    position: absolute;
+    border: 1px solid rgba(147,181,238,.32);
+    border-radius: 50%;
+    animation: harperSignal 2.8s ease-out infinite;
+}
+
+.harper-boot-signal i:nth-child(1) { width: 42px; height: 42px; }
+.harper-boot-signal i:nth-child(2) { width: 86px; height: 86px; animation-delay: .38s; }
+.harper-boot-signal i:nth-child(3) { width: 136px; height: 136px; animation-delay: .76s; }
+
+.harper-boot-copy { position: relative; z-index: 2; text-align: center; }
+.harper-boot-kicker {
+    display: block;
+    color: #71809a;
+    font: 700 9px/1.2 'JetBrains Mono', monospace;
+    letter-spacing: .22em;
+}
+
+.harper-boot h1 {
+    margin: 12px 0 9px;
+    color: #f7f9fc;
+    font-size: 54px;
+    font-weight: 300;
+    line-height: .95;
+    letter-spacing: .22em;
+    text-indent: .22em;
+    text-shadow: 0 0 34px rgba(141,175,234,.18);
+}
+
+.harper-boot-copy p {
+    margin: 0;
+    color: #778396;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.harper-boot-start {
+    position: absolute;
+    z-index: 4;
+    bottom: 78px;
+    display: grid;
+    gap: 5px;
+    min-width: 246px;
+    padding: 13px 20px;
+    border: 1px solid rgba(188,210,249,.22);
+    border-radius: 999px;
+    color: #eaf1fb;
+    background: rgba(10,15,23,.76);
+    box-shadow: 0 14px 40px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.05);
+    backdrop-filter: blur(16px);
+    cursor: pointer;
+    transition: opacity .25s ease, transform .25s ease;
+}
+
+.harper-boot-start span { font: 750 10px/1 'JetBrains Mono', monospace; letter-spacing: .12em; }
+.harper-boot-start small { color: #637086; font-size: 9px; letter-spacing: .08em; }
+.harper-boot.is-loading .harper-boot-start { opacity: 0; transform: translateY(10px); pointer-events: none; }
+
+.harper-boot-progress {
+    position: absolute;
+    z-index: 4;
+    bottom: 82px;
+    width: 66%;
+    height: 2px;
+    overflow: hidden;
+    border-radius: 2px;
+    background: rgba(255,255,255,.08);
+    opacity: 0;
+}
+
+.harper-boot-progress span { display: block; width: 0; height: 100%; background: linear-gradient(90deg, #4f78c5, #d7e5ff); box-shadow: 0 0 16px #779ee7; }
+.harper-boot.is-loading .harper-boot-progress { opacity: 1; }
+.harper-boot.is-loading .harper-boot-progress span { animation: harperBootLoad 4.65s cubic-bezier(.2,.7,.15,1) forwards; }
+.harper-boot.is-loading .harper-boot-signal { animation: harperBootLock 4.4s ease both; }
+.harper-boot.is-complete { animation: harperBootOut .6s ease forwards; }
+
+.harper-boot-code {
+    position: absolute;
+    bottom: 28px;
+    color: rgba(137,154,182,.42);
+    font: 600 8px/1 'JetBrains Mono', monospace;
+    letter-spacing: .14em;
+}
+
+@keyframes harperSignal { 0% { opacity: 0; transform: scale(.55); } 30% { opacity: .8; } 100% { opacity: 0; transform: scale(1.12); } }
+@keyframes harperBootLoad { 0% { width: 0; } 24% { width: 18%; } 55% { width: 61%; } 82% { width: 82%; } 100% { width: 100%; } }
+@keyframes harperBootLock { 0%,70% { transform: scale(1); filter: none; } 88% { transform: scale(.92); filter: brightness(1.8); } 100% { transform: scale(1.45); filter: brightness(3); opacity: 0; } }
+@keyframes harperBootOut { to { opacity: 0; transform: scale(1.03); } }
+@keyframes harperBootOrbit { to { transform: rotate(360deg); } }
+@keyframes harperNoise { 0% { transform: translate(0); } 25% { transform: translate(2%,-1%); } 50% { transform: translate(-1%,2%); } 75% { transform: translate(1%,1%); } }
+
+/* Official local Lucide assets */
+.lucide-app-icon { width: 27px; height: 27px; display: block; object-fit: contain; }
+.home-weather-icon {
+    width: 22px !important;
+    height: 22px !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+}
+.home-weather-icon .lucide-app-icon { width: 22px; height: 22px; opacity: .9; }
+.lock-notif-app { display: inline-flex !important; align-items: center; gap: 5px; }
+.lock-notif-app img { width: 12px; height: 12px; }
+
+#notification-toast {
+    color: var(--harper-text) !important;
+    border: 1px solid rgba(255,255,255,.11) !important;
+    background: rgba(11,15,21,.94) !important;
+    box-shadow: 0 20px 45px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.04) !important;
+    backdrop-filter: blur(24px) saturate(1.2) !important;
+}
+#notification-toast .notif-icon {
+    display: grid !important;
+    place-items: center;
+    background: linear-gradient(145deg, #2a6d5c, #123c35) !important;
+    border: 1px solid rgba(124,237,199,.25);
+}
+#notification-toast .notif-icon::before,
+#notification-toast .notif-icon::after { content: none !important; }
+#notification-toast .notif-icon img { width: 21px; height: 21px; }
+#notification-toast .notif-title { color: #f4f7fb !important; }
+#notification-toast .notif-text { color: #9ca8b9 !important; }
+
+/* One black visual system across all phone apps */
+.phone-home-screen {
+    background:
+        radial-gradient(circle at 76% 5%, rgba(68,81,113,.22), transparent 31%),
+        radial-gradient(circle at 0 100%, rgba(34,63,64,.16), transparent 36%),
+        linear-gradient(180deg, #0a0d12 0%, #040609 100%) !important;
+}
+
+.native-chat-list-shell,
+.contacts-screen,
+.contactProfile-screen,
+.notes-screen,
+.settings-screen,
+.browser-screen,
+.map-screen,
+.caseIntroTask-screen,
+.caseFile-screen {
+    background: var(--harper-black) !important;
+    color: var(--harper-text) !important;
+}
+
+.native-chat-list-shell .native-messages-header {
+    background: linear-gradient(180deg, #111722 0%, #080b10 100%) !important;
+    color: var(--harper-text) !important;
+    border-bottom: 1px solid var(--harper-line) !important;
+}
+.native-chat-list-shell .native-messages-header h1 { color: #f4f7fb !important; }
+.native-chat-list-shell .native-messages-header p { color: #7e899a !important; }
+.native-chat-list-shell .native-messages-header .native-back-ghost {
+    color: #f4f7fb !important;
+    background: rgba(255,255,255,.07) !important;
+}
+.native-chat-list-shell .native-white-panel,
+.native-chat-list-shell .native-messages-panel {
+    background: #070a0f !important;
+    color: #f4f7fb !important;
+}
+.native-chat-list-shell .chat-list-item,
+.native-chat-list-shell .chat-item {
+    border-color: rgba(255,255,255,.07) !important;
+    background: transparent !important;
+}
+.native-chat-list-shell .chat-name,
+.native-chat-list-shell .chat-list-name,
+.native-chat-list-shell strong { color: #eef2f7 !important; }
+.native-chat-list-shell .chat-preview,
+.native-chat-list-shell .chat-time { color: #748094 !important; }
+
+.lock-notif {
+    color: #eef2f7 !important;
+    border: 1px solid rgba(255,255,255,.1) !important;
+    background: rgba(10,14,20,.82) !important;
+    box-shadow: 0 18px 42px rgba(0,0,0,.34) !important;
+    backdrop-filter: blur(22px) saturate(1.1) !important;
+}
+.lock-notif-title { color: #f4f7fb !important; }
+.lock-notif-body, .lock-notif-time { color: #929daf !important; }
+
+/* Character profiles: unique cover, biography and four-photo life grid */
+.social-profile-overlay {
+    background: #05070a !important;
+    color: #f4f7fb !important;
+}
+.social-profile-top {
+    background: rgba(5,7,10,.92) !important;
+    border-bottom: 1px solid rgba(255,255,255,.08);
+    backdrop-filter: blur(20px);
+}
+.social-profile-top button { background: rgba(255,255,255,.08) !important; }
+.social-profile-hero { height: 300px !important; background: #090c11 !important; }
+.social-profile-hero img { object-position: center 35%; filter: saturate(.82) contrast(1.03); }
+.social-profile-card {
+    color: #f4f7fb !important;
+    border: 1px solid rgba(255,255,255,.1) !important;
+    background: rgba(12,16,22,.96) !important;
+    box-shadow: 0 22px 50px rgba(0,0,0,.48) !important;
+}
+.social-profile-avatar { border-color: #0c1016 !important; }
+.social-profile-card h2 { color: #f4f7fb !important; }
+.social-profile-phone { color: #7f8a9c !important; }
+.social-profile-card p { color: #c3cad5 !important; font-weight: 520 !important; }
+.social-profile-mood { background: #121821 !important; }
+.social-profile-mood strong { color: #e9eef6 !important; }
+.social-profile-mood span { color: #8591a3 !important; }
+.social-profile-info > div {
+    color: #f4f7fb !important;
+    border: 1px solid rgba(255,255,255,.08) !important;
+    background: #0c1016 !important;
+}
+.social-profile-info span { color: #748094 !important; }
+
+.social-profile-gallery { margin: 18px; padding-bottom: 18px; }
+.social-profile-gallery-head,
+.contact-profile-gallery-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 11px;
+}
+.social-profile-gallery-head strong,
+.contact-profile-gallery-head strong { color: #eef2f7; font-size: 15px; }
+.social-profile-gallery-head span,
+.contact-profile-gallery-head span { color: #727f92; font-size: 11px; }
+.social-profile-photo-grid,
+.contact-profile-photo-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 7px; }
+.social-profile-photo-grid button {
+    overflow: hidden;
+    aspect-ratio: 1;
+    padding: 0;
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 15px;
+    background: #0c1016;
+}
+.social-profile-photo-grid img,
+.contact-profile-photo-grid img { width: 100%; height: 100%; display: block; object-fit: cover; }
+.social-profile-photo-viewer {
+    position: absolute;
+    inset: 0;
+    z-index: 50;
+    display: grid;
+    place-items: center;
+    width: 100%;
+    height: 100%;
+    padding: 18px;
+    border: 0;
+    background: rgba(0,0,0,.94);
+}
+.social-profile-photo-viewer img { max-width: 100%; max-height: 86%; border-radius: 18px; box-shadow: 0 28px 70px #000; }
+.social-profile-photo-viewer span { position: absolute; top: 45px; right: 23px; color: #fff; font-size: 31px; }
+
+/* Contacts use the same living profile language */
+.contacts-header,
+.notes-header,
+.settings-header,
+.invest-header,
+.ravenwood-map-header {
+    color: #f4f7fb !important;
+    border-color: rgba(255,255,255,.08) !important;
+    background: rgba(7,10,15,.96) !important;
+}
+.contacts-list { background: #05070a !important; }
+.contact-item { color: #f4f7fb !important; border-color: rgba(255,255,255,.07) !important; background: #0a0e14 !important; }
+.contact-name, .contacts-title { color: #f4f7fb !important; }
+.contact-status-text { color: #778396 !important; }
+.profile-header-section {
+    position: relative;
+    min-height: 320px;
+    color: #fff !important;
+    background-image: linear-gradient(180deg, rgba(0,0,0,.08), #05070a 94%), var(--profile-cover) !important;
+    background-size: cover !important;
+    background-position: center !important;
+}
+.profile-header-section::after { content: ''; position: absolute; inset: 0; pointer-events: none; box-shadow: inset 0 -80px 70px #05070a; }
+.profile-header-section > * { position: relative; z-index: 1; }
+.profile-name { color: #fff !important; text-shadow: 0 3px 18px #000; }
+.profile-status { color: #c5ccd7 !important; }
+.profile-loyalty-section,
+.profile-info-section { color: #f4f7fb !important; background: #05070a !important; }
+.profile-info-card,
+.settings-group,
+.settings-row,
+.browser-addressbar,
+.browser-result,
+.map-viewer-card,
+.case-sort-card,
+.case-column,
+.case-question-card {
+    color: #f4f7fb !important;
+    border-color: rgba(255,255,255,.09) !important;
+    background: #0c1016 !important;
+}
+.profile-info-label,
+.settings-group-title,
+.settings-note { color: #7f8a9d !important; }
+.profile-info-value,
+.profile-loyalty-title,
+.profile-mood-text { color: #dce2eb !important; }
+.contact-profile-gallery { padding: 6px 18px 26px; background: #05070a; }
+.contact-profile-photo-grid img { aspect-ratio: 1; border: 1px solid rgba(255,255,255,.08); border-radius: 15px; }
+.settings-content,
+.browser-results,
+.ravenwood-map-body,
+.case-task-body { background: #05070a !important; color: #f4f7fb !important; }
+.settings-soft-btn,
+.settings-checkpoint-btn { color: #dce5f4 !important; border-color: rgba(255,255,255,.1) !important; background: #111720 !important; }
+
+@media (prefers-reduced-motion: reduce) {
+    .harper-boot *, .harper-boot::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; }
+}
+
+/* High-specificity cleanup for legacy light skins. */
+#screen-container > .social-profile-overlay {
+    background: #05070a !important;
+    backdrop-filter: none !important;
+}
+#screen-container > .social-profile-overlay .social-profile-top {
+    background: rgba(5,7,10,.92) !important;
+    border-bottom-color: rgba(255,255,255,.08) !important;
+}
+#screen-container > .social-profile-overlay .social-profile-scroll { background: #05070a !important; }
+#screen-container > .settings-screen .settings-screen-shell,
+#screen-container > .browser-screen .invest-app,
+#screen-container > .caseIntroTask-screen .case-task-screen {
+    color: #f4f7fb !important;
+    background: #05070a !important;
+}
+#screen-container > .caseIntroTask-screen .case-task-header {
+    background: linear-gradient(180deg, #111720 0%, #05070a 100%) !important;
+}
+#screen-container > .caseIntroTask-screen .case-task-rule {
+    color: #aeb8c7 !important;
+    border-color: rgba(255,255,255,.09) !important;
+    background: #0c1016 !important;
+}

@@ -75,9 +75,10 @@ export function renderContactProfile({ characterId, onBack }) {
 
     const avatarBg = getCharacterColor(characterId);
     const relationship = getRelationshipTone(characterId);
+    const gallery = Array.isArray(char.gallery) ? char.gallery : [char.socialPhoto || char.avatarImage].filter(Boolean);
 
     wrapper.innerHTML = `
-        <div class="profile-header-section">
+        <div class="profile-header-section" style="--profile-cover:url('${char.socialPhoto || char.avatarImage || ''}')">
             <button class="profile-back-btn" id="profile-back">←</button>
             <div class="profile-avatar-xl" style="background:${avatarBg}">
                 ${char.avatarImage ? `<img src="${char.avatarImage}" alt="${char.name}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" />` : char.name.charAt(0)}
@@ -112,6 +113,14 @@ export function renderContactProfile({ characterId, onBack }) {
                 ` : ''}
             </div>
         </div>
+        ${gallery.length ? `
+        <section class="contact-profile-gallery">
+            <div class="contact-profile-gallery-head"><strong>Фотографии</strong><span>${gallery.length}</span></div>
+            <div class="contact-profile-photo-grid">
+                ${gallery.map(photo => `<img src="${photo}" alt="" />`).join('')}
+            </div>
+        </section>
+        ` : ''}
     `;
 
     wrapper.querySelector('#profile-back').addEventListener('click', onBack);

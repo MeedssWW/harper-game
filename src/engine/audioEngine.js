@@ -16,12 +16,15 @@ export class AudioEngine {
     constructor() {
         this.bgm = new Audio('src/assets/audio/source.mp3');
         this.bgm.loop = true;
+        this.loadingMusic = new Audio('src/assets/audio/harper-loading-echoes.mp3');
+        this.loadingMusic.loop = false;
         this.settings = this._loadSettings();
         this.bgm.volume = this.settings.musicVolume;
         this.isPlaying = false;
         this.sounds = {};
         this.messageSound = 'src/assets/audio/ui/message-in.wav';
         this.notificationSound = 'src/assets/audio/ui/notification-soft.wav';
+        this.signatureSound = 'src/assets/audio/ui/harper-signature-metallic-sweep.mp3';
         this.incomingCallSound = 'src/assets/audio/ui/incoming-call.wav';
         this.unknownCallSound = 'src/assets/audio/ui/unknown-call-breath.wav';
         this.unknownVoicemailSound = 'src/assets/audio/ui/unknown-voicemail.wav';
@@ -32,13 +35,15 @@ export class AudioEngine {
         this._ringAudio = null;
         this._callAudio = null;
         this._voicemailAudio = null;
+        this._signatureTimer = null;
+        this._bootSequenceActive = false;
     }
 
     unlock() {
         this.isUnlocked = true;
         this._ensureAudioContext();
 
-        [this.messageSound, this.notificationSound, this.incomingCallSound].forEach(src => {
+        [this.messageSound, this.notificationSound, this.incomingCallSound, this.signatureSound].forEach(src => {
             const warmup = new Audio(src);
             warmup.volume = 0;
             warmup.play()
@@ -52,10 +57,12 @@ export class AudioEngine {
 
     playBGM() {
         if (!this.settings.musicEnabled) return;
+        if (this._bootSequenceActive) return;
         if (!this.isPlaying) {
             this.bgm.play()
                 .then(() => {
                     this.isPlaying = true;
+                    this.startSignatureLoop();
                 })
                 .catch(() => {
                     this.isPlaying = false;
@@ -66,6 +73,48 @@ export class AudioEngine {
     stopBGM() {
         this.bgm.pause();
         this.isPlaying = false;
+    }
+
+    playBootSequence() {
+        this.unlock();
+        this._bootSequenceActive = true;
+        this.stopBGM();
+        this.stopSignatureLoop();
+        this.loadingMusic.pause();
+        this.loadingMusic.currentTime = 0;
+        this.loadingMusic.volume = this.settings.musicEnabled ? Math.min(0.42, this.settings.musicVolume * 0.92) : 0;
+        this.loadingMusic.play().catch(() => {});
+        window.setTimeout(() => this.playSignature(), 240);
+    }
+
+    finishBootSequence() {
+        this.loadingMusic.pause();
+        this.loadingMusic.currentTime = 0;
+        this._bootSequenceActive = false;
+        this.playBGM();
+        this.startSignatureLoop();
+    }
+
+    playSignature() {
+        if (!this.settings.notificationSoundsEnabled) return false;
+        this.playSound(this.signatureSound);
+        return true;
+    }
+
+    startSignatureLoop() {
+        if (this._signatureTimer || this._bootSequenceActive) return;
+        const delay = 180000 + Math.floor(Math.random() * 240001);
+        this._signatureTimer = window.setTimeout(() => {
+            this._signatureTimer = null;
+            this.playSignature();
+            this.startSignatureLoop();
+        }, delay);
+    }
+
+    stopSignatureLoop() {
+        if (!this._signatureTimer) return;
+        window.clearTimeout(this._signatureTimer);
+        this._signatureTimer = null;
     }
 
     pauseBGMForScene() {
@@ -354,6 +403,7 @@ export class AudioEngine {
 
     _applySettings() {
         this.bgm.volume = this.settings.musicVolume;
+        this.loadingMusic.volume = this.settings.musicEnabled ? Math.min(0.42, this.settings.musicVolume * 0.92) : 0;
         Object.values(this.sounds).forEach(sound => {
             sound.volume = this.settings.effectsVolume;
         });
@@ -362,6 +412,12 @@ export class AudioEngine {
             this.stopBGM();
         } else if (this.isUnlocked) {
             this.playBGM();
+        }
+
+        if (this.settings.notificationSoundsEnabled) {
+            this.startSignatureLoop();
+        } else {
+            this.stopSignatureLoop();
         }
     }
 
