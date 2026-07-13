@@ -555,6 +555,7 @@ function attachDone(wrapper, onDone) {
     const button = wrapper.querySelector('#case-done');
     if (!button) return;
     button.addEventListener('click', () => {
+        stateManager.setFlag('nextMorningUnlocked', true);
         if (onDone) onDone();
     });
 }

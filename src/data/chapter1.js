@@ -3,6 +3,7 @@ import { chapter1FinaleBeats } from './chapter1Finale.js?v=70';
 import { introRewriteBeats } from './introRewrite.js?v=1';
 import { oliviaIntroFinalBeats } from './oliviaIntroFinal.js?v=1';
 import { miaIntroRewriteBeats } from './miaIntroRewrite.js?v=1';
+import { derekMorningRewriteBeats } from './derekMorningRewrite.js?v=1';
 
 const legacyChapter1 = {
   id: "act1",
@@ -507,9 +508,7 @@ const legacyChapter1 = {
       chat: "private_mia",
       trigger: "flag:nextMorningUnlocked",
       messages: [
-        { type: "note_auto", id: "harper_intro_summary", appendTo: "harper_intro_summary", title: "Харпер Вэнс", text: "Оливия написала мне после того, как группа развалилась. Она не знает, связан ли я с Харпер, но не собирается обвинять меня только из-за номера.\n\nХарпер редко просила о помощи и умела делать вид, что всё нормально. Перед исчезновением она стала более дёрганой и часто смотрела по сторонам, хотя Оливия не уверена, что это что-то значит.\n\nМиа тоже написала позже. Похоже, исчезновение Харпер усилило старое напряжение между её друзьями, особенно между Дереком и Брук.", noteCompleteFlag: "postCaseNoteWritten", notificationText: "Записать новые мысли по делу", skipIfFlag: "postCaseNoteWritten", delay: 700 },
-        { type: "wait_flag", flag: "postCaseNoteWritten", delay: 700 },
-        { type: "navigate", screen: "transition", params: { title: "02:14", lines: ["Ночь прошла.", "Следующее утро."], duration: 5200 }, delay: 5400 },
+        { type: "navigate", screen: "transition", params: { title: "07:42", lines: ["Ночь прошла.", "Следующее утро."], duration: 4200 }, delay: 4400 },
         { type: "navigate", screen: "home", delay: 700 }
       ]
     },
@@ -3250,6 +3249,8 @@ const legacyChapter1 = {
 };
 
 const firstPostMiaBeat = legacyChapter1.beats.findIndex(beat => beat.id === 'intro_case_sort_task');
+const firstLegacyDerekMorningBeat = legacyChapter1.beats.findIndex(beat => beat.id === 'morning_derek_photos');
+const firstMorningOliviaBeat = legacyChapter1.beats.findIndex(beat => beat.id === 'morning_olivia_cafe_photo');
 
 export const chapter1 = {
   ...legacyChapter1,
@@ -3258,6 +3259,8 @@ export const chapter1 = {
     ...introRewriteBeats,
     ...oliviaIntroFinalBeats,
     ...miaIntroRewriteBeats,
-    ...legacyChapter1.beats.slice(firstPostMiaBeat)
+    ...legacyChapter1.beats.slice(firstPostMiaBeat, firstLegacyDerekMorningBeat),
+    ...derekMorningRewriteBeats,
+    ...legacyChapter1.beats.slice(firstMorningOliviaBeat)
   ]
 };

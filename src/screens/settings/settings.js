@@ -4,10 +4,10 @@
 
 import { audioEngine } from '../../engine/audioEngine.js?v=73';
 import { stateManager } from '../../engine/stateManager.js';
-import { chapter1 } from '../../data/chapter1.js?v=115';
+import { chapter1 } from '../../data/chapter1.js?v=116';
 
 const STATE_KEY = 'harper_act1_v4';
-const STORY_VERSION = 'harper_act1_notes_mechanic_2026_07_13_v8';
+const STORY_VERSION = 'harper_act1_derek_morning_2026_07_13_v9';
 
 const CHECKPOINTS = [
     {
@@ -58,7 +58,7 @@ const CHECKPOINTS = [
         unlockedChats: ['private_derek', 'private_olivia', 'private_mia'],
         unlockedContacts: ['derek', 'olivia', 'mia', 'mason', 'brooke', 'tyler'],
         knownContacts: ['derek', 'olivia', 'mia', 'mason', 'brooke', 'tyler'],
-        flags: { harperIntroNoteWritten: true, caseIntroTaskUnlocked: true, caseMechanicUnlocked: true, caseIntroCompleted: true, notesMechanicPending: false, notesUnread: false }
+        flags: { harperIntroNoteWritten: true, caseIntroTaskUnlocked: true, caseMechanicUnlocked: true, caseIntroCompleted: true, notesMechanicPending: false, notesUnread: false, nextMorningUnlocked: true }
     },
     {
         id: 'after_map',
