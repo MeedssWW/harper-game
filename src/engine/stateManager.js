@@ -3,7 +3,7 @@
 // ============================================
 
 const STATE_KEY = 'harper_act1_v4';
-const STORY_VERSION = 'harper_act1_derek_morning_2026_07_13_v9';
+const STORY_VERSION = 'harper_act1_olivia_morning_2026_07_13_v10';
 
 const defaultState = {
     storyVersion: STORY_VERSION,

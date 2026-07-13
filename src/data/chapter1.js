@@ -4,6 +4,7 @@ import { introRewriteBeats } from './introRewrite.js?v=1';
 import { oliviaIntroFinalBeats } from './oliviaIntroFinal.js?v=1';
 import { miaIntroRewriteBeats } from './miaIntroRewrite.js?v=1';
 import { derekMorningRewriteBeats } from './derekMorningRewrite.js?v=1';
+import { oliviaMorningRewriteBeats } from './oliviaMorningRewrite.js?v=1';
 
 const legacyChapter1 = {
   id: "act1",
@@ -3250,7 +3251,7 @@ const legacyChapter1 = {
 
 const firstPostMiaBeat = legacyChapter1.beats.findIndex(beat => beat.id === 'intro_case_sort_task');
 const firstLegacyDerekMorningBeat = legacyChapter1.beats.findIndex(beat => beat.id === 'morning_derek_photos');
-const firstMorningOliviaBeat = legacyChapter1.beats.findIndex(beat => beat.id === 'morning_olivia_cafe_photo');
+const firstLarksGroupBeat = legacyChapter1.beats.findIndex(beat => beat.id === 'larks_group_start');
 
 export const chapter1 = {
   ...legacyChapter1,
@@ -3261,6 +3262,7 @@ export const chapter1 = {
     ...miaIntroRewriteBeats,
     ...legacyChapter1.beats.slice(firstPostMiaBeat, firstLegacyDerekMorningBeat),
     ...derekMorningRewriteBeats,
-    ...legacyChapter1.beats.slice(firstMorningOliviaBeat)
+    ...oliviaMorningRewriteBeats,
+    ...legacyChapter1.beats.slice(firstLarksGroupBeat)
   ]
 };
