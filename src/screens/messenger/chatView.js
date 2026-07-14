@@ -3,8 +3,8 @@
 // ============================================
 
 import { stateManager } from '../../engine/stateManager.js';
-import { getCharacter, getCharacterColor } from '../../data/characters.js';
-import { CHATS, getActiveGroupMembers } from './chatList.js?v=121';
+import { getCharacter, getCharacterColor } from '../../data/characters.js?v=123';
+import { CHATS, getActiveGroupMembers } from './chatList.js?v=123';
 import { storyEngine } from '../../engine/storyEngine.js?v=121';
 
 export class ChatView {
@@ -55,7 +55,7 @@ export class ChatView {
         this.container.innerHTML = `
             <div class="chat-header">
                 <button class="chat-header-back" id="chat-back" aria-label="Назад">
-                    <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" d="m15 5-7 7 7 7"/></svg>
+                    <img src="src/assets/icons/lucide/chevron-left.svg" alt="" />
                 </button>
                 <div class="chat-header-avatar ${chat.type === 'group' ? 'group-avatar-collage compact' : ''}" style="background:${avatarBg}; overflow:hidden; cursor:pointer;" id="chat-profile-btn">
                     ${chat.type !== 'group' && getCharacter(chat.characterId)?.avatarImage && !this._shouldHideAvatar(chat.characterId) ? `<img src="${getCharacter(chat.characterId).avatarImage}" alt="" />` : avatarText}
@@ -68,16 +68,16 @@ export class ChatView {
             <div class="chat-messages" id="chat-messages" aria-live="polite" aria-relevant="additions"></div>
             <div class="chat-input-area" id="chat-input-area">
                 <div class="chat-input-attach" aria-hidden="true">
-                    <svg viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M16.5 6v11.5c0 2.21-1.79 4-4 4s-4-1.79-4-4V5a2.5 2.5 0 0 1 5 0v10.5c0 .55-.45 1-1 1s-1-.45-1-1V6H10v9.5a2.5 2.5 0 0 0 5 0V5c0-3.31-2.69-6-6-6S3 1.69 3 5v11.5c0 3.86 3.14 7 7 7s7-3.14 7-7V6h-1.5z"/></svg>
+                    <img src="src/assets/icons/lucide/paperclip.svg" alt="" />
                 </div>
                 <div style="flex:1; position:relative; display:flex; align-items:center;">
                     <div class="chat-input-box">Ответ появится здесь</div>
                     <div class="chat-input-emoji" style="position:absolute; right:12px;" aria-hidden="true">
-                        <svg viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm3.5-9c.83 0 1.5-.67 1.5-1.5S16.33 8 15.5 8 14 8.67 14 9.5s.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S8.33 8 7.5 8 6 8.67 6 9.5 6.67 11 7.5 11zm3.5 6.5c2.33 0 4.31-1.46 5.11-3.5H7.89c.8 2.04 2.78 3.5 5.11 3.5z"/></svg>
+                        <img src="src/assets/icons/lucide/smile.svg" alt="" />
                     </div>
                 </div>
                 <div class="chat-input-mic" aria-hidden="true">
-                    <svg viewBox="0 0 24 24" width="20" height="20"><path fill="#fff" d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5-3c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/></svg>
+                    <img src="src/assets/icons/lucide/send-horizontal.svg" alt="" />
                 </div>
             </div>
         `;
@@ -151,16 +151,6 @@ export class ChatView {
                     <div class="social-profile-mood" style="border-color:${relationship.color};">
                         <strong>${relationship.label}</strong>
                         <span>${relationship.detail}</span>
-                    </div>
-                </div>
-                <div class="social-profile-info">
-                    <div>
-                        <span>Связь</span>
-                        <strong>${this._escapeHtml(char.relation || 'неизвестно')}</strong>
-                    </div>
-                    <div>
-                        <span>Секрет</span>
-                        <strong>${relationship.revealsSecret && char.secret ? this._escapeHtml(char.secret) : '???'}</strong>
                     </div>
                 </div>
                 ${gallery.length ? `

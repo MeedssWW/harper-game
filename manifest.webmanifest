@@ -1,0 +1,11 @@
+{
+  "name": "HARPER",
+  "short_name": "HARPER",
+  "description": "Телефонный хоррор-триллер в Рейвенвуде",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#030507",
+  "theme_color": "#030507",
+  "orientation": "portrait"
+}

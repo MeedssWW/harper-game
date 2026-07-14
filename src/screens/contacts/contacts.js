@@ -3,7 +3,7 @@
 // ============================================
 
 import { stateManager } from '../../engine/stateManager.js';
-import { getCharacter, getCharacterColor, characters } from '../../data/characters.js';
+import { getCharacter, getCharacterColor, characters } from '../../data/characters.js?v=123';
 
 export function renderContactList({ onContactOpen, onBack }) {
     const fragment = document.createDocumentFragment();
@@ -99,18 +99,8 @@ export function renderContactProfile({ characterId, onBack }) {
             <div class="profile-info-card">
                 <div class="profile-info-item">
                     <div class="profile-info-label">О себе</div>
-                    <div class="profile-info-value">${char.description || 'Неизвестно'}</div>
+                    <div class="profile-info-value">${char.bio || char.description || 'Неизвестно'}</div>
                 </div>
-                <div class="profile-info-item">
-                    <div class="profile-info-label">Связь</div>
-                    <div class="profile-info-value">${char.relation || 'Не определено'}</div>
-                </div>
-                ${char.secret ? `
-                <div class="profile-info-item" style="border-left:3px solid var(--accent-red);padding-left:12px;">
-                    <div class="profile-info-label" style="color:var(--accent-red);">🔓 Секрет</div>
-                    <div class="profile-info-value" style="font-size:13px;">${relationship.revealsSecret ? char.secret : '???'}</div>
-                </div>
-                ` : ''}
             </div>
         </div>
         ${gallery.length ? `

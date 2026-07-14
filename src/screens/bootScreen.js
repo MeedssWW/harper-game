@@ -4,20 +4,27 @@ export function renderBootScreen({ onBegin, onComplete }) {
     wrapper.className = 'harper-boot';
     wrapper.innerHTML = `
         <div class="harper-boot-noise" aria-hidden="true"></div>
+        <div class="harper-boot-rain" aria-hidden="true"></div>
+        <div class="harper-boot-vignette" aria-hidden="true"></div>
         <div class="harper-boot-signal" aria-hidden="true">
             <i></i><i></i><i></i>
         </div>
         <div class="harper-boot-copy">
-            <span class="harper-boot-kicker">RAVENWOOD / SECURE LINE</span>
+            <span class="harper-boot-kicker">RAVENWOOD // NORTH LINE</span>
             <h1>HARPER</h1>
             <p>Некоторые сообщения находят тебя сами.</p>
         </div>
+        <div class="harper-boot-case" aria-hidden="true">
+            <span>ПОСЛЕДНИЙ СИГНАЛ</span>
+            <strong>04:16</strong>
+            <small>переезд № 7 · источник неизвестен</small>
+        </div>
         <button class="harper-boot-start" type="button">
             <span>КОСНУТЬСЯ, ЧТОБЫ НАЧАТЬ</span>
-            <small>используйте наушники</small>
+            <small>лучше в наушниках</small>
         </button>
         <div class="harper-boot-progress" aria-hidden="true"><span></span></div>
-        <div class="harper-boot-code">RVN // 04:16 // LINK STANDBY</div>
+        <div class="harper-boot-code">RVN-07 // LINK STANDBY</div>
     `;
 
     const startButton = wrapper.querySelector('.harper-boot-start');

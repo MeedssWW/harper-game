@@ -4,7 +4,7 @@
 
 import { stateManager } from '../../engine/stateManager.js';
 import { storyEngine } from '../../engine/storyEngine.js?v=121';
-import { getCharacter, getCharacterColor } from '../../data/characters.js';
+import { getCharacter, getCharacterColor } from '../../data/characters.js?v=123';
 
 // Chat definitions
 const CHATS = {

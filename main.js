@@ -6,13 +6,13 @@ import { stateManager } from './src/engine/stateManager.js';
 import { storyEngine } from './src/engine/storyEngine.js?v=121';
 import { screenManager } from './src/screens/screenManager.js';
 import { renderLockScreen } from './src/screens/lockScreen.js?v=70';
-import { renderBootScreen } from './src/screens/bootScreen.js?v=122';
+import { renderBootScreen } from './src/screens/bootScreen.js?v=123';
 import { renderNameScreen } from './src/screens/nameScreen.js';
 import { renderHomeScreen } from './src/screens/homeScreen.js?v=115';
-import { CHATS, renderChatList } from './src/screens/messenger/chatList.js?v=121';
-import { ChatView } from './src/screens/messenger/chatView.js?v=121';
+import { CHATS, renderChatList } from './src/screens/messenger/chatList.js?v=123';
+import { ChatView } from './src/screens/messenger/chatView.js?v=123';
 import { renderTransitionScreen } from './src/screens/transitionScreen.js?v=70';
-import { renderContactList, renderContactProfile } from './src/screens/contacts/contacts.js';
+import { renderContactList, renderContactProfile } from './src/screens/contacts/contacts.js?v=123';
 import { renderGallery } from './src/screens/gallery/gallery.js';
 import { renderNotes } from './src/screens/notes/notes.js?v=71';
 import { renderMap } from './src/screens/map/map.js?v=118';
@@ -23,12 +23,12 @@ import { renderClues } from './src/screens/clues/clues.js';
 import { renderCaseIntroTask } from './src/screens/caseFile/caseIntroTask.js?v=116';
 import { renderFrameAnalysis } from './src/screens/frameAnalysis/frameAnalysis.js?v=70';
 import { renderLizaPhone } from './src/screens/lizaPhone/lizaPhone.js';
-import { renderSettings } from './src/screens/settings/settings.js?v=79';
-import { renderUnknownCall } from './src/screens/call/unknownCall.js?v=119';
+import { renderSettings } from './src/screens/settings/settings.js?v=123';
+import { renderUnknownCall } from './src/screens/call/unknownCall.js?v=123';
 import { renderPoliceDecision } from './src/screens/policeDecision/policeDecision.js?v=70';
 import { renderChapterEnd } from './src/screens/chapterEnd/chapterEnd.js?v=70';
-import { audioEngine } from './src/engine/audioEngine.js?v=73';
-import { characters } from './src/data/characters.js';
+import { audioEngine } from './src/engine/audioEngine.js?v=123';
+import { characters } from './src/data/characters.js?v=123';
 import { chapter1 } from './src/data/chapter1.js?v=120';
 
 // ---- App State ----
@@ -477,7 +477,7 @@ function setupStoryEngine() {
     storyEngine.onNotification = (from, text, chatId) => {
         if (currentViewingChat !== chatId) {
             // getCharacter is already imported at the top of this file
-            import('./src/data/characters.js').then(({ getCharacter: gc }) => {
+            import('./src/data/characters.js?v=123').then(({ getCharacter: gc }) => {
                 const char = gc(from);
                 const displayName = char ? char.name : from;
                 audioEngine.playNotification();

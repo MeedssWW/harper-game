@@ -16,15 +16,19 @@ export class AudioEngine {
     constructor() {
         this.bgm = new Audio('src/assets/audio/source.mp3');
         this.bgm.loop = true;
+        this.bgm.preload = 'auto';
         this.loadingMusic = new Audio('src/assets/audio/harper-loading-echoes.mp3');
         this.loadingMusic.loop = false;
+        this.loadingMusic.preload = 'auto';
+        this.loadingMusic.setAttribute('playsinline', '');
+        this.loadingMusic.load();
         this.settings = this._loadSettings();
         this.bgm.volume = this.settings.musicVolume;
         this.isPlaying = false;
         this.sounds = {};
         this.messageSound = 'src/assets/audio/ui/message-in.wav';
         this.notificationSound = 'src/assets/audio/ui/notification-soft.wav';
-        this.signatureSound = 'src/assets/audio/ui/harper-signature-metallic-sweep.mp3';
+        this.signatureSound = 'src/assets/audio/ui/harper-signature-distant-train.mp3';
         this.incomingCallSound = 'src/assets/audio/ui/incoming-call.wav';
         this.unknownCallSound = 'src/assets/audio/ui/unknown-call-breath.wav';
         this.unknownVoicemailSound = 'src/assets/audio/ui/unknown-voicemail.wav';
@@ -37,12 +41,19 @@ export class AudioEngine {
         this._voicemailAudio = null;
         this._signatureTimer = null;
         this._bootSequenceActive = false;
+        this._bootAmbientNodes = [];
+        this._bootFallbackTimer = null;
+        this._gameAmbientNodes = [];
+        this._gameAmbientMaster = null;
+        this._bgmFallbackTimer = null;
     }
 
-    unlock() {
+    unlock({ warmup = true } = {}) {
         this.isUnlocked = true;
-        this._ensureAudioContext();
+        const ctx = this._ensureAudioContext();
+        if (ctx?.state === 'suspended') ctx.resume().catch(() => {});
 
+        if (!warmup) return;
         [this.messageSound, this.notificationSound, this.incomingCallSound, this.signatureSound].forEach(src => {
             const warmup = new Audio(src);
             warmup.volume = 0;
@@ -59,37 +70,93 @@ export class AudioEngine {
         if (!this.settings.musicEnabled) return;
         if (this._bootSequenceActive) return;
         if (!this.isPlaying) {
+            if (this._bgmFallbackTimer) window.clearTimeout(this._bgmFallbackTimer);
+            this._bgmFallbackTimer = window.setTimeout(() => {
+                this._bgmFallbackTimer = null;
+                if (!this.isPlaying && !this._bootSequenceActive && this.settings.musicEnabled) {
+                    this._playGameAmbientSynth();
+                    this.isPlaying = this._gameAmbientNodes.length > 0;
+                    if (this.isPlaying) this.startSignatureLoop();
+                }
+            }, 1200);
             this.bgm.play()
                 .then(() => {
+                    if (this._bgmFallbackTimer) {
+                        window.clearTimeout(this._bgmFallbackTimer);
+                        this._bgmFallbackTimer = null;
+                    }
+                    this._stopGameAmbientSynth();
+                    document.documentElement.dataset.harperGameAudio = 'track';
                     this.isPlaying = true;
                     this.startSignatureLoop();
                 })
                 .catch(() => {
-                    this.isPlaying = false;
+                    if (this._bgmFallbackTimer) {
+                        window.clearTimeout(this._bgmFallbackTimer);
+                        this._bgmFallbackTimer = null;
+                    }
+                    this._playGameAmbientSynth();
+                    this.isPlaying = this._gameAmbientNodes.length > 0;
+                    if (this.isPlaying) this.startSignatureLoop();
                 });
         }
     }
 
     stopBGM() {
+        if (this._bgmFallbackTimer) {
+            window.clearTimeout(this._bgmFallbackTimer);
+            this._bgmFallbackTimer = null;
+        }
         this.bgm.pause();
+        this._stopGameAmbientSynth();
         this.isPlaying = false;
     }
 
     playBootSequence() {
-        this.unlock();
+        this.unlock({ warmup: false });
         this._bootSequenceActive = true;
         this.stopBGM();
         this.stopSignatureLoop();
+        this._stopBootAmbientSynth();
+        if (this._bootFallbackTimer) window.clearTimeout(this._bootFallbackTimer);
         this.loadingMusic.pause();
         this.loadingMusic.currentTime = 0;
         this.loadingMusic.volume = this.settings.musicEnabled ? Math.min(0.42, this.settings.musicVolume * 0.92) : 0;
-        this.loadingMusic.play().catch(() => {});
-        window.setTimeout(() => this.playSignature(), 240);
+
+        let musicStarted = false;
+        const markPlaying = () => {
+            musicStarted = true;
+            this._stopBootAmbientSynth();
+            document.documentElement.dataset.harperBootAudio = 'track';
+        };
+        this.loadingMusic.addEventListener('playing', markPlaying, { once: true });
+
+        const playback = this.loadingMusic.play();
+        if (playback) {
+            playback.catch(() => {
+                if (this._bootSequenceActive) this._playBootAmbientSynth();
+            });
+        }
+
+        this._bootFallbackTimer = window.setTimeout(() => {
+            this._bootFallbackTimer = null;
+            if (!musicStarted && this._bootSequenceActive && this.settings.musicEnabled) {
+                this._playBootAmbientSynth();
+            }
+        }, 900);
+
+        // Start the signature horn inside the user's tap event so iOS treats it as intentional audio.
+        this.playSignature();
     }
 
     finishBootSequence() {
+        if (this._bootFallbackTimer) {
+            window.clearTimeout(this._bootFallbackTimer);
+            this._bootFallbackTimer = null;
+        }
         this.loadingMusic.pause();
         this.loadingMusic.currentTime = 0;
+        this._stopBootAmbientSynth();
         this._bootSequenceActive = false;
         this.playBGM();
         this.startSignatureLoop();
@@ -99,6 +166,103 @@ export class AudioEngine {
         if (!this.settings.notificationSoundsEnabled) return false;
         this.playSound(this.signatureSound);
         return true;
+    }
+
+    _playBootAmbientSynth() {
+        if (!this.settings.musicEnabled || this._bootAmbientNodes.length) return;
+        const ctx = this._ensureAudioContext();
+        if (!ctx) return;
+        if (ctx.state === 'suspended') ctx.resume().catch(() => {});
+
+        const now = ctx.currentTime;
+        const master = ctx.createGain();
+        const filter = ctx.createBiquadFilter();
+        master.gain.setValueAtTime(0.0001, now);
+        master.gain.exponentialRampToValueAtTime(0.055, now + 1.1);
+        master.gain.setValueAtTime(0.055, now + 4.2);
+        master.gain.exponentialRampToValueAtTime(0.0001, now + 5.2);
+        filter.type = 'lowpass';
+        filter.frequency.setValueAtTime(720, now);
+        filter.Q.setValueAtTime(0.8, now);
+        filter.connect(master);
+        master.connect(ctx.destination);
+
+        const oscillators = [82.41, 123.47, 164.81].map((frequency, index) => {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = index === 0 ? 'sine' : 'triangle';
+            osc.frequency.setValueAtTime(frequency, now);
+            osc.detune.setValueAtTime(index * -7, now);
+            gain.gain.setValueAtTime(index === 0 ? 0.75 : 0.22, now);
+            osc.connect(gain);
+            gain.connect(filter);
+            osc.start(now);
+            osc.stop(now + 5.3);
+            return osc;
+        });
+
+        this._bootAmbientNodes = [master, filter, ...oscillators];
+        document.documentElement.dataset.harperBootAudio = 'synth';
+    }
+
+    _stopBootAmbientSynth() {
+        this._bootAmbientNodes.forEach(node => {
+            try { node.stop?.(); } catch {}
+            try { node.disconnect?.(); } catch {}
+        });
+        this._bootAmbientNodes = [];
+    }
+
+    _playGameAmbientSynth() {
+        if (!this.settings.musicEnabled || this._gameAmbientNodes.length) return;
+        const ctx = this._ensureAudioContext();
+        if (!ctx) return;
+        if (ctx.state === 'suspended') ctx.resume().catch(() => {});
+
+        const now = ctx.currentTime;
+        const master = ctx.createGain();
+        const filter = ctx.createBiquadFilter();
+        const lfo = ctx.createOscillator();
+        const lfoGain = ctx.createGain();
+        master.gain.setValueAtTime(0.0001, now);
+        master.gain.exponentialRampToValueAtTime(Math.max(0.012, this.settings.musicVolume * 0.1), now + 2.4);
+        filter.type = 'lowpass';
+        filter.frequency.setValueAtTime(320, now);
+        filter.Q.setValueAtTime(1.5, now);
+        lfo.type = 'sine';
+        lfo.frequency.setValueAtTime(0.045, now);
+        lfoGain.gain.setValueAtTime(110, now);
+        lfo.connect(lfoGain);
+        lfoGain.connect(filter.frequency);
+        filter.connect(master);
+        master.connect(ctx.destination);
+
+        const oscillators = [55, 82.41, 110].map((frequency, index) => {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = index === 0 ? 'sine' : 'triangle';
+            osc.frequency.setValueAtTime(frequency, now);
+            osc.detune.setValueAtTime(index === 1 ? -11 : index === 2 ? 7 : 0, now);
+            gain.gain.setValueAtTime(index === 0 ? 0.72 : 0.18, now);
+            osc.connect(gain);
+            gain.connect(filter);
+            osc.start(now);
+            return osc;
+        });
+
+        lfo.start(now);
+        this._gameAmbientMaster = master;
+        this._gameAmbientNodes = [master, filter, lfo, lfoGain, ...oscillators];
+        document.documentElement.dataset.harperGameAudio = 'synth';
+    }
+
+    _stopGameAmbientSynth() {
+        this._gameAmbientNodes.forEach(node => {
+            try { node.stop?.(); } catch {}
+            try { node.disconnect?.(); } catch {}
+        });
+        this._gameAmbientNodes = [];
+        this._gameAmbientMaster = null;
     }
 
     startSignatureLoop() {
@@ -142,8 +306,52 @@ export class AudioEngine {
         snd.currentTime = 0;
         const playback = snd.play();
         if (playback) {
-            playback.catch(() => this.playTone());
+            return playback
+                .then(() => {
+                    if (src === this.signatureSound) {
+                        document.documentElement.dataset.harperSignatureAudio = 'playing';
+                    }
+                })
+                .catch(() => {
+                    if (src === this.signatureSound) return this._playTrainHornSynth();
+                    return this.playTone();
+                });
         }
+        return null;
+    }
+
+    _playTrainHornSynth() {
+        const ctx = this._ensureAudioContext();
+        if (!ctx) return;
+        if (ctx.state === 'suspended') ctx.resume().catch(() => {});
+
+        const now = ctx.currentTime;
+        const master = ctx.createGain();
+        const filter = ctx.createBiquadFilter();
+        filter.type = 'lowpass';
+        filter.frequency.setValueAtTime(620, now);
+        filter.frequency.exponentialRampToValueAtTime(360, now + 3.7);
+        master.gain.setValueAtTime(0.0001, now);
+        master.gain.exponentialRampToValueAtTime(0.075, now + 0.18);
+        master.gain.setValueAtTime(0.075, now + 1.9);
+        master.gain.exponentialRampToValueAtTime(0.0001, now + 3.8);
+        filter.connect(master);
+        master.connect(ctx.destination);
+
+        [146.83, 174.61, 220].forEach((frequency, index) => {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = index === 0 ? 'sawtooth' : 'triangle';
+            osc.frequency.setValueAtTime(frequency, now);
+            osc.frequency.exponentialRampToValueAtTime(frequency * 0.975, now + 3.7);
+            gain.gain.setValueAtTime(index === 0 ? 0.35 : 0.24, now);
+            osc.connect(gain);
+            gain.connect(filter);
+            osc.start(now);
+            osc.stop(now + 3.85);
+        });
+
+        document.documentElement.dataset.harperSignatureAudio = 'synth';
     }
 
     playMessage() {
@@ -407,6 +615,13 @@ export class AudioEngine {
         Object.values(this.sounds).forEach(sound => {
             sound.volume = this.settings.effectsVolume;
         });
+        if (this._gameAmbientMaster) {
+            this._gameAmbientMaster.gain.setTargetAtTime(
+                Math.max(0.012, this.settings.musicVolume * 0.1),
+                this.audioContext.currentTime,
+                0.18
+            );
+        }
 
         if (!this.settings.musicEnabled) {
             this.stopBGM();
