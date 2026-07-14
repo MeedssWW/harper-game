@@ -1,13 +1,13 @@
-import { miaLateSceneBeats } from './miaLateScene.js?v=120';
-import { chapter1FinaleRewriteBeats as chapter1FinaleBeats } from './chapter1FinaleRewrite.js?v=1';
-import { introRewriteBeats } from './introRewrite.js?v=1';
-import { oliviaIntroFinalBeats } from './oliviaIntroFinal.js?v=1';
-import { miaIntroRewriteBeats } from './miaIntroRewrite.js?v=1';
-import { derekMorningRewriteBeats } from './derekMorningRewrite.js?v=1';
-import { oliviaMorningRewriteBeats } from './oliviaMorningRewrite.js?v=1';
-import { postOliviaRoutesRewriteBeats } from './postOliviaRoutesRewrite.js?v=1';
-import { backupFoundRewriteBeats } from './backupFoundRewrite.js?v=1';
-import { postLeakRewriteBeats } from './postLeakRewrite.js?v=1';
+import { miaLateSceneBeats } from './miaLateScene.js?v=125';
+import { chapter1FinaleRewriteBeats as chapter1FinaleBeats } from './chapter1FinaleRewrite.js?v=125';
+import { introRewriteBeats } from './introRewrite.js?v=125';
+import { oliviaIntroFinalBeats } from './oliviaIntroFinal.js?v=125';
+import { miaIntroRewriteBeats } from './miaIntroRewrite.js?v=125';
+import { derekMorningRewriteBeats } from './derekMorningRewrite.js?v=125';
+import { oliviaMorningRewriteBeats } from './oliviaMorningRewrite.js?v=125';
+import { postOliviaRoutesRewriteBeats } from './postOliviaRoutesRewrite.js?v=125';
+import { backupFoundRewriteBeats } from './backupFoundRewrite.js?v=125';
+import { postLeakRewriteBeats } from './postLeakRewrite.js?v=125';
 
 const legacyChapter1 = {
   id: "act1",
@@ -1513,12 +1513,12 @@ const legacyChapter1 = {
         { type: "system", text: "Перезагрузка устройства…", delay: 500 },
         { type: "system", text: "Устройство включено.", delay: 900 },
         { type: "system", text: "Новое сообщение.", delay: 900 },
-        { from: "unknown", text: "Не открывай файл снова.", delay: 900 },
-        { from: "unknown", text: "Я оборвал подключение.", delay: 850 },
+        { from: "unknown", text: "Файл больше не открывай.", delay: 900 },
+        { from: "unknown", text: "Я закрыл чужое соединение.", delay: 850 },
         { type: "choice", options: [
-          { text: "Кто ты?", loyalty: {}, next: "unknown_after_hack_who" },
-          { text: "Что только что произошло?", loyalty: {}, next: "unknown_after_hack_phone" },
-          { text: "Это ты залез в мой телефон?", loyalty: {}, next: "unknown_after_hack_inside" }
+          { text: "Сначала имя. Потом будем разговаривать.", loyalty: {}, next: "unknown_after_hack_who" },
+          { text: "Что за чужое соединение? Телефон сам всё открывал.", loyalty: {}, next: "unknown_after_hack_phone" },
+          { text: "Ты тоже залез в мой телефон. Чем ты лучше?", loyalty: {}, next: "unknown_after_hack_inside" }
         ]}
       ]
     },
@@ -1527,7 +1527,7 @@ const legacyChapter1 = {
       chat: "private_unknown",
       trigger: "choice:unknown_after_hack_start:0",
       messages: [
-        { from: "unknown", text: "Сейчас это неважно.", delay: 900 }
+        { from: "unknown", text: "Не тот вопрос.", delay: 900 }
       ]
     },
     {
@@ -1535,7 +1535,8 @@ const legacyChapter1 = {
       chat: "private_unknown",
       trigger: "choice:unknown_after_hack_start:1",
       messages: [
-        { from: "unknown", text: "Оборвал подключение.", delay: 900 }
+        { from: "unknown", text: "К твоему телефону подключились." , delay: 900 },
+        { from: "unknown", text: "Я их выбил.", delay: 700 }
       ]
     },
     {
@@ -1543,7 +1544,7 @@ const legacyChapter1 = {
       chat: "private_unknown",
       trigger: "choice:unknown_after_hack_start:2",
       messages: [
-        { from: "unknown", text: "Не так, как ты думаешь.", delay: 900 }
+        { from: "unknown", text: "Я вошёл после них." , delay: 900 }
       ]
     },
     {
@@ -1551,10 +1552,10 @@ const legacyChapter1 = {
       chat: "private_unknown",
       trigger: "after:unknown_after_hack_who|unknown_after_hack_phone|unknown_after_hack_inside",
       messages: [
-        { from: "unknown", text: "Я вмешался уже после того, как подключение началось.", delay: 1200 },
-        { from: "unknown", text: "До этого кто-то пытался получить доступ к твоему устройству.", delay: 1300 },
+        { from: "unknown", text: "Когда я вошёл, они уже были внутри.", delay: 1200 },
+        { from: "unknown", text: "Чаты. Заметки. Камера.", delay: 1000 },
         { type: "choice", options: [
-          { text: "То есть меня пытались взломать?", loyalty: {}, next: "unknown_after_hack_hacked" },
+          { text: "Это не «пытались». Они взломали телефон.", loyalty: {}, next: "unknown_after_hack_hacked" },
           { text: "Что они успели сделать?", loyalty: {}, next: "unknown_after_hack_what_done" },
           { text: "Камеру тоже открыли они?", loyalty: {}, next: "unknown_after_hack_camera" }
         ]}
@@ -1565,8 +1566,8 @@ const legacyChapter1 = {
       chat: "private_unknown",
       trigger: "choice:unknown_after_hack_intrusion:0",
       messages: [
-        { from: "unknown", text: "Да.", delay: 700 },
-        { from: "unknown", text: "И успели получить часть данных.", delay: 1000 }
+        { from: "unknown", text: "Да." , delay: 700 },
+        { from: "unknown", text: "Меньше минуты. Но им хватило.", delay: 1000 }
       ]
     },
     {
@@ -1574,9 +1575,8 @@ const legacyChapter1 = {
       chat: "private_unknown",
       trigger: "choice:unknown_after_hack_intrusion:1",
       messages: [
-        { from: "unknown", text: "Открыть часть переписок.", delay: 900 },
-        { from: "unknown", text: "Заметки.", delay: 700 },
-        { from: "unknown", text: "Возможно, контакты.", delay: 900 }
+        { from: "unknown", text: "Открыли список чатов и заметки.", delay: 900 },
+        { from: "unknown", text: "Контакты — возможно. Я не успел увидеть всё.", delay: 900 }
       ]
     },
     {
@@ -1584,8 +1584,8 @@ const legacyChapter1 = {
       chat: "private_unknown",
       trigger: "choice:unknown_after_hack_intrusion:2",
       messages: [
-        { from: "unknown", text: "Да.", delay: 700 },
-        { from: "unknown", text: "Фото сделал не я.", delay: 1000 }
+        { from: "unknown", text: "Они." , delay: 700 },
+        { from: "unknown", text: "Я остановил отправку. Не знаю, успел ли снимок уйти до этого.", delay: 1100 }
       ]
     },
     {
@@ -1593,12 +1593,12 @@ const legacyChapter1 = {
       chat: "private_unknown",
       trigger: "after:unknown_after_hack_hacked|unknown_after_hack_what_done|unknown_after_hack_camera",
       messages: [
-        { from: "unknown", text: "Я заметил подключение, когда началась загрузка файла.", delay: 1200 },
-        { from: "unknown", text: "Он не должен был открываться.", delay: 1000 },
+        { from: "unknown", text: "Соединение открылось вместе с видео.", delay: 1100 },
+        { from: "unknown", text: "Самого видео в копии не было. Только ссылка.", delay: 1000 },
         { type: "choice", options: [
-          { text: "Что значит — не должен был?", loyalty: {}, next: "unknown_after_hack_file_meaning" },
+          { text: "То есть ссылку подменили уже после сообщения Харпер?", loyalty: {}, next: "unknown_after_hack_file_meaning" },
           { text: "Его кто-то изменил?", loyalty: {}, next: "unknown_after_hack_file_changed" },
-          { text: "Это была ловушка?", loyalty: {}, next: "unknown_after_hack_file_trap" }
+          { text: "Значит, кто-то ждал, что мы нажмём на видео.", loyalty: {}, next: "unknown_after_hack_file_trap" }
         ]}
       ]
     },
@@ -1607,7 +1607,7 @@ const legacyChapter1 = {
       chat: "private_unknown",
       trigger: "choice:unknown_after_hack_file_start:0",
       messages: [
-        { from: "unknown", text: "Вложение изменили уже после того, как его удалили.", delay: 1100 }
+        { from: "unknown", text: "Ссылку подменили уже после удаления чата.", delay: 1100 }
       ]
     },
     {
@@ -1615,8 +1615,8 @@ const legacyChapter1 = {
       chat: "private_unknown",
       trigger: "choice:unknown_after_hack_file_start:1",
       messages: [
-        { from: "unknown", text: "Да.", delay: 700 },
-        { from: "unknown", text: "Уже после удаления.", delay: 900 }
+        { from: "unknown", text: "Ссылку — да." , delay: 700 },
+        { from: "unknown", text: "Когда чат уже был удалён.", delay: 900 }
       ]
     },
     {
@@ -1624,7 +1624,7 @@ const legacyChapter1 = {
       chat: "private_unknown",
       trigger: "choice:unknown_after_hack_file_start:2",
       messages: [
-        { from: "unknown", text: "Похоже на то.", delay: 900 }
+        { from: "unknown", text: "И ждал не Мию." , delay: 900 }
       ]
     },
     {
@@ -1632,13 +1632,13 @@ const legacyChapter1 = {
       chat: "private_unknown",
       trigger: "after:unknown_after_hack_file_meaning|unknown_after_hack_file_changed|unknown_after_hack_file_trap",
       messages: [
-        { from: "unknown", text: "Внутри файла оставили способ подключиться к тому, кто попытается его открыть.", delay: 1300 },
-        { from: "unknown", text: "Ловушка была не для Мии.", delay: 1000 },
-        { from: "unknown", text: "Для того, кто начнёт искать.", delay: 1000 },
+        { from: "unknown", text: "Открывший ссылку сам отдавал доступ к устройству.", delay: 1200 },
+        { from: "unknown", text: "Когда ставили ловушку, Миа про файл ещё не знала." , delay: 900 },
+        { from: "unknown", text: "Ловушка была для того, кто начнёт копать.", delay: 1000 },
         { type: "choice", options: [
-          { text: "Кто-то знал, что мы полезем в телефон Мии?", loyalty: {}, next: "unknown_after_hack_knew" },
-          { text: "Файл точно связан с Харпер?", loyalty: {}, next: "unknown_after_hack_harper_file" },
-          { text: "Ты знаешь, кто это сделал?", loyalty: {}, next: "unknown_after_hack_knows_who" }
+          { text: "Значит, кто-то заранее ждал, что мы полезем в файл.", loyalty: {}, next: "unknown_after_hack_knew" },
+          { text: "С Харпер пока совпадает только время. Это ещё ничего не доказывает.", loyalty: {}, next: "unknown_after_hack_harper_file" },
+          { text: "Если ты не знаешь, кто это сделал, у нас проблема.", loyalty: {}, next: "unknown_after_hack_knows_who" }
         ]}
       ]
     },
@@ -1647,8 +1647,8 @@ const legacyChapter1 = {
       chat: "private_unknown",
       trigger: "choice:unknown_after_hack_trap_common:0",
       messages: [
-        { from: "unknown", text: "Или знал заранее.", delay: 900 },
-        { from: "unknown", text: "Или следил за тем, что вы делаете.", delay: 1000 }
+        { from: "unknown", text: "Либо знал заранее." , delay: 900 },
+        { from: "unknown", text: "Либо читает вас прямо сейчас.", delay: 1000 }
       ]
     },
     {
@@ -1656,8 +1656,8 @@ const legacyChapter1 = {
       chat: "private_unknown",
       trigger: "choice:unknown_after_hack_trap_common:1",
       messages: [
-        { from: "unknown", text: "Он был отправлен с телефона Мии в тот вечер.", delay: 1100 },
-        { from: "unknown", text: "Этого достаточно, чтобы не игнорировать его.", delay: 1100 }
+        { from: "unknown", text: "Ссылка появилась в те минуты, когда телефон был у Харпер.", delay: 1100 },
+        { from: "unknown", text: "Связь есть. Что именно она значит — пока нет.", delay: 1100 }
       ]
     },
     {
@@ -1665,7 +1665,7 @@ const legacyChapter1 = {
       chat: "private_unknown",
       trigger: "choice:unknown_after_hack_trap_common:2",
       messages: [
-        { from: "unknown", text: "Пока нет.", delay: 900 }
+        { from: "unknown", text: "Если бы знал, написал бы имя." , delay: 900 }
       ]
     },
     {
@@ -1673,7 +1673,7 @@ const legacyChapter1 = {
       chat: "private_unknown",
       trigger: "after:unknown_after_hack_knew|unknown_after_hack_harper_file|unknown_after_hack_knows_who",
       messages: [
-        { from: "unknown", text: "Я успел сохранить часть данных до обрыва.", delay: 1200 },
+        { from: "unknown", text: "Я вытащил первые секунды видео. Остальное рассыпалось.", delay: 1200 },
         { type: "choice", options: [
           { text: "Тогда покажи мне файл.", loyalty: {}, next: "unknown_after_hack_show_file" },
           { text: "Ты сможешь его восстановить?", loyalty: {}, next: "unknown_after_hack_restore_file" },
@@ -1686,7 +1686,7 @@ const legacyChapter1 = {
       chat: "private_unknown",
       trigger: "choice:unknown_after_hack_saved_data:0",
       messages: [
-        { from: "unknown", text: "Не сейчас.", delay: 900 }
+        { from: "unknown", text: "Там пока нечего смотреть." , delay: 900 }
       ]
     },
     {
@@ -1694,7 +1694,7 @@ const legacyChapter1 = {
       chat: "private_unknown",
       trigger: "choice:unknown_after_hack_saved_data:1",
       messages: [
-        { from: "unknown", text: "Не полностью.", delay: 900 }
+        { from: "unknown", text: "Три секунды — возможно. Весь файл — нет." , delay: 900 }
       ]
     },
     {
@@ -1702,8 +1702,8 @@ const legacyChapter1 = {
       chat: "private_unknown",
       trigger: "choice:unknown_after_hack_saved_data:2",
       messages: [
-        { from: "unknown", text: "Потому что ты оказался в чужой ловушке.", delay: 1100 },
-        { from: "unknown", text: "И она уже начала срабатывать.", delay: 1000 }
+        { from: "unknown", text: "Потому что этот сервер уже попадался мне раньше.", delay: 1100 },
+        { from: "unknown", text: "Больше пока не скажу.", delay: 900 }
       ]
     },
     {
@@ -1711,11 +1711,11 @@ const legacyChapter1 = {
       chat: "private_unknown",
       trigger: "after:unknown_after_hack_show_file|unknown_after_hack_restore_file|unknown_after_hack_why_help",
       messages: [
-        { from: "unknown", text: "В файле всё ещё есть код, через который к тебе подключились.", delay: 1300 },
-        { from: "unknown", text: "Я не буду отправлять его обратно, пока не уберу это.", delay: 1200 },
+        { from: "unknown", text: "Ссылка всё ещё опасна.", delay: 900 },
+        { from: "unknown", text: "Пока не вычищу подключение, ничего тебе не отправлю.", delay: 1200 },
         { type: "choice", options: [
-          { text: "Ты можешь это убрать?", loyalty: {}, next: "unknown_after_hack_can_clean" },
-          { text: "Почему я должен тебе верить?", loyalty: {}, next: "unknown_after_hack_trust" },
+          { text: "Тогда сначала обезвредь ссылку. Потом присылай что угодно.", loyalty: {}, next: "unknown_after_hack_can_clean" },
+          { text: "Я пока не вижу ни одной причины тебе верить.", loyalty: {}, next: "unknown_after_hack_trust" },
           { text: "Что будет, если открыть файл ещё раз?", loyalty: {}, next: "unknown_after_hack_open_again" }
         ]}
       ]
@@ -1725,7 +1725,7 @@ const legacyChapter1 = {
       chat: "private_unknown",
       trigger: "choice:unknown_after_hack_clean_file:0",
       messages: [
-        { from: "unknown", text: "Уже убираю.", delay: 900 }
+        { from: "unknown", text: "Иначе бы не писал." , delay: 900 }
       ]
     },
     {
@@ -1741,7 +1741,8 @@ const legacyChapter1 = {
       chat: "private_unknown",
       trigger: "choice:unknown_after_hack_clean_file:2",
       messages: [
-        { from: "unknown", text: "Не проверяй.", delay: 900 }
+        { from: "unknown", text: "Они зайдут снова." , delay: 900 },
+        { from: "unknown", text: "Не проверяй из любопытства.", delay: 850 }
       ]
     },
     {
@@ -1749,13 +1750,13 @@ const legacyChapter1 = {
       chat: "private_unknown",
       trigger: "after:unknown_after_hack_can_clean|unknown_after_hack_trust|unknown_after_hack_open_again",
       messages: [
-        { from: "unknown", text: "Не открывай вложение снова.", delay: 1000 },
-        { from: "unknown", text: "Не подключайся к телефону Мии с другого устройства.", delay: 1200 },
-        { from: "unknown", text: "И скажи ей пока не трогать старый телефон.", delay: 1200 },
+        { from: "unknown", text: "Ссылку не открывай. Никому не пересылай.", delay: 1000 },
+        { from: "unknown", text: "К телефону Мии с другого устройства тоже не лезь.", delay: 1100 },
+        { from: "unknown", text: "Сам телефон пусть не включает до полиции.", delay: 1100 },
         { type: "choice", options: [
-          { text: "Они успели что-то узнать?", loyalty: {}, next: "unknown_after_hack_what_they_know" },
-          { text: "Они видели мои чаты?", loyalty: {}, next: "unknown_after_hack_saw_chats" },
-          { text: "Ты вернёшься?", loyalty: {}, next: "unknown_after_hack_return" }
+          { text: "Самое мерзкое — я даже не знаю, что они успели забрать.", loyalty: {}, next: "unknown_after_hack_what_they_know" },
+          { text: "В чатах есть всё, что мы успели узнать о Харпер.", loyalty: {}, next: "unknown_after_hack_saw_chats" },
+          { text: "Отлично. А теперь ты просто исчезнешь?", loyalty: {}, next: "unknown_after_hack_return" }
         ]}
       ]
     },
@@ -1764,9 +1765,8 @@ const legacyChapter1 = {
       chat: "private_unknown",
       trigger: "choice:unknown_after_hack_warning:0",
       messages: [
-        { from: "unknown", text: "Возможно.", delay: 800 },
-        { from: "unknown", text: "Они увидели, что вы ищете Харпер.", delay: 1100 },
-        { from: "unknown", text: "И этого уже достаточно, чтобы стать осторожнее.", delay: 1200 }
+        { from: "unknown", text: "Они точно поняли, что вы ищете Харпер." , delay: 900 },
+        { from: "unknown", text: "Что ещё скопировали — не знаю.", delay: 1000 }
       ]
     },
     {
@@ -1783,7 +1783,8 @@ const legacyChapter1 = {
       chat: "private_unknown",
       trigger: "choice:unknown_after_hack_warning:2",
       messages: [
-        { from: "unknown", text: "Когда смогу безопасно отправить то, что осталось от файла.", delay: 1200 }
+        { from: "unknown", text: "Когда восстановлю кусок видео." , delay: 1000 },
+        { from: "unknown", text: "Если восстановлю.", delay: 750 }
       ]
     },
     {
@@ -1791,9 +1792,9 @@ const legacyChapter1 = {
       chat: "private_unknown",
       trigger: "after:unknown_after_hack_what_they_know|unknown_after_hack_saw_chats|unknown_after_hack_return",
       messages: [
-        { from: "unknown", text: "И пока никому не говори обо мне.", delay: 1100 },
+        { from: "unknown", text: "И моё появление пока оставь при себе.", delay: 1100 },
         { type: "choice", options: [
-          { text: "Почему?", loyalty: {}, next: "unknown_after_hack_why_silent" },
+          { text: "Нет. После такого я не собираюсь слепо выполнять твои приказы.", loyalty: {}, next: "unknown_after_hack_why_silent" },
           { text: "Ты хочешь, чтобы я соврал Мие?", loyalty: {}, next: "unknown_after_hack_lie_mia" },
           { text: "А если она спросит, что произошло?", loyalty: {}, next: "unknown_after_hack_if_mia_asks" }
         ]}
@@ -1804,7 +1805,8 @@ const legacyChapter1 = {
       chat: "private_unknown",
       trigger: "choice:unknown_after_hack_silence:0",
       messages: [
-        { from: "unknown", text: "Потому что ты не знаешь, кто читает ваши сообщения.", delay: 1100 }
+        { from: "unknown", text: "И правильно." , delay: 700 },
+        { from: "unknown", text: "Но ты не знаешь, кто ещё читает ваши сообщения.", delay: 1100 }
       ]
     },
     {
@@ -1812,7 +1814,8 @@ const legacyChapter1 = {
       chat: "private_unknown",
       trigger: "choice:unknown_after_hack_silence:1",
       messages: [
-        { from: "unknown", text: "Я хочу, чтобы ты не называл меня в чате, который могли увидеть.", delay: 1200 }
+        { from: "unknown", text: "Не лги про атаку." , delay: 800 },
+        { from: "unknown", text: "Просто не называй меня в чате, который уже могли скопировать.", delay: 1200 }
       ]
     },
     {
@@ -1820,7 +1823,8 @@ const legacyChapter1 = {
       chat: "private_unknown",
       trigger: "choice:unknown_after_hack_silence:2",
       messages: [
-        { from: "unknown", text: "Скажи, что доступ оборвался.", delay: 1000 }
+        { from: "unknown", text: "Скажи правду: доступ оборвался и файл опасен." , delay: 1000 },
+        { from: "unknown", text: "Про меня — ни слова.", delay: 750 }
       ]
     },
     {
@@ -1828,8 +1832,8 @@ const legacyChapter1 = {
       chat: "private_unknown",
       trigger: "after:unknown_after_hack_why_silent|unknown_after_hack_lie_mia|unknown_after_hack_if_mia_asks",
       messages: [
-        { from: "unknown", text: "Остальное решай сам.", delay: 1000 },
-        { from: "unknown", text: "Будь осторожен.", delay: 1100 },
+        { from: "unknown", text: "Решай сам." , delay: 900 },
+        { from: "unknown", text: "Но второй раз я могу не успеть.", delay: 1100 },
         { type: "system", text: "Неизвестный вышел из сети.", delay: 900, characterStatus: { id: "unknown", online: false } }
       ]
     },
@@ -1838,16 +1842,16 @@ const legacyChapter1 = {
       chat: "private_mia",
       trigger: "after:unknown_after_hack_end",
       messages: [
-        { type: "system", text: "Несколько секунд спустя.", delay: 1600 },
+        { type: "pause", delay: 1600 },
         { type: "system", text: "Миа в сети.", delay: 900, characterStatus: { id: "mia", online: true } },
-        { from: "mia", text: "Что случилось?", delay: 800 },
-        { from: "mia", text: "Доступ резко оборвался.", delay: 850 },
-        { from: "mia", text: "У меня программа закрылась.", delay: 850 },
-        { from: "mia", text: "Ты успел открыть видео?", delay: 900 },
+        { from: "mia", text: "эй", delay: 650 },
+        { from: "mia", text: "что сейчас было?", delay: 750 },
+        { from: "mia", text: "У меня всё закрылось само.", delay: 850 },
+        { from: "mia", text: "Ты видео открыл?", delay: 900 },
         { type: "choice", options: [
-          { text: "Да. Файл взломал мой телефон. Потом написал человек, который остановил подключение.", loyalty: {}, next: "mia_after_hack_reveal_unknown" },
-          { text: "Да. Файл взломал телефон, но я не знаю, кто это сделал.", loyalty: {}, trust: { miaTrust: 1 }, next: "mia_after_hack_attack" },
-          { text: "Нет. Просто всё зависло и закрылось.", loyalty: {}, trust: { miaTrust: -1 }, next: "mia_after_hack_cover_story" }
+          { text: "Открыл. Телефон взломали, а потом мне написал какой-то человек. Говорит, что остановил подключение.", loyalty: {}, next: "mia_after_hack_reveal_unknown" },
+          { text: "Открыл. После этого кто-то залез в мой телефон. Кто — понятия не имею.", loyalty: {}, trust: { miaTrust: 1 }, next: "mia_after_hack_attack" },
+          { text: "Не успел. Всё зависло и закрылось.", loyalty: {}, trust: { miaTrust: -1 }, next: "mia_after_hack_cover_story" }
         ]}
       ]
     },
@@ -1856,16 +1860,13 @@ const legacyChapter1 = {
       chat: "private_mia",
       trigger: "choice:mia_after_hack_start:0",
       messages: [
-        { from: "mia", text: "Что?", delay: 800 },
-        { from: "mia", text: "Какой незнакомец?", delay: 900 },
-        { from: "player", text: "Он сказал, что файл был ловушкой.", delay: 700 },
-        { from: "mia", text: "Подожди.", delay: 800 },
-        { from: "mia", text: "То есть кто-то специально оставил его в моём телефоне?", delay: 1200 },
-        { from: "mia", text: "И этот человек просто написал тебе после этого?", delay: 1200 },
+        { from: "mia", text: "стоп", delay: 650 },
+        { from: "mia", text: "Какой ещё человек?", delay: 850 },
+        { from: "mia", text: "Он может тебе писать? Прямо сейчас?", delay: 1050 },
         { type: "choice", options: [
-          { text: "Он появился сразу после перезагрузки.", loyalty: {}, trust: { miaTrust: 1 }, next: "mia_after_hack_unknown_reboot" },
-          { text: "Он сказал, что оборвал подключение.", loyalty: {}, next: "mia_after_hack_unknown_cut" },
-          { text: "Я не знаю, можно ли ему верить.", loyalty: {}, trust: { miaTrust: 1 }, next: "mia_after_hack_unknown_trust" }
+          { text: "Да. Чат появился сразу после перезагрузки.", loyalty: {}, trust: { miaTrust: 1 }, next: "mia_after_hack_unknown_reboot" },
+          { text: "Да. Он утверждает, что сам оборвал чужое подключение.", loyalty: {}, next: "mia_after_hack_unknown_cut" },
+          { text: "Может. Но я вообще не уверен, что ему можно верить.", loyalty: {}, trust: { miaTrust: 1 }, next: "mia_after_hack_unknown_trust" }
         ]}
       ]
     },
@@ -1874,7 +1875,7 @@ const legacyChapter1 = {
       chat: "private_mia",
       trigger: "choice:mia_after_hack_reveal_unknown:0",
       messages: [
-        { from: "mia", text: "Это вообще не делает ситуацию лучше.", delay: 1000 }
+        { from: "mia", text: "Супер. Ещё один человек внутри твоего телефона 🙃", delay: 1000 }
       ]
     },
     {
@@ -1882,11 +1883,11 @@ const legacyChapter1 = {
       chat: "private_mia",
       trigger: "choice:mia_after_hack_reveal_unknown:1",
       messages: [
-        { from: "mia", text: "И ты ему поверил?", delay: 1000 },
+        { from: "mia", text: "И ты ему веришь?", delay: 1000 },
         { type: "choice", options: [
-          { text: "Не знаю. Но он знал про файл.", loyalty: {}, trust: { miaTrust: 1 }, next: "mia_after_hack_unknown_knew_file" },
-          { text: "Нет. Просто он появился сразу после перезагрузки.", loyalty: {}, trust: { miaTrust: 1 }, next: "mia_after_hack_unknown_after_reboot" },
-          { text: "Я не верю ему. Но и игнорировать это нельзя.", loyalty: {}, trust: { miaTrust: 1 }, next: "mia_after_hack_unknown_cant_ignore" }
+          { text: "Не знаю. Но про файл и подключение он уже знал.", loyalty: {}, trust: { miaTrust: 1 }, next: "mia_after_hack_unknown_knew_file" },
+          { text: "Нет. Он просто появился сразу после перезагрузки — и это ещё подозрительнее.", loyalty: {}, trust: { miaTrust: 1 }, next: "mia_after_hack_unknown_after_reboot" },
+          { text: "Не верю. Но после такого сделать вид, что его нет, тоже не получится.", loyalty: {}, trust: { miaTrust: 1 }, next: "mia_after_hack_unknown_cant_ignore" }
         ]}
       ]
     },
@@ -1895,8 +1896,8 @@ const legacyChapter1 = {
       chat: "private_mia",
       trigger: "choice:mia_after_hack_unknown_cut:0",
       messages: [
-        { from: "mia", text: "Тогда он либо видел всё сам...", delay: 1000 },
-        { from: "mia", text: "Либо знает намного больше, чем говорит.", delay: 1100 }
+        { from: "mia", text: "Тогда он либо всё это видел...", delay: 1000 },
+        { from: "mia", text: "либо сам там был.", delay: 950 }
       ]
     },
     {
@@ -1904,7 +1905,7 @@ const legacyChapter1 = {
       chat: "private_mia",
       trigger: "choice:mia_after_hack_unknown_cut:1",
       messages: [
-        { from: "mia", text: "Это всё равно очень странно.", delay: 1000 }
+        { from: "mia", text: "Мне от этого вообще не легче.", delay: 1000 }
       ]
     },
     {
@@ -1912,8 +1913,8 @@ const legacyChapter1 = {
       chat: "private_mia",
       trigger: "choice:mia_after_hack_unknown_cut:2",
       messages: [
-        { from: "mia", text: "Да.", delay: 700 },
-        { from: "mia", text: "Наверное, ты прав.", delay: 900 }
+        { from: "mia", text: "угу", delay: 700 },
+        { from: "mia", text: "Только осторожнее с ним, ладно?", delay: 950 }
       ]
     },
     {
@@ -1921,11 +1922,11 @@ const legacyChapter1 = {
       chat: "private_mia",
       trigger: "choice:mia_after_hack_reveal_unknown:2",
       messages: [
-        { from: "mia", text: "Тогда почему он вообще знает про мой телефон?", delay: 1100 },
+        { from: "mia", text: "Тогда откуда он вообще знает про мой телефон?", delay: 1100 },
         { type: "choice", options: [
-          { text: "Не знаю. Он появился сразу после перезагрузки.", loyalty: {}, next: "mia_after_hack_unknown_trust_reboot" },
-          { text: "Может, он увидел то же подключение, что и тот, кто нас взломал.", loyalty: {}, next: "mia_after_hack_unknown_trust_more" },
-          { text: "Я пытаюсь это понять.", loyalty: {}, next: "mia_after_hack_unknown_trust_understand" }
+          { text: "Не знаю. Он появился сразу после перезагрузки — это всё, что у меня есть.", loyalty: {}, next: "mia_after_hack_unknown_trust_reboot" },
+          { text: "Может, он следил за тем же подключением. Или за тем, кто нас взломал.", loyalty: {}, next: "mia_after_hack_unknown_trust_more" },
+          { text: "Не знаю, Миа. Я сам сейчас пытаюсь не охренеть.", loyalty: {}, next: "mia_after_hack_unknown_trust_understand" }
         ]}
       ]
     },
@@ -1934,7 +1935,7 @@ const legacyChapter1 = {
       chat: "private_mia",
       trigger: "choice:mia_after_hack_unknown_trust:0",
       messages: [
-        { from: "mia", text: "Как будто этого уже недостаточно.", delay: 1000 }
+        { from: "mia", text: "Господи. Как будто одного взлома было мало.", delay: 1000 }
       ]
     },
     {
@@ -1942,7 +1943,7 @@ const legacyChapter1 = {
       chat: "private_mia",
       trigger: "choice:mia_after_hack_unknown_trust:1",
       messages: [
-        { from: "mia", text: "То есть их может быть больше одного?", delay: 1100 }
+        { from: "mia", text: "То есть там мог быть не один человек...", delay: 1100 }
       ]
     },
     {
@@ -1950,8 +1951,8 @@ const legacyChapter1 = {
       chat: "private_mia",
       trigger: "choice:mia_after_hack_unknown_trust:2",
       messages: [
-        { from: "mia", text: "Ладно.", delay: 800 },
-        { from: "mia", text: "Просто не делай вид, что всё под контролем.", delay: 1100 }
+        { from: "mia", text: "да, прости", delay: 800 },
+        { from: "mia", text: "Я тоже сейчас немного в панике.", delay: 1100 }
       ]
     },
     {
@@ -1960,7 +1961,7 @@ const legacyChapter1 = {
       trigger: "after:mia_after_hack_unknown_reboot|mia_after_hack_unknown_knew_file|mia_after_hack_unknown_after_reboot|mia_after_hack_unknown_cant_ignore|mia_after_hack_unknown_trust_reboot|mia_after_hack_unknown_trust_more|mia_after_hack_unknown_trust_understand",
       setFlags: { unknownRevealedToMia: true, miaKnowsAboutHack: true },
       messages: [
-        { from: "mia", text: "Мне это совсем не нравится.", delay: 1000 }
+        { from: "mia", text: "Мне вообще всё это не нравится.", delay: 1000 }
       ]
     },
     {
@@ -1968,14 +1969,13 @@ const legacyChapter1 = {
       chat: "private_mia",
       trigger: "choice:mia_after_hack_start:1",
       messages: [
-        { from: "mia", text: "Из-за старого телефона?", delay: 900 },
-        { from: "player", text: "Похоже на то.", delay: 700 },
-        { from: "mia", text: "Чёрт.", delay: 800 },
-        { from: "mia", text: "Ты успел что-нибудь увидеть?", delay: 1000 },
+        { from: "mia", text: "Из-за моего старого телефона...", delay: 900 },
+        { from: "mia", text: "чёрт", delay: 750 },
+        { from: "mia", text: "Ты хоть что-нибудь успел увидеть?", delay: 1000 },
         { type: "choice", options: [
-          { text: "Только странный чат и файл.", loyalty: {}, next: "mia_after_hack_attack_chat_file" },
-          { text: "Файл начал загружаться, а потом всё сорвалось.", loyalty: {}, next: "mia_after_hack_attack_download" },
-          { text: "Телефон начал сам открывать чаты.", loyalty: {}, next: "mia_after_hack_attack_phone_self" }
+          { text: "Только удалённый чат и ссылку на видео. Само видео — нет.", loyalty: {}, next: "mia_after_hack_attack_chat_file" },
+          { text: "Пошла загрузка, а потом всё резко оборвалось.", loyalty: {}, next: "mia_after_hack_attack_download" },
+          { text: "Видео не увидел. Телефон сам полез по моим чатам.", loyalty: {}, next: "mia_after_hack_attack_phone_self" }
         ]}
       ]
     },
@@ -1984,7 +1984,7 @@ const legacyChapter1 = {
       chat: "private_mia",
       trigger: "choice:mia_after_hack_attack:0",
       messages: [
-        { from: "mia", text: "Значит, Харпер правда что-то оставила.", delay: 1100 }
+        { from: "mia", text: "Значит, там всё-таки что-то было.", delay: 1100 }
       ]
     },
     {
@@ -1992,11 +1992,11 @@ const legacyChapter1 = {
       chat: "private_mia",
       trigger: "choice:mia_after_hack_attack:1",
       messages: [
-        { from: "mia", text: "И просто отключилось?", delay: 900 },
+        { from: "mia", text: "И всё просто погасло?", delay: 900 },
         { type: "choice", options: [
-          { text: "Да. Будто кто-то оборвал подключение.", loyalty: {}, next: "mia_after_hack_attack_cut" },
-          { text: "Да. Слишком резко, чтобы это было обычной ошибкой.", loyalty: {}, next: "mia_after_hack_attack_too_fast" },
-          { text: "Да. И после этого телефон начал глючить.", loyalty: {}, next: "mia_after_hack_attack_glitched" }
+          { text: "Да. Будто кто-то дёрнул провод с другой стороны.", loyalty: {}, next: "mia_after_hack_attack_cut" },
+          { text: "Да. Слишком резко для обычного сбоя.", loyalty: {}, next: "mia_after_hack_attack_too_fast" },
+          { text: "Да. А потом телефон начал жить своей жизнью.", loyalty: {}, next: "mia_after_hack_attack_glitched" }
         ]}
       ]
     },
@@ -2005,7 +2005,7 @@ const legacyChapter1 = {
       chat: "private_mia",
       trigger: "choice:mia_after_hack_attack_download:0",
       messages: [
-        { from: "mia", text: "Тогда это точно не похоже на сбой.", delay: 1000 }
+        { from: "mia", text: "Нет. Это точно был не просто сбой.", delay: 1000 }
       ]
     },
     {
@@ -2013,7 +2013,7 @@ const legacyChapter1 = {
       chat: "private_mia",
       trigger: "choice:mia_after_hack_attack_download:1",
       messages: [
-        { from: "mia", text: "Согласна.", delay: 900 }
+        { from: "mia", text: "Тоже так думаю.", delay: 900 }
       ]
     },
     {
@@ -2021,8 +2021,8 @@ const legacyChapter1 = {
       chat: "private_mia",
       trigger: "choice:mia_after_hack_attack_download:2",
       messages: [
-        { from: "mia", text: "Что?", delay: 700 },
-        { from: "mia", text: "Это уже совсем не похоже на ошибку.", delay: 1100 }
+        { from: "mia", text: "в смысле?", delay: 700 },
+        { from: "mia", text: "Нет, это уже точно не ошибка.", delay: 1100 }
       ]
     },
     {
@@ -2030,11 +2030,11 @@ const legacyChapter1 = {
       chat: "private_mia",
       trigger: "choice:mia_after_hack_attack:2",
       messages: [
-        { from: "mia", text: "Что значит — сам?", delay: 900 },
+        { from: "mia", text: "Сам — это как?", delay: 900 },
         { type: "choice", options: [
-          { text: "Открыл мои переписки и заметки.", loyalty: {}, next: "mia_after_hack_attack_notes" },
-          { text: "Будто кто-то листал всё вместо меня.", loyalty: {}, next: "mia_after_hack_attack_scrolled" },
-          { text: "Я сам не до конца понимаю, что это было.", loyalty: {}, next: "mia_after_hack_attack_dont_know" }
+          { text: "Открылись переписки, заметки. Потом камера.", loyalty: {}, next: "mia_after_hack_attack_notes" },
+          { text: "Кто-то листал мои приложения вместо меня.", loyalty: {}, next: "mia_after_hack_attack_scrolled" },
+          { text: "Не знаю. Я просто смотрел, как телефон сам всё открывает.", loyalty: {}, next: "mia_after_hack_attack_dont_know" }
         ]}
       ]
     },
@@ -2043,7 +2043,7 @@ const legacyChapter1 = {
       chat: "private_mia",
       trigger: "choice:mia_after_hack_attack_phone_self:0",
       messages: [
-        { from: "mia", text: "Это уже похоже на взлом.", delay: 1000 }
+        { from: "mia", text: "Они включили камеру?..", delay: 1000 }
       ]
     },
     {
@@ -2051,8 +2051,8 @@ const legacyChapter1 = {
       chat: "private_mia",
       trigger: "choice:mia_after_hack_attack_phone_self:1",
       messages: [
-        { from: "mia", text: "Чёрт.", delay: 700 },
-        { from: "mia", text: "Мне это не нравится.", delay: 900 }
+        { from: "mia", text: "чёрт", delay: 700 },
+        { from: "mia", text: "Прости. Это я дала тебе доступ.", delay: 1000 }
       ]
     },
     {
@@ -2060,7 +2060,7 @@ const legacyChapter1 = {
       chat: "private_mia",
       trigger: "choice:mia_after_hack_attack_phone_self:2",
       messages: [
-        { from: "mia", text: "Тогда лучше не пытаться подключиться снова.", delay: 1100 }
+        { from: "mia", text: "Пожалуйста, только не открывай ссылку ещё раз.", delay: 1100 }
       ]
     },
     {
@@ -2069,7 +2069,7 @@ const legacyChapter1 = {
       trigger: "after:mia_after_hack_attack_chat_file|mia_after_hack_attack_cut|mia_after_hack_attack_too_fast|mia_after_hack_attack_glitched|mia_after_hack_attack_notes|mia_after_hack_attack_scrolled|mia_after_hack_attack_dont_know",
       setFlags: { unknownKeptSecret: true, miaKnowsAboutAttack: true, miaKnowsAboutHack: true, unknownRevealedToMia: false },
       messages: [
-        { from: "mia", text: "Значит, телефон пока лучше не трогать.", delay: 1000 }
+        { from: "mia", text: "Всё. Старый телефон я больше не трогаю.", delay: 1000 }
       ]
     },
     {
@@ -2078,10 +2078,10 @@ const legacyChapter1 = {
       trigger: "choice:mia_after_hack_start:2",
       setFlags: { unknownKeptSecret: true, miaKnowsAboutAttack: false, miaKnowsAboutHack: false, unknownRevealedToMia: false, playerHidHackFromMia: true },
       messages: [
-        { from: "mia", text: "Странно.", delay: 800 },
-        { from: "mia", text: "Он же работал всего минуту назад.", delay: 1000 },
-        { from: "mia", text: "Может, приложение просто старое.", delay: 1000 },
-        { from: "mia", text: "Или телефон совсем умирает.", delay: 1000 }
+        { from: "mia", text: "странно", delay: 800 },
+        { from: "mia", text: "Секунду назад всё работало.", delay: 1000 },
+        { from: "mia", text: "Может, программа просто древняя.", delay: 1000 },
+        { from: "mia", text: "В общем... лучше пока не трогать, да?", delay: 1000 }
       ]
     },
     {
@@ -2090,9 +2090,9 @@ const legacyChapter1 = {
       trigger: "after:mia_after_hack_reveal_common|mia_after_hack_attack_common|mia_after_hack_cover_story",
       messages: [
         { type: "choice", options: [
-          { text: "Пока не включай старый телефон снова.", loyalty: {}, next: "mia_after_hack_dont_turn_on" },
-          { text: "Убери телефон и не трогай его до завтра.", loyalty: {}, next: "mia_after_hack_put_away" },
-          { text: "Не подключайся к нему больше, пока не станет понятно, что произошло.", loyalty: {}, next: "mia_after_hack_no_more_access" }
+          { text: "Не включай старый телефон. Вообще.", loyalty: {}, next: "mia_after_hack_dont_turn_on" },
+          { text: "Убери его подальше и до полиции не трогай.", loyalty: {}, next: "mia_after_hack_put_away" },
+          { text: "Закрой копию. На сегодня хватит приключений.", loyalty: {}, next: "mia_after_hack_no_more_access" }
         ]}
       ]
     },
@@ -2101,8 +2101,8 @@ const legacyChapter1 = {
       chat: "private_mia",
       trigger: "choice:mia_after_hack_phone_warning:0",
       messages: [
-        { from: "mia", text: "Хорошо.", delay: 800 },
-        { from: "mia", text: "Я и сама пока не хочу к нему прикасаться.", delay: 1100 }
+        { from: "mia", text: "не буду", delay: 800 },
+        { from: "mia", text: "Я теперь на него даже смотреть не хочу.", delay: 1100 }
       ]
     },
     {
@@ -2110,8 +2110,8 @@ const legacyChapter1 = {
       chat: "private_mia",
       trigger: "choice:mia_after_hack_phone_warning:1",
       messages: [
-        { from: "mia", text: "Ладно.", delay: 800 },
-        { from: "mia", text: "Выключу его и уберу в ящик.", delay: 1000 }
+        { from: "mia", text: "угу", delay: 800 },
+        { from: "mia", text: "Положу обратно в коробку. Пусть лежит.", delay: 1000 }
       ]
     },
     {
@@ -2119,8 +2119,8 @@ const legacyChapter1 = {
       chat: "private_mia",
       trigger: "choice:mia_after_hack_phone_warning:2",
       messages: [
-        { from: "mia", text: "Хорошо.", delay: 800 },
-        { from: "mia", text: "Больше не буду его включать.", delay: 1000 }
+        { from: "mia", text: "Закрыла.", delay: 800 },
+        { from: "mia", text: "И временную ссылку тоже отключаю.", delay: 1000 }
       ]
     },
     {
@@ -2128,11 +2128,12 @@ const legacyChapter1 = {
       chat: "private_mia",
       trigger: "after:mia_after_hack_dont_turn_on|mia_after_hack_put_away|mia_after_hack_no_more_access",
       messages: [
-        { from: "mia", text: "Мне уже пора на смену.", delay: 1000 },
+        { from: "mia", text: "Мне через полчаса на смену, кстати.", delay: 1000 },
+        { from: "mia", text: "И я вообще не представляю, как сейчас изображать нормального человека.", delay: 1150 },
         { type: "choice", options: [
-          { text: "Будь осторожна по дороге.", loyalty: {}, trust: { miaTrust: 1 }, next: "mia_after_hack_careful" },
-          { text: "Напиши, когда доберёшься.", loyalty: {}, trust: { miaTrust: 1 }, next: "mia_after_hack_write_arrive" },
-          { text: "Не вини себя из-за этого.", loyalty: {}, next: "mia_after_hack_no_blame" }
+          { text: "Тогда хотя бы осторожнее по дороге.", loyalty: {}, trust: { miaTrust: 1 }, next: "mia_after_hack_careful" },
+          { text: "Напиши, когда доберёшься. Просто чтобы я знал, что всё нормально.", loyalty: {}, trust: { miaTrust: 1 }, next: "mia_after_hack_write_arrive" },
+          { text: "И не вздумай всю дорогу винить себя. Ты не знала про ловушку.", loyalty: {}, next: "mia_after_hack_no_blame" }
         ]}
       ]
     },
@@ -2141,7 +2142,7 @@ const legacyChapter1 = {
       chat: "private_mia",
       trigger: "choice:mia_after_hack_shift:0",
       messages: [
-        { from: "mia", text: "Буду.", delay: 800 },
+        { from: "mia", text: "постараюсь", delay: 800 },
         { from: "mia", text: "Спасибо.", delay: 800 }
       ]
     },
@@ -2150,7 +2151,7 @@ const legacyChapter1 = {
       chat: "private_mia",
       trigger: "choice:mia_after_hack_shift:1",
       messages: [
-        { from: "mia", text: "Хорошо.", delay: 800 }
+        { from: "mia", text: "Напишу.", delay: 800 }
       ]
     },
     {
@@ -2158,9 +2159,8 @@ const legacyChapter1 = {
       chat: "private_mia",
       trigger: "choice:mia_after_hack_shift:2",
       messages: [
-        { from: "mia", text: "Я постараюсь.", delay: 900 },
-        { from: "mia", text: "Просто это мой телефон.", delay: 900 },
-        { from: "mia", text: "И Харпер держала его в руках.", delay: 1000 }
+        { from: "mia", text: "Легко сказать.", delay: 900 },
+        { from: "mia", text: "Но да. Я правда не знала.", delay: 950 }
       ]
     },
     {
@@ -2168,9 +2168,9 @@ const legacyChapter1 = {
       chat: "private_mia",
       trigger: "after:mia_after_hack_careful|mia_after_hack_write_arrive|mia_after_hack_no_blame",
       messages: [
-        { from: "mia", text: "Напиши, если поймёшь, что там произошло.", delay: 1100 },
-        { from: "mia", text: "И пожалуйста...", delay: 900 },
-        { from: "mia", text: "Не лезь в это один.", delay: 1000 },
+        { from: "mia", text: "Напиши, если поймёшь, что это было.", delay: 1100 },
+        { from: "mia", text: "И... пожалуйста", delay: 900 },
+        { from: "mia", text: "не лезь туда один. Хотя бы сейчас.", delay: 1000 },
         { type: "system", text: "Миа вышла из сети.", delay: 900, characterStatus: { id: "mia", online: false } }
       ]
     },
@@ -2180,37 +2180,40 @@ const legacyChapter1 = {
       trigger: "flagsValueAfter:mia_after_hack_end:miaBackupAccessGranted:true:miaPrivateChatsOpened:false",
       setFlags: { miaRespectedPrivacy: true },
       messages: [
-        { from: "mia", text: "И... я вижу историю доступа.", delay: 800 },
-        { from: "mia", text: "Ты правда не полез в мои личные переписки.", delay: 850 },
+        { type: "system", text: "Миа снова в сети.", delay: 450, characterStatus: { id: "mia", online: true } },
+        { from: "mia", text: "Подожди", delay: 800 },
+        { from: "mia", text: "я вижу историю доступа", delay: 850 },
+        { from: "mia", text: "Ты правда не открывал мои чаты.", delay: 850 },
         { type: "choice", options: [
-          { text: "Ты попросила этого не делать.", loyalty: {}, trust: { miaTrust: 1 }, next: "mia_privacy_good_request" },
-          { text: "Они не относятся к Харпер.", loyalty: {}, trust: { miaTrust: 1 }, next: "mia_privacy_good_case" },
-          { text: "Я вообще-то умею соблюдать чужие границы.", loyalty: {}, trust: { miaTrust: 1 }, next: "mia_privacy_good_boundaries" }
+          { text: "Ты попросила туда не лезть. Что тут удивительного?", loyalty: {}, trust: { miaTrust: 1 }, next: "mia_privacy_good_request" },
+          { text: "Твои личные переписки не имеют отношения к Харпер.", loyalty: {}, trust: { miaTrust: 1 }, next: "mia_privacy_good_case" },
+          { text: "Я любопытный, но не настолько же.", loyalty: {}, trust: { miaTrust: 1 }, next: "mia_privacy_good_boundaries" }
         ] }
       ]
     },
-    { id: "mia_privacy_good_request", chat: "private_mia", trigger: "choice:mia_privacy_respected:0", messages: [{ from: "mia", text: "Да. Просто не все останавливаются после просьбы.", delay: 900 }] },
-    { id: "mia_privacy_good_case", chat: "private_mia", trigger: "choice:mia_privacy_respected:1", messages: [{ from: "mia", text: "Спасибо. Серьёзно.", delay: 850 }] },
-    { id: "mia_privacy_good_boundaries", chat: "private_mia", trigger: "choice:mia_privacy_respected:2", messages: [{ from: "mia", text: "Хорошо. Буду знать.", delay: 850 }] },
+    { id: "mia_privacy_good_request", chat: "private_mia", trigger: "choice:mia_privacy_respected:0", messages: [{ from: "mia", text: "Для меня — есть чему удивляться. Спасибо.", delay: 900 }] },
+    { id: "mia_privacy_good_case", chat: "private_mia", trigger: "choice:mia_privacy_respected:1", messages: [{ from: "mia", text: "Спасибо. Правда.", delay: 850 }] },
+    { id: "mia_privacy_good_boundaries", chat: "private_mia", trigger: "choice:mia_privacy_respected:2", messages: [{ from: "mia", text: "ахах. Ладно, принято", delay: 850 }] },
     {
       id: "mia_privacy_violated",
       chat: "private_mia",
       trigger: "flagsValueAfter:mia_after_hack_end:miaBackupAccessGranted:true:miaPrivateChatsOpened:true",
       setFlags: { miaPrivacyViolated: true, miaRemoteAccessBlocked: true },
       messages: [
+        { type: "system", text: "Миа снова в сети.", delay: 450, characterStatus: { id: "mia", online: true } },
         { from: "mia", text: "Подожди.", delay: 650 },
-        { from: "mia", text: "В истории доступа написано, что ты открывал мои переписки.", delay: 950 },
-        { from: "mia", text: "Не чат с Харпер. Мои.", delay: 800 },
+        { from: "mia", text: "Ты открыл мои переписки?", delay: 950 },
+        { from: "mia", text: "Не Харпер. Маму. Лею.", delay: 800 },
         { type: "choice", options: [
-          { text: "Я хотел проверить, не писала ли Харпер с твоего аккаунта кому-то ещё.", loyalty: {}, trust: { miaTrust: -2 }, next: "mia_privacy_bad_excuse" },
-          { text: "Да. Я открыл их. Извини.", loyalty: {}, trust: { miaTrust: -2 }, next: "mia_privacy_bad_apology" },
-          { text: "Ты всё равно дала мне доступ.", loyalty: {}, trust: { miaTrust: -3 }, next: "mia_privacy_bad_entitled" }
+          { text: "Я проверял, не писала ли Харпер кому-то ещё с твоего телефона.", loyalty: {}, trust: { miaTrust: -2 }, next: "mia_privacy_bad_excuse" },
+          { text: "Да. Открыл. Это было лишнее, извини.", loyalty: {}, trust: { miaTrust: -2 }, next: "mia_privacy_bad_apology" },
+          { text: "Ты сама дала мне доступ ко всей копии.", loyalty: {}, trust: { miaTrust: -3 }, next: "mia_privacy_bad_entitled" }
         ] }
       ]
     },
-    { id: "mia_privacy_bad_excuse", chat: "private_mia", trigger: "choice:mia_privacy_violated:0", messages: [{ from: "mia", text: "В чате с моей мамой? Серьёзно? Не надо придумывать оправдание.", delay: 1050 }] },
-    { id: "mia_privacy_bad_apology", chat: "private_mia", trigger: "choice:mia_privacy_violated:1", messages: [{ from: "mia", text: "Я прямо попросила тебя не лезть туда. Я не хочу сейчас продолжать этот разговор.", delay: 1100 }] },
-    { id: "mia_privacy_bad_entitled", chat: "private_mia", trigger: "choice:mia_privacy_violated:2", messages: [{ from: "mia", text: "К копии. Не к моей личной жизни. Больше доступа не будет.", delay: 1100 }] },
+    { id: "mia_privacy_bad_excuse", chat: "private_mia", trigger: "choice:mia_privacy_violated:0", messages: [{ from: "mia", text: "В чате с моей мамой? Серьёзно? Не надо.", delay: 1050 }] },
+    { id: "mia_privacy_bad_apology", chat: "private_mia", trigger: "choice:mia_privacy_violated:1", messages: [{ from: "mia", text: "Я прямо попросила тебя туда не лезть. Мне сейчас лучше уйти.", delay: 1100 }] },
+    { id: "mia_privacy_bad_entitled", chat: "private_mia", trigger: "choice:mia_privacy_violated:2", messages: [{ from: "mia", text: "К копии. Не к моей жизни. Всё, доступ закрыт.", delay: 1100 }] },
     { id: "mia_privacy_not_applicable", chat: "private_mia", trigger: "flagAfter:playerDeclinedBackupAccess:mia_after_hack_end", messages: [] },
     {
       id: "mia_after_hack_case_update",
@@ -2234,67 +2237,11 @@ const legacyChapter1 = {
         {
           type: "choice",
           options: [
-            { text: "Рассказать о звонке.", sendMessage: false, loyalty: {}, next: "unknown_call_report_tell_1" },
-            { text: "Спросить, связан ли звонок с файлом.", sendMessage: false, loyalty: {}, next: "unknown_call_report_file_1" },
-            { text: "Спросить, пытаются ли меня запугать.", sendMessage: false, loyalty: {}, next: "unknown_call_report_scare_1" }
+            { text: "Мне только что звонили со скрытого номера. В трубке молчали, был только шум дороги.", loyalty: {}, setFlag: "unknownCallReportedToUnknown" },
+            { text: "После файла мне позвонили со скрытого номера. Это связано?", loyalty: {}, setFlag: "unknownCallReportedToUnknown" },
+            { text: "Мне позвонили со скрытого номера. Похоже, кто-то решил меня напугать.", loyalty: {}, setFlag: "unknownCallReportedToUnknown" }
           ]
         }
-      ]
-    },
-    {
-      id: "unknown_call_report_tell_1",
-      chat: "private_unknown",
-      trigger: "choice:unknown_call_report_start:0",
-      messages: [
-        { type: "choice", options: [{ text: "Мне только что звонили с неизвестного номера.", loyalty: {}, next: "unknown_call_report_tell_2" }] }
-      ]
-    },
-    {
-      id: "unknown_call_report_tell_2",
-      chat: "private_unknown",
-      trigger: "choice:unknown_call_report_tell_1:0",
-      messages: [
-        { type: "choice", options: [{ text: "В трубке молчали.", loyalty: {}, next: "unknown_call_report_tell_3" }] }
-      ]
-    },
-    {
-      id: "unknown_call_report_tell_3",
-      chat: "private_unknown",
-      trigger: "choice:unknown_call_report_tell_2:0",
-      messages: [
-        { type: "choice", options: [{ text: "Был слышен только шум дороги.", loyalty: {}, setFlag: "unknownCallReportedToUnknown" }] }
-      ]
-    },
-    {
-      id: "unknown_call_report_file_1",
-      chat: "private_unknown",
-      trigger: "choice:unknown_call_report_start:1",
-      messages: [
-        { type: "choice", options: [{ text: "Мне только что звонили с неизвестного номера.", loyalty: {}, next: "unknown_call_report_file_2" }] }
-      ]
-    },
-    {
-      id: "unknown_call_report_file_2",
-      chat: "private_unknown",
-      trigger: "choice:unknown_call_report_file_1:0",
-      messages: [
-        { type: "choice", options: [{ text: "Это связано с файлом?", loyalty: {}, setFlag: "unknownCallReportedToUnknown" }] }
-      ]
-    },
-    {
-      id: "unknown_call_report_scare_1",
-      chat: "private_unknown",
-      trigger: "choice:unknown_call_report_start:2",
-      messages: [
-        { type: "choice", options: [{ text: "Мне только что звонили с неизвестного номера.", loyalty: {}, next: "unknown_call_report_scare_2" }] }
-      ]
-    },
-    {
-      id: "unknown_call_report_scare_2",
-      chat: "private_unknown",
-      trigger: "choice:unknown_call_report_scare_1:0",
-      messages: [
-        { type: "choice", options: [{ text: "Кто-то пытается меня запугать?", loyalty: {}, setFlag: "unknownCallReportedToUnknown" }] }
       ]
     },
     {
@@ -2305,22 +2252,22 @@ const legacyChapter1 = {
       messages: [
         { type: "pause", delay: 4500 },
         { type: "system", text: "Брук в сети.", delay: 500, characterStatus: { id: "brooke", online: true } },
-        { from: "brooke", text: "Это что?", delay: 700 },
-        { from: "brooke", text: "Значит, отдельную группу вы не создали.", delay: 850 },
-        { from: "brooke", text: "Просто решили обсуждать Харпер с тобой по личкам.", delay: 950 },
-        { from: "brooke", text: "Намного лучше.", delay: 650 },
+        { from: "brooke", text: "Красиво.", delay: 700 },
+        { from: "brooke", text: "Группу вы, значит, не создали.", delay: 850 },
+        { from: "brooke", text: "Просто разнесли всё по личкам.", delay: 950 },
+        { from: "brooke", text: "Совсем другое дело 👍", delay: 650 },
         { type: "choice", options: [
-          { text: "Они сами мне написали.", loyalty: {}, next: "brooke_separate_they_wrote" },
-          { text: "Мы не обсуждаем ничего за вашей спиной.", loyalty: {}, next: "brooke_separate_not_behind" },
+          { text: "Они сами мне написали. Я никого не уводил по углам.", loyalty: {}, next: "brooke_separate_they_wrote" },
+          { text: "За вашей спиной? Мы с вами даже толком не знакомы.", loyalty: {}, next: "brooke_separate_not_behind" },
           { text: "Откуда у тебя этот скриншот?", loyalty: {}, next: "brooke_separate_source" }
         ] }
       ]
     },
-    { id: "brooke_separate_they_wrote", chat: "private_brooke", trigger: "choice:brooke_after_call_separate_start:0", messages: [{ from: "brooke", text: "И ты, конечно, просто случайно оказался в центре всего.", delay: 950 }] },
-    { id: "brooke_separate_not_behind", chat: "private_brooke", trigger: "choice:brooke_after_call_separate_start:1", messages: [{ from: "brooke", text: "Тогда почему я узнаю об этих разговорах из анонимного сообщения?", delay: 1000 }] },
+    { id: "brooke_separate_they_wrote", chat: "private_brooke", trigger: "choice:brooke_after_call_separate_start:0", messages: [{ from: "brooke", text: "А ты просто из вежливости оказался в центре всего. Конечно.", delay: 950 }] },
+    { id: "brooke_separate_not_behind", chat: "private_brooke", trigger: "choice:brooke_after_call_separate_start:1", messages: [{ from: "brooke", text: "И поэтому я узнаю об этом от анонима?", delay: 1000 }] },
     { id: "brooke_separate_source", chat: "private_brooke", trigger: "choice:brooke_after_call_separate_start:2", messages: [
-      { from: "brooke", text: "Его прислали с неизвестного номера.", delay: 850 },
-      { from: "brooke", text: "Без текста. Только картинка.", delay: 800 }
+      { from: "brooke", text: "Неизвестный номер.", delay: 850 },
+      { from: "brooke", text: "Без текста. Одна картинка.", delay: 800 }
     ] },
     {
       id: "brooke_after_call_start",
@@ -2330,16 +2277,16 @@ const legacyChapter1 = {
       messages: [
         { type: "pause", delay: 4500 },
         { type: "system", text: "Брук в сети.", delay: 500, characterStatus: { id: "brooke", online: true } },
-        { from: "brooke", text: "Мне прислали скрин.", delay: 900 },
-        { from: "brooke", text: "У вас есть отдельный чат.", delay: 900 },
-        { from: "brooke", text: "Ты, Оливия и Миа.", delay: 900 },
-        { from: "brooke", text: "Что это вообще такое?", delay: 900 },
+        { from: "brooke", text: "Красиво.", delay: 750 },
+        { from: "brooke", text: "Larks.", delay: 800 },
+        { from: "brooke", text: "Ты, Оливия и Миа.", delay: 850 },
+        { from: "brooke", text: "Очень мило.", delay: 800 },
         {
           type: "choice",
           options: [
-            { text: "Какое тебе дело?", loyalty: { brooke: -1 }, next: "brooke_after_call_your_business" },
+            { text: "Какое тебе дело до моего списка чатов?", loyalty: { brooke: -1 }, next: "brooke_after_call_your_business" },
             { text: "Кто скинул тебе мой список чатов?", loyalty: { brooke: 1 }, next: "brooke_after_call_who_sent" },
-            { text: "Ты из-за одного скрина решила мне писать?", loyalty: {}, next: "brooke_after_call_one_screen" }
+            { text: "Ты из-за одного названия уже решила устроить допрос?", loyalty: {}, next: "brooke_after_call_one_screen" }
           ]
         }
       ]
@@ -2349,8 +2296,8 @@ const legacyChapter1 = {
       chat: "private_brooke",
       trigger: "choice:brooke_after_call_start:0",
       messages: [
-        { from: "brooke", text: "Потому что речь о Харпер.", delay: 900 },
-        { from: "brooke", text: "И потому что вы обсуждаете её без остальных.", delay: 1100 }
+        { from: "brooke", text: "До тебя — никакого.", delay: 900 },
+        { from: "brooke", text: "До Харпер — прямое.", delay: 1000 }
       ]
     },
     {
@@ -2358,9 +2305,9 @@ const legacyChapter1 = {
       chat: "private_brooke",
       trigger: "choice:brooke_after_call_start:1",
       messages: [
-        { from: "brooke", text: "Не знаю.", delay: 800 },
-        { from: "brooke", text: "Номер не определился.", delay: 900 },
-        { from: "brooke", text: "Поэтому я и пишу тебе, а не ему.", delay: 1000 }
+        { from: "brooke", text: "Без понятия.", delay: 800 },
+        { from: "brooke", text: "Номер скрыт.", delay: 900 },
+        { from: "brooke", text: "И да, меня это тоже напрягает.", delay: 1000 }
       ]
     },
     {
@@ -2368,8 +2315,9 @@ const legacyChapter1 = {
       chat: "private_brooke",
       trigger: "choice:brooke_after_call_start:2",
       messages: [
-        { from: "brooke", text: "Да.", delay: 700 },
-        { from: "brooke", text: "Потому что вчера ты даже не знал, кто такая Харпер.", delay: 1200 }
+        { from: "brooke", text: "Не из-за одного.", delay: 700 },
+        { from: "brooke", text: "Ещё вчера ты не знал, кто такая Харпер.", delay: 1200 },
+        { from: "brooke", text: "А теперь кто-то присылает мне твой экран.", delay: 1100 }
       ]
     },
     {
@@ -2377,15 +2325,15 @@ const legacyChapter1 = {
       chat: "private_brooke",
       trigger: "after:brooke_after_call_your_business|brooke_after_call_who_sent|brooke_after_call_one_screen|brooke_separate_they_wrote|brooke_separate_not_behind|brooke_separate_source",
       messages: [
-        { from: "brooke", text: "Я не знаю, что именно вы там обсуждаете.", delay: 1000 },
-        { from: "brooke", text: "Но со стороны это выглядит так, будто часть людей уже решила говорить отдельно.", delay: 1300 },
-        { from: "brooke", text: "И да, меня это напрягает.", delay: 900 },
+        { from: "brooke", text: "Я не вижу, что внутри.", delay: 900 },
+        { from: "brooke", text: "Я вижу, что Харпер обсуждают отдельно от остальных.", delay: 1100 },
+        { from: "brooke", text: "И ты уже в центре этого.", delay: 800 },
         {
           type: "choice",
           options: [
-            { text: "Мы ничего тебе не должны объяснять.", loyalty: { brooke: -1 }, next: "brooke_after_call_owe_nothing" },
-            { text: "Ты видела один скрин и уже всё решила.", loyalty: {}, next: "brooke_after_call_decided" },
-            { text: "Не делай выводов по названию чата.", loyalty: { brooke: 1 }, next: "brooke_after_call_chat_name" }
+            { text: "Да, потому что после «Семеро» всем очень захотелось ещё одного скандала.", loyalty: { brooke: -1 }, next: "brooke_after_call_owe_nothing" },
+            { text: "Ты видела только список чатов. Остальное уже придумала сама.", loyalty: {}, next: "brooke_after_call_decided" },
+            { text: "Там обсуждали одну фотографию. И её уже отправили полиции.", loyalty: { brooke: 1 }, next: "brooke_after_call_chat_name" }
           ]
         }
       ]
@@ -2395,8 +2343,8 @@ const legacyChapter1 = {
       chat: "private_brooke",
       trigger: "choice:brooke_after_call_common_one:0",
       messages: [
-        { from: "brooke", text: "Вот это и бесит.", delay: 900 },
-        { from: "brooke", text: "Все говорят, что хотят найти Харпер, а потом начинают закрываться друг от друга.", delay: 1400 }
+        { from: "brooke", text: "Очень смешно.", delay: 900 },
+        { from: "brooke", text: "Особенно когда мне уже сливают ваши экраны.", delay: 1200 }
       ]
     },
     {
@@ -2404,7 +2352,7 @@ const legacyChapter1 = {
       chat: "private_brooke",
       trigger: "choice:brooke_after_call_common_one:1",
       messages: [
-        { from: "brooke", text: "Я увидела достаточно, чтобы спросить.", delay: 1000 }
+        { from: "brooke", text: "Я увидела достаточно, чтобы не молчать.", delay: 1000 }
       ]
     },
     {
@@ -2412,7 +2360,8 @@ const legacyChapter1 = {
       chat: "private_brooke",
       trigger: "choice:brooke_after_call_common_one:2",
       messages: [
-        { from: "brooke", text: "Тогда не заставляй меня их делать.", delay: 1000 }
+        { from: "brooke", text: "Наконец-то конкретный ответ.", delay: 850 },
+        { from: "brooke", text: "Сразу было нельзя?", delay: 850 }
       ]
     },
     {
@@ -2420,15 +2369,15 @@ const legacyChapter1 = {
       chat: "private_brooke",
       trigger: "after:brooke_after_call_owe_nothing|brooke_after_call_decided|brooke_after_call_chat_name",
       messages: [
-        { from: "brooke", text: "Я не знаю, что вы там обсуждали.", delay: 1000 },
-        { from: "brooke", text: "Но мне не нравится, что Оливия и Миа теперь пишут тебе отдельно.", delay: 1300 },
-        { from: "brooke", text: "И мне не нравится, что ты оказался в центре всего этого через один день.", delay: 1300 },
+        { from: "brooke", text: "Оливия и Миа могут писать кому хотят.", delay: 1000 },
+        { from: "brooke", text: "Но ты появился вчера.", delay: 950 },
+        { from: "brooke", text: "И уже кто-то следит за твоими чатами.", delay: 1100 },
         {
           type: "choice",
           options: [
-            { text: "Я никого не заставлял мне писать.", loyalty: {}, next: "brooke_after_call_didnt_force" },
-            { text: "Они сами решают, с кем говорить.", loyalty: {}, next: "brooke_after_call_their_choice" },
-            { text: "Ты сейчас злишься не на меня.", loyalty: { brooke: 1 }, next: "brooke_after_call_not_at_me" }
+            { text: "Думаешь, мне самому нравится быть в центре этого?", loyalty: {}, next: "brooke_after_call_didnt_force" },
+            { text: "Они сами решили мне рассказать. Спроси у них почему.", loyalty: {}, next: "brooke_after_call_their_choice" },
+            { text: "Ты злишься не на меня. Тебя просто оставили снаружи.", loyalty: { brooke: 1 }, next: "brooke_after_call_not_at_me" }
           ]
         }
       ]
@@ -2438,8 +2387,7 @@ const legacyChapter1 = {
       chat: "private_brooke",
       trigger: "choice:brooke_after_call_common_two:0",
       messages: [
-        { from: "brooke", text: "Может, и нет.", delay: 900 },
-        { from: "brooke", text: "Но ты мог не соглашаться.", delay: 900 }
+        { from: "brooke", text: "Тогда перестань вести себя так, будто это просто любопытство.", delay: 1050 }
       ]
     },
     {
@@ -2447,8 +2395,8 @@ const legacyChapter1 = {
       chat: "private_brooke",
       trigger: "choice:brooke_after_call_common_two:1",
       messages: [
-        { from: "brooke", text: "Да.", delay: 700 },
-        { from: "brooke", text: "И я надеюсь, что они понимают, во что ввязываются.", delay: 1200 }
+        { from: "brooke", text: "Спрошу.", delay: 700 },
+        { from: "brooke", text: "Не сомневайся.", delay: 900 }
       ]
     },
     {
@@ -2456,7 +2404,8 @@ const legacyChapter1 = {
       chat: "private_brooke",
       trigger: "choice:brooke_after_call_common_two:2",
       messages: [
-        { from: "brooke", text: "Я злюсь на всех, кто решил, что может разрулить это без последствий.", delay: 1300 }
+        { from: "brooke", text: "Я злюсь, потому что она пропала.", delay: 1000 },
+        { from: "brooke", text: "А вы всё равно что-то друг от друга прячете.", delay: 1100 }
       ]
     },
     {
@@ -2464,15 +2413,15 @@ const legacyChapter1 = {
       chat: "private_brooke",
       trigger: "after:brooke_after_call_didnt_force|brooke_after_call_their_choice|brooke_after_call_not_at_me",
       messages: [
-        { from: "brooke", text: "Харпер пропала.", delay: 900 },
-        { from: "brooke", text: "А вы уже делите информацию на “для своих” и “не для своих”.", delay: 1300 },
-        { from: "brooke", text: "Это плохо кончится.", delay: 900 },
+        { from: "brooke", text: "Мне не нужны ваши подробности.", delay: 900 },
+        { from: "brooke", text: "Нашли что-то — отдайте полиции.", delay: 1000 },
+        { from: "brooke", text: "Не тащите это дальше по чатам.", delay: 900 },
         {
           type: "choice",
           options: [
-            { text: "Ты сама не хочешь участвовать.", loyalty: { brooke: -1 }, next: "brooke_after_call_you_left" },
-            { text: "А что, по-твоему, надо делать?", loyalty: { brooke: 1 }, next: "brooke_after_call_what_to_do" },
-            { text: "Мы пока вообще ничего не нашли.", loyalty: {}, next: "brooke_after_call_found_nothing" }
+            { text: "Удобно: самой выйти, а остальных всё равно контролировать.", loyalty: { brooke: -1 }, next: "brooke_after_call_you_left" },
+            { text: "Мы и отправляем всё полиции. Ты могла сначала спросить.", loyalty: { brooke: 1 }, next: "brooke_after_call_what_to_do" },
+            { text: "Мы пока ничего не нашли. Только вопросов стало больше.", loyalty: {}, next: "brooke_after_call_found_nothing" }
           ]
         }
       ]
@@ -2482,8 +2431,8 @@ const legacyChapter1 = {
       chat: "private_brooke",
       trigger: "choice:brooke_after_call_common_three:0",
       messages: [
-        { from: "brooke", text: "Я не хочу играть в следователя.", delay: 1000 },
-        { from: "brooke", text: "Это разные вещи.", delay: 800 }
+        { from: "brooke", text: "Я вышла из истерики, а не из жизни Харпер.", delay: 1100 },
+        { from: "brooke", text: "Не путай.", delay: 750 }
       ]
     },
     {
@@ -2491,8 +2440,8 @@ const legacyChapter1 = {
       chat: "private_brooke",
       trigger: "choice:brooke_after_call_common_three:1",
       messages: [
-        { from: "brooke", text: "Не создавать новые проблемы.", delay: 900 },
-        { from: "brooke", text: "И не хвататься за всё подряд, потому что страшно сидеть без дела.", delay: 1400 }
+        { from: "brooke", text: "Я спросила.", delay: 800 },
+        { from: "brooke", text: "Ответ мне всё равно пришлось вытаскивать.", delay: 1100 }
       ]
     },
     {
@@ -2500,7 +2449,8 @@ const legacyChapter1 = {
       chat: "private_brooke",
       trigger: "choice:brooke_after_call_common_three:2",
       messages: [
-        { from: "brooke", text: "Тогда тем более не понимаю, зачем всё это.", delay: 1100 }
+        { from: "brooke", text: "Вот именно.", delay: 800 },
+        { from: "brooke", text: "А скрин уже гуляет по чужим телефонам.", delay: 1100 }
       ]
     },
     {
@@ -2509,10 +2459,9 @@ const legacyChapter1 = {
       trigger: "after:brooke_after_call_you_left|brooke_after_call_what_to_do|brooke_after_call_found_nothing",
       setFlags: { brookeConfrontedPrivateChats: true, brookeReceivedLeak: true, derekKnowsAboutPrivateCoordination: true },
       messages: [
-        { from: "brooke", text: "Я уже отправила скрин Дереку.", delay: 1100 },
-        { from: "brooke", text: "Не потому что хочу устроить ссору.", delay: 1000 },
-        { from: "brooke", text: "Просто он всё равно узнает.", delay: 1000 },
-        { from: "brooke", text: "И лучше не от кого-то ещё.", delay: 900 },
+        { from: "brooke", text: "Скрин уже у Дерека.", delay: 1100 },
+        { from: "brooke", text: "Он всё равно бы узнал.", delay: 900 },
+        { from: "brooke", text: "Разбирайтесь.", delay: 800 },
         { type: "system", text: "Брук вышла из сети.", delay: 900, characterStatus: { id: "brooke", online: false } }
       ]
     },

@@ -6,16 +6,15 @@ export const miaLateSceneBeats = [
     identify: ["mia"],
     messages: [
       { type: "pause", delay: 6500 },
-      { type: "system", text: "Поздний вечер.", delay: 500 },
+      { type: "pause", delay: 500 },
       { type: "system", text: "Миа в сети.", delay: 500, characterStatus: { id: "mia", online: true } },
-      { from: "mia", text: "Я дома.", delay: 900 },
-      { from: "mia", text: "Наконец-то.", delay: 900 },
-      { from: "mia", text: "Ты как вообще?", delay: 900 },
+      { from: "mia", text: "я дома наконец", delay: 900 },
+      { from: "mia", text: "Ты как? Только честно.", delay: 900 },
       {
         type: "choice",
         options: [
-          { text: "Честно? Не очень.", loyalty: {}, sendMessage: false, next: "mia_late_player_not_good" },
-          { text: "Нормально. Ты сама как?", loyalty: {}, trust: { miaTrust: 1 }, sendMessage: false, next: "mia_late_player_normal" },
+          { text: "Честно? Не очень.", loyalty: {}, next: "mia_late_player_not_good" },
+          { text: "Нормально. Ты сама как?", loyalty: {}, trust: { miaTrust: 1 }, next: "mia_late_player_normal" },
           { text: "Как будто всё время жду, что снова что-то случится.", loyalty: {}, next: "mia_late_player_waiting" }
         ]
       }
@@ -26,10 +25,8 @@ export const miaLateSceneBeats = [
     chat: "private_mia",
     trigger: "choice:mia_late_evening_start:0",
     messages: [
-      { from: "player", text: "Честно?", delay: 300 },
-      { from: "player", text: "Не очень.", delay: 500 },
-      { from: "mia", text: "Да.", delay: 800 },
-      { from: "mia", text: "У меня примерно так же.", delay: 900 }
+      { from: "mia", text: "угу", delay: 800 },
+      { from: "mia", text: "я тоже не очень", delay: 900 }
     ]
   },
   {
@@ -37,10 +34,8 @@ export const miaLateSceneBeats = [
     chat: "private_mia",
     trigger: "choice:mia_late_evening_start:1",
     messages: [
-      { from: "player", text: "Нормально.", delay: 300 },
-      { from: "player", text: "Ты сама как?", delay: 500 },
       { from: "mia", text: "Устала.", delay: 800 },
-      { from: "mia", text: "И голова гудит от всего, что было сегодня.", delay: 1000 }
+      { from: "mia", text: "Голова гудит. Как будто этот день всё ещё не закончился.", delay: 1000 }
     ]
   },
   {
@@ -48,8 +43,8 @@ export const miaLateSceneBeats = [
     chat: "private_mia",
     trigger: "choice:mia_late_evening_start:2",
     messages: [
-      { from: "mia", text: "Вот.", delay: 800 },
-      { from: "mia", text: "Я тоже постоянно проверяю телефон.", delay: 900 }
+      { from: "mia", text: "вот да", delay: 800 },
+      { from: "mia", text: "Я каждые две минуты смотрю на телефон. Даже когда он в руке.", delay: 900 }
     ]
   },
   {
@@ -57,16 +52,15 @@ export const miaLateSceneBeats = [
     chat: "private_mia",
     trigger: "after:mia_late_player_not_good|mia_late_player_normal|mia_late_player_waiting",
     messages: [
-      { from: "mia", text: "Самое противное — когда становится тихо.", delay: 1000 },
-      { from: "mia", text: "И ты вроде бы должен отдохнуть.", delay: 1000 },
-      { from: "mia", text: "Но вместо этого просто сидишь и думаешь обо всём подряд.", delay: 1200 },
-      { from: "mia", text: "Можно хотя бы пару минут не о Харпер?", delay: 1000 },
-      { from: "mia", text: "Без файлов, скринов, станции и всего остального.", delay: 1100 },
+      { from: "mia", text: "Самое противное — когда наконец тихо.", delay: 1000 },
+      { from: "mia", text: "Вроде можно выдохнуть, а мозг такой: нет, держи ещё двадцать мыслей.", delay: 1200 },
+      { from: "mia", text: "Можно мы хотя бы пять минут поговорим не о Харпер?", delay: 1000 },
+      { from: "mia", text: "Ни файлов, ни станции. Вообще ничего такого.", delay: 1100 },
       {
         type: "choice",
         options: [
-          { text: "Давай. Как смена прошла?", loyalty: {}, sendMessage: false, next: "mia_late_shift" },
-          { text: "Можно. О чём хочешь поговорить?", loyalty: {}, sendMessage: false, next: "mia_late_topic" },
+          { text: "Давай. Как смена прошла?", loyalty: {}, next: "mia_late_shift" },
+          { text: "Можно. О чём хочешь поговорить?", loyalty: {}, next: "mia_late_topic" },
           { text: "Можем просто посидеть тут.", loyalty: {}, next: "mia_late_sit" }
         ]
       }
@@ -77,12 +71,10 @@ export const miaLateSceneBeats = [
     chat: "private_mia",
     trigger: "choice:mia_late_quiet_common:0",
     messages: [
-      { from: "player", text: "Давай.", delay: 300 },
-      { from: "player", text: "Как смена прошла?", delay: 500 },
       { from: "mia", text: "У нас терминал завис перед закрытием.", delay: 1000 },
-      { from: "mia", text: "И все смотрели на меня так, будто я лично отключила оплату во всём городе.", delay: 1300 },
-      { from: "mia", text: "Один мужик минут десять доказывал, что его карта работает.", delay: 1200 },
-      { from: "mia", text: "Будто я спорила.", delay: 900 }
+      { from: "mia", text: "И все смотрели на меня так, будто это я лично отключила оплату во всём городе.", delay: 1300 },
+      { from: "mia", text: "Один мужчина минут десять убеждал меня, что его карта работает.", delay: 1200 },
+      { from: "mia", text: "я вообще с ним не спорила 😭", delay: 900 }
     ]
   },
   {
@@ -90,10 +82,9 @@ export const miaLateSceneBeats = [
     chat: "private_mia",
     trigger: "choice:mia_late_quiet_common:1",
     messages: [
-      { from: "player", text: "Можно.", delay: 300 },
-      { from: "player", text: "О чём хочешь поговорить?", delay: 500 },
       { from: "mia", text: "Не знаю.", delay: 800 },
-      { from: "mia", text: "О чём-нибудь, где никто не исчез и никого не нужно искать.", delay: 1100 }
+      { from: "mia", text: "О чём-нибудь, где никто не пропал и нам не надо ничего расследовать.", delay: 1100 },
+      { from: "mia", text: "Высокая планка, знаю.", delay: 850 }
     ]
   },
   {
@@ -101,8 +92,8 @@ export const miaLateSceneBeats = [
     chat: "private_mia",
     trigger: "choice:mia_late_quiet_common:2",
     messages: [
-      { from: "mia", text: "Это тоже вариант.", delay: 800 },
-      { from: "mia", text: "Спасибо.", delay: 800 }
+      { from: "mia", text: "Можно.", delay: 800 },
+      { from: "mia", text: "Мне даже так легче.", delay: 800 }
     ]
   },
   {
@@ -110,9 +101,9 @@ export const miaLateSceneBeats = [
     chat: "private_mia",
     trigger: "after:mia_late_shift|mia_late_topic|mia_late_sit",
     messages: [
-      { from: "mia", text: "По дороге домой я увидела собаку в жёлтом дождевике.", delay: 1000 },
-      { from: "mia", text: "И почему-то минут пять думала только о том, кто вообще покупает собаке дождевик.", delay: 1300 },
-      { from: "mia", text: "Наверное, это глупо.", delay: 900 }
+      { from: "mia", text: "По дороге домой видела собаку в жёлтом дождевике.", delay: 1000 },
+      { from: "mia", text: "И минут пять думала только о том, кто утром решает: да, сегодня моей собаке нужен именно жёлтый.", delay: 1300 },
+      { from: "mia", text: "глупость, короче", delay: 900 }
     ]
   },
   {
@@ -120,8 +111,8 @@ export const miaLateSceneBeats = [
     chat: "private_mia",
     trigger: "afterTrustFlag:mia_late_dog_intro:miaTrust:2:miaPrivateChatsOpened:false",
     messages: [
-      { from: "mia", text: "Я даже сфотографировала.", delay: 900 },
-      { from: "mia", text: "Не смейся.", delay: 800 },
+      { from: "mia", text: "Я даже сфотографировала 😅", delay: 900 },
+      { from: "mia", text: "Только не смейся.", delay: 800 },
       { from: "mia", type: "image", src: "src/assets/story/mia_raincoat_dog.png", caption: "Собака в жёлтом дождевике", delay: 900 },
       {
         type: "choice",
@@ -138,8 +129,8 @@ export const miaLateSceneBeats = [
     chat: "private_mia",
     trigger: "choice:mia_late_dog_photo_unlock:0",
     messages: [
-      { from: "mia", text: "Правда?", delay: 800 },
-      { from: "mia", text: "Тогда день был совсем ужасный.", delay: 900 }
+      { from: "mia", text: "правда?", delay: 800 },
+      { from: "mia", text: "Хотя это больше говорит о нашем дне, чем о собаке.", delay: 900 }
     ]
   },
   {
@@ -147,8 +138,8 @@ export const miaLateSceneBeats = [
     chat: "private_mia",
     trigger: "choice:mia_late_dog_photo_unlock:1",
     messages: [
-      { from: "mia", text: "Вот.", delay: 700 },
-      { from: "mia", text: "Наконец-то кто-то понимает.", delay: 900 }
+      { from: "mia", text: "вот", delay: 700 },
+      { from: "mia", text: "Наконец-то человек, который понимает серьёзность ситуации.", delay: 900 }
     ]
   },
   {
@@ -156,7 +147,7 @@ export const miaLateSceneBeats = [
     chat: "private_mia",
     trigger: "choice:mia_late_dog_photo_unlock:2",
     messages: [
-      { from: "mia", text: "Он выглядел так, будто у него важная встреча.", delay: 1000 }
+      { from: "mia", text: "Он выглядел так, будто опаздывал на очень важную встречу.", delay: 1000 }
     ]
   },
   {
@@ -165,8 +156,8 @@ export const miaLateSceneBeats = [
     trigger: "after:mia_late_dog_best|mia_late_dog_serious|mia_late_dog_meeting",
     setFlags: { miaSentRaincoatDogPhoto: true },
     messages: [
-      { from: "mia", text: "Ладно.", delay: 700 },
-      { from: "mia", text: "Теперь можешь смеяться.", delay: 900 }
+      { from: "mia", text: "Ладно, теперь можешь смеяться.", delay: 900 },
+      { from: "mia", text: "Но дождевик всё равно хороший.", delay: 800 }
     ]
   },
   {
@@ -177,7 +168,7 @@ export const miaLateSceneBeats = [
       {
         type: "choice",
         options: [
-          { text: "Не глупо. Иногда надо цепляться за обычные вещи.", loyalty: {}, sendMessage: false, next: "mia_late_ordinary_things" },
+          { text: "Не глупо. Иногда надо цепляться за обычные вещи.", loyalty: {}, next: "mia_late_ordinary_things" },
           { text: "Жёлтый дождевик — вполне нормальная причина отвлечься.", loyalty: {}, next: "mia_late_yellow_reason" },
           { text: "Лучше думать о собаке, чем снова обо всём этом.", loyalty: {}, next: "mia_late_better_dog" }
         ]
@@ -189,10 +180,8 @@ export const miaLateSceneBeats = [
     chat: "private_mia",
     trigger: "choice:mia_late_dog_no_photo:0",
     messages: [
-      { from: "player", text: "Не глупо.", delay: 300 },
-      { from: "player", text: "Иногда надо цепляться за обычные вещи.", delay: 500 },
-      { from: "mia", text: "Наверное.", delay: 800 },
-      { from: "mia", text: "Иначе совсем можно сойти с ума.", delay: 900 }
+      { from: "mia", text: "Наверное, да.", delay: 800 },
+      { from: "mia", text: "А то я уже скоро начну искать скрытый смысл в собачьих дождевиках.", delay: 900 }
     ]
   },
   {
@@ -200,8 +189,7 @@ export const miaLateSceneBeats = [
     chat: "private_mia",
     trigger: "choice:mia_late_dog_no_photo:1",
     messages: [
-      { from: "mia", text: "Спасибо.", delay: 800 },
-      { from: "mia", text: "Я тоже решила, что это важная тема.", delay: 900 }
+      { from: "mia", text: "Спасибо, что поддержал эту важную тему.", delay: 900 }
     ]
   },
   {
@@ -218,9 +206,8 @@ export const miaLateSceneBeats = [
     chat: "private_mia",
     trigger: "after:mia_late_dog_photo_end|mia_late_ordinary_things|mia_late_yellow_reason|mia_late_better_dog",
     messages: [
-      { from: "mia", text: "Ладно.", delay: 800 },
-      { from: "mia", text: "Мне правда уже надо в душ и спать.", delay: 1000 },
-      { from: "mia", text: "Ты тоже не сиди до утра, хорошо?", delay: 1000 },
+      { from: "mia", text: "Ладно, мне правда пора в душ и спать.", delay: 1000 },
+      { from: "mia", text: "И ты не сиди до утра, ладно?", delay: 1000 },
       {
         type: "choice",
         options: [
@@ -263,16 +250,16 @@ export const miaLateSceneBeats = [
     messages: [
       { from: "mia", text: "Спокойной ночи.", delay: 900 },
       { type: "system", text: "Миа вышла из сети.", delay: 900, characterStatus: { id: "mia", online: false } },
-      { type: "system", text: "Несколько секунд спустя.", delay: 1600 },
+      { type: "pause", delay: 1600 },
       { type: "system", text: "Миа в сети.", delay: 500, characterStatus: { id: "mia", online: true } },
-      { from: "mia", text: "Стой.", delay: 800 },
-      { from: "mia", text: "Я кое-что вспомнила про тот вечер у моста.", delay: 1000 },
+      { from: "mia", text: "стой", delay: 800 },
+      { from: "mia", text: "Я сейчас легла и кое-что вспомнила про мост.", delay: 1000 },
       {
         type: "choice",
         options: [
           { text: "Что именно?", loyalty: {}, next: "mia_late_memory_what" },
           { text: "Это про Харпер?", loyalty: {}, next: "mia_late_memory_harper" },
-          { text: "Не спеши. Вспоминай, как было.", loyalty: {}, sendMessage: false, next: "mia_late_memory_slow" }
+          { text: "Не торопись. Напиши ровно то, что помнишь.", loyalty: {}, next: "mia_late_memory_slow" }
         ]
       }
     ]
@@ -298,9 +285,7 @@ export const miaLateSceneBeats = [
     chat: "private_mia",
     trigger: "choice:mia_late_first_goodnight:2",
     messages: [
-      { from: "player", text: "Не спеши.", delay: 300 },
-      { from: "player", text: "Вспоминай, как было.", delay: 500 },
-      { from: "mia", text: "Я пытаюсь.", delay: 900 }
+      { from: "mia", text: "ладно. пытаюсь", delay: 900 }
     ]
   },
   {
@@ -308,18 +293,15 @@ export const miaLateSceneBeats = [
     chat: "private_mia",
     trigger: "after:mia_late_memory_what|mia_late_memory_harper|mia_late_memory_slow",
     messages: [
-      { from: "mia", text: "Я спросила её, не написать ли Дереку.", delay: 1000 },
-      { from: "mia", text: "Чтобы он заехал за ней.", delay: 900 },
-      { from: "mia", text: "Или хотя бы поговорил с ней.", delay: 900 },
-      { from: "mia", text: "Она сказала: «Не надо. Мы поссорились. Я не хочу сейчас с ним разговаривать».", delay: 1300 },
-      { from: "mia", text: "Я тогда решила, что это обычная ссора.", delay: 1000 },
-      { from: "mia", text: "И не стала лезть.", delay: 900 },
+      { from: "mia", text: "Я спросила, написать ли Дереку. Чтобы он забрал её или хотя бы позвонил.", delay: 1100 },
+      { from: "mia", text: "Она сразу: «Не надо. Мы поссорились. Я не хочу сейчас с ним разговаривать».", delay: 1300 },
+      { from: "mia", text: "Я решила, что это их обычная ссора, и... не полезла.", delay: 1000 },
       {
         type: "choice",
         options: [
           { text: "Она сказала, из-за чего они поссорились?", loyalty: {}, next: "mia_late_why_argued" },
-          { text: "Ты уверена, что она говорила именно о Дереке?", loyalty: {}, next: "mia_late_sure_derek" },
-          { text: "Как она это сказала?", loyalty: {}, next: "mia_late_how_said" }
+          { text: "Если ты первая назвала Дерека, она могла иметь в виду кого-то ещё.", loyalty: {}, next: "mia_late_sure_derek" },
+          { text: "По твоему описанию она звучит скорее уставшей, чем злой.", loyalty: {}, next: "mia_late_how_said" }
         ]
       }
     ]
@@ -329,9 +311,7 @@ export const miaLateSceneBeats = [
     chat: "private_mia",
     trigger: "choice:mia_late_derek_argument:0",
     messages: [
-      { from: "mia", text: "Нет.", delay: 800 },
-      { from: "mia", text: "Я спросила.", delay: 800 },
-      { from: "mia", text: "Она только сказала, что не хочет это обсуждать.", delay: 1000 }
+      { from: "mia", text: "Нет. Я спросила, но она сказала: «не хочу об этом». И всё.", delay: 1000 }
     ]
   },
   {
@@ -339,9 +319,8 @@ export const miaLateSceneBeats = [
     chat: "private_mia",
     trigger: "choice:mia_late_derek_argument:1",
     messages: [
-      { from: "mia", text: "Да.", delay: 800 },
-      { from: "mia", text: "Я сама первая назвала его.", delay: 900 },
-      { from: "mia", text: "И она не стала спорить.", delay: 900 }
+      { from: "mia", text: "Я первая назвала Дерека, и она не поправила меня." , delay: 950 },
+      { from: "mia", text: "Не железное доказательство, я знаю. Но я почти уверена.", delay: 900 }
     ]
   },
   {
@@ -349,8 +328,8 @@ export const miaLateSceneBeats = [
     chat: "private_mia",
     trigger: "choice:mia_late_derek_argument:2",
     messages: [
-      { from: "mia", text: "Тихо.", delay: 800 },
-      { from: "mia", text: "Будто уже решила, что не хочет с ним разговаривать.", delay: 1000 }
+      { from: "mia", text: "Очень тихо. Без злости даже." , delay: 850 },
+      { from: "mia", text: "Будто она уже всё решила и просто не хотела снова это обсуждать.", delay: 1000 }
     ]
   },
   {
@@ -358,9 +337,8 @@ export const miaLateSceneBeats = [
     chat: "private_mia",
     trigger: "after:mia_late_why_argued|mia_late_sure_derek|mia_late_how_said",
     messages: [
-      { from: "mia", text: "Я не думаю, что Дерек обязательно сделал с ней что-то.", delay: 1100 },
-      { from: "mia", text: "Просто он мог знать, куда она собиралась.", delay: 1000 },
-      { from: "mia", text: "Или почему она не хотела ехать домой.", delay: 1000 },
+      { from: "mia", text: "Я не говорю, что Дерек что-то с ней сделал. Пожалуйста, не так." , delay: 1100 },
+      { from: "mia", text: "Просто он мог знать, куда она собиралась. Или почему не хотела домой.", delay: 1000 },
       {
         type: "choice",
         options: [
@@ -376,8 +354,8 @@ export const miaLateSceneBeats = [
     chat: "private_mia",
     trigger: "choice:mia_late_derek_possible_context:0",
     messages: [
-      { from: "mia", text: "Спасибо.", delay: 800 },
-      { from: "mia", text: "Я не хочу, чтобы все сразу решили, что он виноват.", delay: 1000 }
+      { from: "mia", text: "спасибо", delay: 800 },
+      { from: "mia", text: "Я боялась, что сейчас опять начнётся: «значит, это Дерек».", delay: 1000 }
     ]
   },
   {
@@ -385,8 +363,8 @@ export const miaLateSceneBeats = [
     chat: "private_mia",
     trigger: "choice:mia_late_derek_possible_context:1",
     messages: [
-      { from: "mia", text: "Хорошо.", delay: 800 },
-      { from: "mia", text: "Только не пиши так, будто мы уже всё про него решили.", delay: 1000 }
+      { from: "mia", text: "Только правда спокойно." , delay: 800 },
+      { from: "mia", text: "Если начать с обвинения, он просто закроется.", delay: 1000 }
     ]
   },
   {
@@ -394,8 +372,8 @@ export const miaLateSceneBeats = [
     chat: "private_mia",
     trigger: "choice:mia_late_derek_possible_context:2",
     messages: [
-      { from: "mia", text: "Я должна была сказать раньше.", delay: 900 },
-      { from: "mia", text: "Но тогда мне правда казалось, что это ничего не значит.", delay: 1000 }
+      { from: "mia", text: "Я должна была вспомнить раньше." , delay: 900 },
+      { from: "mia", text: "Знаю, что это уже звучит как моя любимая фраза.", delay: 1000 }
     ]
   },
   {
@@ -404,14 +382,13 @@ export const miaLateSceneBeats = [
     trigger: "after:mia_late_no_conclusions|mia_late_ask_calmly|mia_late_thanks_memory",
     setFlags: { miaRememberedDerekArgument: true },
     messages: [
-      { from: "mia", text: "Мне правда пора.", delay: 900 },
-      { from: "mia", text: "На этот раз точно.", delay: 900 },
-      { from: "mia", text: "Спокойной ночи.", delay: 900 },
+      { from: "mia", text: "Всё. Теперь правда ухожу спать." , delay: 900 },
+      { from: "mia", text: "спокойной ночи ещё раз", delay: 900 },
       { type: "system", text: "Миа вышла из сети.", delay: 900, characterStatus: { id: "mia", online: false } },
       {
         type: "choice",
         options: [
-          { text: "Написать Дереку", loyalty: {}, sendMessage: false, setFlag: "derekConversationUnlocked" }
+          { text: "Открыть чат с Дереком", loyalty: {}, sendMessage: false, setFlag: "derekConversationUnlocked" }
         ]
       }
     ]
@@ -424,29 +401,28 @@ export const miaLateSceneBeats = [
     messages: [
       { type: "pause", delay: 4200 },
       { type: "system", text: "Оливия в сети.", delay: 500, characterStatus: { id: "olivia", online: true } },
-      { from: "olivia", text: "Миа вспомнила ещё одну деталь.", delay: 850 },
-      { from: "olivia", text: "Перед встречей у моста Харпер поссорилась с Дереком.", delay: 950 },
-      { from: "olivia", text: "И сказала Мие, что не хочет с ним разговаривать.", delay: 950 },
+      { from: "olivia", text: "Миа только что вспомнила ещё кое-что.", delay: 850 },
+      { from: "olivia", text: "Перед мостом Харпер поссорилась с Дереком и не хотела, чтобы он ей звонил.", delay: 1000 },
       { type: "choice", options: [
-        { text: "Миа сама будет говорить с Дереком?", loyalty: {}, next: "mia_late_low_who" },
-        { text: "Тогда сообщение с её телефона могло быть не ему.", loyalty: {}, next: "mia_late_low_message" },
-        { text: "Похоже, Миа всё ещё вспоминает тот день по кускам.", loyalty: {}, next: "mia_late_low_memory" }
+        { text: "Лучше поговори с Дереком ты. Миа сейчас не до споров.", loyalty: {}, next: "mia_late_low_who" },
+        { text: "Тогда мы даже не знаем, кому Харпер писала с телефона Мии.", loyalty: {}, next: "mia_late_low_message" },
+        { text: "Похоже, Миа опять винит себя, что вспомнила не сразу.", loyalty: {}, next: "mia_late_low_memory" }
       ] }
     ]
   },
   { id: "mia_late_low_who", chat: "private_olivia", trigger: "choice:mia_late_low_trust_olivia:0", messages: [
-    { from: "olivia", text: "Нет. Она не хочет сейчас с ним спорить.", delay: 900 },
+    { from: "olivia", text: "Да. Она сейчас точно не захочет с ним спорить.", delay: 900 },
     { from: "olivia", text: "Я напишу ему сама.", delay: 800 },
-    { type: "choice", options: [{ text: "Хорошо.", loyalty: {}, sendMessage: false, setFlag: "derekConversationUnlocked" }] }
+    { type: "choice", options: [{ text: "Открыть чат с Дереком", loyalty: {}, sendMessage: false, setFlag: "derekConversationUnlocked" }] }
   ] },
   { id: "mia_late_low_message", chat: "private_olivia", trigger: "choice:mia_late_low_trust_olivia:1", messages: [
     { from: "olivia", text: "Да. Раньше Миа была уверена в обратном.", delay: 900 },
     { from: "olivia", text: "Я спрошу Дерека о ссоре.", delay: 850 },
-    { type: "choice", options: [{ text: "Хорошо.", loyalty: {}, sendMessage: false, setFlag: "derekConversationUnlocked" }] }
+    { type: "choice", options: [{ text: "Открыть чат с Дереком", loyalty: {}, sendMessage: false, setFlag: "derekConversationUnlocked" }] }
   ] },
   { id: "mia_late_low_memory", chat: "private_olivia", trigger: "choice:mia_late_low_trust_olivia:2", messages: [
     { from: "olivia", text: "Да. И каждый раз винит себя, что не вспомнила раньше.", delay: 950 },
     { from: "olivia", text: "Я спрошу Дерека о ссоре. Без обвинений.", delay: 850 },
-    { type: "choice", options: [{ text: "Хорошо.", loyalty: {}, sendMessage: false, setFlag: "derekConversationUnlocked" }] }
+    { type: "choice", options: [{ text: "Открыть чат с Дереком", loyalty: {}, sendMessage: false, setFlag: "derekConversationUnlocked" }] }
   ] }
 ];

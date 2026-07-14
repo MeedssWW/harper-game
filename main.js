@@ -29,7 +29,7 @@ import { renderPoliceDecision } from './src/screens/policeDecision/policeDecisio
 import { renderChapterEnd } from './src/screens/chapterEnd/chapterEnd.js?v=70';
 import { audioEngine } from './src/engine/audioEngine.js?v=123';
 import { characters } from './src/data/characters.js?v=123';
-import { chapter1 } from './src/data/chapter1.js?v=120';
+import { chapter1 } from './src/data/chapter1.js?v=125';
 
 // ---- App State ----
 let activeChatView = null;

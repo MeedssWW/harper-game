@@ -11,9 +11,9 @@ export const introRewriteBeats = [
     messages: [
       { type: "system", text: "Дерек в сети.", delay: 500, characterStatus: { id: "derek", online: true } },
       { from: "derek", text: "Привет.", delay: 800 },
-      { from: "derek", text: "Слушай, ты меня не знаешь.", delay: 950 },
-      { from: "derek", text: "Меня зовут Дерек.", delay: 850 },
-      { from: "derek", text: "Ты знаешь Харпер Вэнс?", delay: 1100 },
+      { from: "derek", text: "Слушай, мы не знакомы.", delay: 950 },
+      { from: "derek", text: "Я Дерек.", delay: 800 },
+      { from: "derek", text: "Ты случайно не знаешь Харпер Вэнс?", delay: 1100 },
       { type: "choice", options: [
         { text: "Нет. Впервые слышу это имя.", loyalty: {}, next: "intro_derek_never_heard" },
         { text: "Сначала скажи, откуда у тебя мой номер.", loyalty: {}, next: "intro_derek_number_source" }
@@ -26,7 +26,7 @@ export const introRewriteBeats = [
     trigger: "choice:intro_derek_opener_v2:0",
     messages: [
       { from: "derek", text: "Точно?", delay: 700 },
-      { from: "derek", text: "Может, она писала тебе с другого номера?", delay: 1050 },
+      { from: "derek", text: "Может, с другого номера писала?", delay: 950 },
       { type: "choice", options: [
         { text: "Нет. Я бы запомнил.", loyalty: {}, next: "intro_derek_would_remember" },
         { text: "Кто она вообще?", loyalty: {}, next: "intro_derek_who_is_she" }
@@ -38,8 +38,8 @@ export const introRewriteBeats = [
     chat: "private_derek",
     trigger: "choice:intro_derek_never_heard:0",
     messages: [
-      { from: "derek", text: "Ладно.", delay: 700 },
-      { from: "derek", text: "Тогда я вообще ничего не понимаю.", delay: 1000 }
+      { from: "derek", text: "Понял.", delay: 700 },
+      { from: "derek", text: "Харпер — моя девушка. И тогда я вообще ничего не понимаю.", delay: 1050 }
     ]
   },
   {
@@ -57,7 +57,7 @@ export const introRewriteBeats = [
     trigger: "choice:intro_derek_opener_v2:1",
     messages: [
       { from: "derek", text: "С телефона Харпер.", delay: 850 },
-      { from: "derek", text: "Поэтому я и написал.", delay: 900 }
+      { from: "derek", text: "Это моя девушка. Поэтому я и написал.", delay: 1000 }
     ]
   },
   {
@@ -65,38 +65,28 @@ export const introRewriteBeats = [
     chat: "private_derek",
     trigger: "after:intro_derek_would_remember|intro_derek_who_is_she|intro_derek_number_source",
     messages: [
-      { from: "derek", text: "Харпер — моя девушка.", delay: 900 },
+      { from: "derek", text: "Короче.", delay: 650 },
       { from: "derek", text: "Она пропала два дня назад.", delay: 1000 },
       { from: "derek", text: "Её телефон почти всё это время был недоступен.", delay: 1100 },
       { from: "derek", text: "А сегодня с её номера вдруг пришло сообщение.", delay: 1150 },
-      { from: "derek", text: "Внутри был только твой номер.", delay: 1000 },
-      { from: "derek", text: "И всё.", delay: 700 },
+      { from: "derek", text: "В сообщении — только твой номер.", delay: 1000 },
+      { from: "derek", text: "Больше ничего.", delay: 700 },
       { type: "choice", options: [
-        { text: "Я правда её не знаю.", loyalty: {}, next: "intro_derek_error_first" },
+        { text: "Я правда её не знаю. Может, номер отправили по ошибке? Ты цифры точно проверил?", loyalty: {}, next: "intro_derek_error_answer" },
         { text: "Ты уверен, что сообщение пришло именно от неё?", loyalty: {}, next: "intro_derek_sender_uncertain" },
         { text: "Телефон Харпер мог быть у кого-то другого?", loyalty: {}, next: "intro_derek_phone_other" }
       ] }
     ]
   },
   {
-    id: "intro_derek_error_first",
+    id: "intro_derek_error_answer",
     chat: "private_derek",
     trigger: "choice:intro_derek_explains_v2:0",
     messages: [
-      { type: "choice", options: [
-        { text: "Может, номер отправили по ошибке?", loyalty: {}, next: "intro_derek_error_answer" }
-      ] }
-    ]
-  },
-  {
-    id: "intro_derek_error_answer",
-    chat: "private_derek",
-    trigger: "choice:intro_derek_error_first:0",
-    messages: [
-      { from: "derek", text: "Может.", delay: 750 },
-      { from: "derek", text: "Я сначала тоже так подумал.", delay: 950 },
-      { from: "derek", text: "Но в сообщении был именно твой номер.", delay: 1050 },
-      { from: "derek", text: "Я несколько раз проверил.", delay: 950 }
+      { from: "derek", text: "Проверил.", delay: 700 },
+      { from: "derek", text: "Несколько раз.", delay: 750 },
+      { from: "derek", text: "Всё совпадает.", delay: 800 },
+      { from: "derek", text: "Это точно твой номер.", delay: 900 }
     ]
   },
   {
@@ -104,9 +94,9 @@ export const introRewriteBeats = [
     chat: "private_derek",
     trigger: "choice:intro_derek_explains_v2:1",
     messages: [
-      { from: "derek", text: "Нет.", delay: 700 },
-      { from: "derek", text: "Я уверен только в том, что оно пришло с её номера.", delay: 1100 },
-      { from: "derek", text: "Кто держал телефон — понятия не имею.", delay: 1000 }
+      { from: "derek", text: "Что это была Харпер? Нет.", delay: 850 },
+      { from: "derek", text: "Я уверен только в том, что сообщение пришло с её номера.", delay: 1100 },
+      { from: "derek", text: "У кого был телефон — понятия не имею.", delay: 950 }
     ]
   },
   {
@@ -115,10 +105,10 @@ export const introRewriteBeats = [
     trigger: "choice:intro_derek_explains_v2:2",
     messages: [
       { from: "derek", text: "Мог.", delay: 700 },
-      { from: "derek", text: "Полиция его до сих пор не нашла.", delay: 1000 },
-      { from: "derek", text: "Поэтому, короче, вариантов не так много.", delay: 1050 },
-      { from: "derek", text: "Либо это была она.", delay: 850 },
-      { from: "derek", text: "Либо кто-то хотел, чтобы я увидел твой номер.", delay: 1150 }
+      { from: "derek", text: "Телефон до сих пор не нашли.", delay: 950 },
+      { from: "derek", text: "Так что да.", delay: 700 },
+      { from: "derek", text: "Либо это была она...", delay: 850 },
+      { from: "derek", text: "Либо кто-то специально подсунул мне твой номер.", delay: 1100 }
     ]
   },
   {
@@ -129,7 +119,7 @@ export const introRewriteBeats = [
       { from: "derek", text: "Ты когда-нибудь был в Рейвенвуде?", delay: 1050 },
       { type: "choice", options: [
         { text: "Нет. Я вообще из другого города.", loyalty: {}, next: "intro_derek_other_city" },
-        { text: "Нет. До твоего сообщения я даже не слышал о нём.", loyalty: {}, next: "intro_derek_never_ravenwood" }
+        { text: "Нет. До твоего сообщения я даже не слышал о нём. Почему спрашиваешь?", loyalty: {}, next: "intro_derek_never_ravenwood" }
       ] }
     ]
   },
@@ -137,24 +127,24 @@ export const introRewriteBeats = [
     id: "intro_derek_other_city",
     chat: "private_derek",
     trigger: "choice:intro_derek_ravenwood:0",
-    messages: [{ from: "derek", text: "Тогда вы вряд ли могли просто где-то пересечься.", delay: 1050 }]
+    messages: [{ from: "derek", text: "То есть вы даже случайно пересечься не могли.", delay: 1050 }]
   },
   {
     id: "intro_derek_never_ravenwood",
     chat: "private_derek",
     trigger: "choice:intro_derek_ravenwood:1",
-    messages: [{ from: "derek", text: "Тогда тем более не понимаю, откуда у неё твой номер.", delay: 1100 }]
+    messages: [{ from: "derek", text: "Тогда откуда у неё вообще взялся твой номер?", delay: 1100 }]
   },
   {
     id: "intro_derek_strange_contacts",
     chat: "private_derek",
     trigger: "after:intro_derek_other_city|intro_derek_never_ravenwood",
     messages: [
-      { from: "derek", text: "За последние пару дней тебе никто странный не писал?", delay: 1100 },
-      { from: "derek", text: "Может, звонили с незнакомого номера?", delay: 950 },
+      { from: "derek", text: "Тебе в последние дни ничего странного не приходило?", delay: 1100 },
+      { from: "derek", text: "Сообщения. Звонки с незнакомых номеров.", delay: 950 },
       { type: "choice", options: [
         { text: "Нет. Ничего необычного не было.", loyalty: {}, next: "intro_derek_nothing_odd" },
-        { text: "Нет. Такое я бы точно запомнил.", loyalty: {}, next: "intro_derek_sure_remember" }
+        { text: "Нет. И если бы что-то было, я бы уже сказал.", loyalty: {}, next: "intro_derek_sure_remember" }
       ] }
     ]
   },
@@ -169,8 +159,8 @@ export const introRewriteBeats = [
     chat: "private_derek",
     trigger: "choice:intro_derek_strange_contacts:1",
     messages: [
-      { from: "derek", text: "Да.", delay: 650 },
-      { from: "derek", text: "Глупый вопрос.", delay: 800 }
+      { from: "derek", text: "Понял.", delay: 650 },
+      { from: "derek", text: "Я просто уже всё подряд проверяю.", delay: 900 }
     ]
   },
   {
@@ -178,35 +168,27 @@ export const introRewriteBeats = [
     chat: "private_derek",
     trigger: "after:intro_derek_nothing_odd|intro_derek_sure_remember",
     messages: [
-      { from: "derek", text: "Прости, что я так на тебя накинулся с вопросами.", delay: 1100 },
+      { from: "derek", text: "Извини. Я сразу навалился с вопросами.", delay: 1050 },
       { from: "derek", text: "Я почти не спал с тех пор, как Харпер пропала.", delay: 1150 },
-      { from: "derek", text: "Просто пытаюсь найти хоть что-нибудь.", delay: 950 },
-      { from: "derek", text: "У неё есть друзья.", delay: 850 },
-      { from: "derek", text: "Они знают её лучше меня во многих вещах.", delay: 1050 },
-      { from: "derek", text: "Может, кто-то из них поймёт, почему Харпер отправила твой номер.", delay: 1200 },
-      { from: "derek", text: "Я хочу добавить тебя в чат с ними.", delay: 1000 },
+      { from: "derek", text: "Проверяю всё, за что можно зацепиться.", delay: 950 },
+      { from: "derek", text: "Я хочу спросить её друзей.", delay: 850 },
+      { from: "derek", text: "Они могут знать то, чего не знаю я.", delay: 950 },
+      { from: "derek", text: "Может, кто-то из них поймёт, почему в сообщении именно твой номер.", delay: 1150 },
+      { from: "derek", text: "Добавлю тебя к нам в чат.", delay: 950 },
       { type: "choice", options: [
-        { text: "Подожди.", loyalty: {}, next: "intro_derek_privacy_first" },
+        { text: "Подожди. Не раздавай мой номер кому попало. Только этот чат — и всё.", loyalty: {}, next: "intro_derek_privacy_answer" },
         { text: "Только сразу скажи им, что я вообще не в курсе происходящего.", loyalty: {}, next: "intro_derek_warn_them" }
       ] }
     ]
   },
   {
-    id: "intro_derek_privacy_first",
-    chat: "private_derek",
-    trigger: "choice:intro_derek_group_offer:0",
-    messages: [{ type: "choice", options: [
-      { text: "Не скидывай мой номер кому попало.", loyalty: {}, next: "intro_derek_privacy_answer" }
-    ] }]
-  },
-  {
     id: "intro_derek_privacy_answer",
     chat: "private_derek",
-    trigger: "choice:intro_derek_privacy_first:0",
+    trigger: "choice:intro_derek_group_offer:0",
     messages: [
-      { from: "derek", text: "Я не буду отдельно его рассылать.", delay: 950 },
-      { from: "derek", text: "Просто добавлю тебя в один чат.", delay: 950 },
-      { from: "derek", text: "Там только люди, которые знают Харпер.", delay: 1050 }
+      { from: "derek", text: "Только один чат.", delay: 800 },
+      { from: "derek", text: "Там пять её друзей. И я.", delay: 950 },
+      { from: "derek", text: "Больше никому не отправлю.", delay: 900 }
     ]
   },
   {
@@ -215,7 +197,7 @@ export const introRewriteBeats = [
     trigger: "choice:intro_derek_group_offer:1",
     messages: [
       { from: "derek", text: "Скажу.", delay: 700 },
-      { from: "derek", text: "Хотя они всё равно, скорее всего, начнут спрашивать сами.", delay: 1100 }
+      { from: "derek", text: "Но вопросы всё равно будут. Сразу предупреждаю.", delay: 1050 }
     ]
   },
   {
@@ -236,8 +218,8 @@ export const introRewriteBeats = [
     chat: "private_derek",
     trigger: "choice:intro_derek_stay_request:0",
     messages: [
-      { from: "derek", text: "Хорошо.", delay: 700 },
-      { from: "derek", text: "Этого хватит.", delay: 800 }
+      { from: "derek", text: "Ладно.", delay: 700 },
+      { from: "derek", text: "И на том спасибо.", delay: 800 }
     ]
   },
   {
@@ -274,59 +256,51 @@ export const introRewriteBeats = [
       { from: "narrator", text: "Дерек создал группу «Семеро».", delay: 750 },
       { from: "narrator", text: "Дерек добавил Оливию, Мию, Брук, Мейсона, Тайлера и {player}.", delay: 900 },
       { type: "system", text: "Мейсон в сети.", delay: 450, characterStatus: { id: "mason", online: true } },
-      { from: "mason", text: "Дерек, ты серьёзно?", delay: 750 },
+      { from: "mason", text: "Дерек, ты сейчас серьёзно?", delay: 750 },
       { type: "system", text: "Брук в сети.", delay: 450, characterStatus: { id: "brooke", online: true } },
-      { from: "brooke", text: "Что это вообще?", delay: 700 },
-      { from: "brooke", text: "Ты просто взял и добавил сюда незнакомого человека?", delay: 1050 },
+      { from: "brooke", text: "О.", delay: 550 },
+      { from: "brooke", text: "Новый человек.", delay: 650 },
+      { from: "brooke", text: "Ты хоть кого-нибудь спросил, прежде чем его добавить?", delay: 1050 },
       { type: "system", text: "Миа в сети.", delay: 450, characterStatus: { id: "mia", online: true } },
-      { from: "mia", text: "Это тот номер?", delay: 750 },
-      { from: "mia", text: "Который пришёл с телефона Харпер?", delay: 900 },
+      { from: "mia", text: "Подождите. Это тот номер?", delay: 850 },
+      { from: "mia", text: "Из сообщения с её телефона?", delay: 850 },
       { from: "derek", text: "Да.", delay: 600 },
-      { from: "derek", text: "Тот самый.", delay: 700 },
+      { from: "derek", text: "Именно он.", delay: 650 },
       { from: "mia", text: "И он правда ничего не знает?", delay: 900 },
-      { from: "derek", text: "По его словам — нет.", delay: 850 },
+      { from: "derek", text: "Так говорит.", delay: 750 },
       { type: "system", text: "Оливия в сети.", delay: 450, characterStatus: { id: "olivia", online: true } },
-      { from: "olivia", text: "Подождите.", delay: 700 },
-      { from: "olivia", text: "Давайте хотя бы не будем сразу на него набрасываться.", delay: 1100 },
+      { from: "olivia", text: "Стоп.", delay: 650 },
+      { from: "olivia", text: "Он сам не просил, чтобы его сюда добавляли.", delay: 1000 },
       { from: "brooke", text: "Я не набрасываюсь.", delay: 800 },
-      { from: "brooke", text: "Я хочу понять, почему какой-то незнакомец теперь сидит в нашем чате.", delay: 1200 },
-      { from: "derek", text: "Потому что Харпер отправила его номер.", delay: 950 },
-      { from: "mason", text: "Ты не знаешь, что именно Харпер отправила его номер.", delay: 1150 },
-      { from: "mason", text: "Телефон мог быть у кого угодно.", delay: 950 },
+      { from: "brooke", text: "Мне просто интересно, почему незнакомец уже в нашем чате.", delay: 1100 },
+      { from: "derek", text: "Потому что с телефона Харпер пришёл его номер.", delay: 1000 },
+      { from: "mason", text: "И ты сразу притащил его сюда?", delay: 900 },
+      { from: "mason", text: "Телефон мог быть у кого угодно.", delay: 900 },
       { from: "mia", text: "Но зачем кому-то отправлять именно его?", delay: 1000 },
-      { from: "brooke", text: "Может, чтобы мы сейчас делали ровно то, что делаем.", delay: 1100 },
-      { from: "derek", text: "И что именно мы делаем?", delay: 850 },
-      { from: "brooke", text: "Паникуем.", delay: 700 },
-      { from: "brooke", text: "И тащим сюда людей, о которых ничего не знаем.", delay: 1050 },
+      { from: "brooke", text: "Может, чтобы мы вот так и дёрнулись.", delay: 950 },
+      { from: "derek", text: "Ты сейчас серьёзно?", delay: 800 },
+      { from: "brooke", text: "Мы уже все здесь. Как думаешь?", delay: 850 },
       { type: "system", text: "Тайлер в сети.", delay: 450, characterStatus: { id: "tyler", online: true } },
-      { from: "tyler", text: "Дерек скинул мне скрин сообщения.", delay: 950 },
+      { from: "tyler", text: "Скрин видел.", delay: 750 },
       { from: "tyler", text: "Номер совпадает.", delay: 750 },
-      { from: "mason", text: "Это ничего не доказывает.", delay: 850 },
-      { from: "derek", text: "Я и не говорил, что доказывает.", delay: 850 },
-      { from: "derek", text: "{player}, скажи им сам.", delay: 850 },
+      { from: "tyler", text: "И больше этот скрин ничего не доказывает.", delay: 900 },
+      { from: "derek", text: "Я и не говорил, что больше.", delay: 800 },
+      { from: "derek", text: "{player}, скажи сам.", delay: 800 },
       { type: "choice", options: [
-        { text: "Я Харпер не знаю.", loyalty: {}, next: "intro_group_dont_know_first" },
-        { text: "Я сам не понимаю, зачем мой номер оказался у Харпер.", loyalty: {}, next: "intro_group_same_question" }
+        { text: "Я не знаю Харпер. Дерек написал мне несколько минут назад — до этого я даже имени её не слышал.", loyalty: {}, next: "intro_group_dont_know_answer" },
+        { text: "Я сам не понимаю, почему с её телефона прислали именно мой номер.", loyalty: {}, next: "intro_group_same_question" }
       ] }
     ]
   },
   {
-    id: "intro_group_dont_know_first",
-    chat: "group_main",
-    trigger: "choice:intro_group_seven_start:0",
-    messages: [{ type: "choice", options: [
-      { text: "Дерек написал мне несколько минут назад.", loyalty: {}, next: "intro_group_dont_know_answer" }
-    ] }]
-  },
-  {
     id: "intro_group_dont_know_answer",
     chat: "group_main",
-    trigger: "choice:intro_group_dont_know_first:0",
+    trigger: "choice:intro_group_seven_start:0",
     messages: [
-      { from: "brooke", text: "И ты сразу решил остаться в чате её друзей?", delay: 1000 },
+      { from: "brooke", text: "И всё равно решил остаться?", delay: 900 },
       { type: "choice", options: [
-        { text: "Дерек попросил не выходить сразу.", loyalty: {}, next: "intro_group_derek_asked" },
-        { text: "Я тоже хочу понять, что происходит.", loyalty: {}, next: "intro_group_want_understand" }
+        { text: "Дерек попросил не выходить. Я пока просто слушаю.", loyalty: {}, next: "intro_group_derek_asked" },
+        { text: "Мой номер в сообщении. Теперь я тоже хочу понять, какого чёрта происходит.", loyalty: {}, next: "intro_group_want_understand" }
       ] }
     ]
   },
@@ -343,7 +317,7 @@ export const introRewriteBeats = [
     id: "intro_group_want_understand",
     chat: "group_main",
     trigger: "choice:intro_group_dont_know_answer:1",
-    messages: [{ from: "mia", text: "Это хотя бы честно.", delay: 800 }]
+    messages: [{ from: "mia", text: "Понимаю. Я бы тоже не смогла просто закрыть чат.", delay: 950 }]
   },
   {
     id: "intro_group_same_question",
@@ -351,8 +325,8 @@ export const introRewriteBeats = [
     trigger: "choice:intro_group_seven_start:1",
     messages: [
       { from: "derek", text: "Вот поэтому я тебя сюда и добавил.", delay: 900 },
-      { from: "brooke", text: "Да, Дерек.", delay: 700 },
-      { from: "brooke", text: "Мы уже поняли, что у тебя на всё один ответ.", delay: 950 }
+      { from: "brooke", text: "Да, Дерек. Мы поняли.", delay: 750 },
+      { from: "brooke", text: "«Харпер прислала номер». А дальше что?", delay: 950 }
     ]
   },
   {
@@ -360,10 +334,10 @@ export const introRewriteBeats = [
     chat: "group_main",
     trigger: "after:intro_group_derek_asked|intro_group_want_understand|intro_group_same_question",
     messages: [
-      { from: "olivia", text: "Ты когда-нибудь был в Рейвенвуде?", delay: 950 },
+      { from: "olivia", text: "Ладно. Ты вообще бывал в Рейвенвуде?", delay: 950 },
       { type: "choice", options: [
         { text: "Нет. Я живу в другом городе.", loyalty: {}, next: "intro_group_other_city" },
-        { text: "Нет. До сегодняшнего дня я даже не слышал о Рейвенвуде.", loyalty: {}, next: "intro_group_never_heard_city" }
+        { text: "Нет. До сегодня это название мне вообще ничего не говорило.", loyalty: {}, next: "intro_group_never_heard_city" }
       ] }
     ]
   },
@@ -371,7 +345,7 @@ export const introRewriteBeats = [
     id: "intro_group_other_city",
     chat: "group_main",
     trigger: "choice:intro_group_ravenwood:0",
-    messages: [{ from: "tyler", text: "Тогда случайно встретиться с Харпер ты вряд ли мог.", delay: 1000 }]
+    messages: [{ from: "tyler", text: "Значит, случайная встреча отпадает.", delay: 900 }]
   },
   {
     id: "intro_group_never_heard_city",
@@ -389,50 +363,50 @@ export const introRewriteBeats = [
     chat: "group_main",
     trigger: "after:intro_group_other_city|intro_group_never_heard_city",
     messages: [
-      { from: "mason", text: "Вот поэтому этот разговор и не должен происходить здесь.", delay: 1100 },
-      { from: "mason", text: "У нас есть сообщение с телефона Харпер.", delay: 950 },
-      { from: "mason", text: "И номер человека, которого никто из нас не знает.", delay: 1000 },
-      { from: "mason", text: "Всё это нужно передать полиции.", delay: 900 },
+      { from: "mason", text: "Вот поэтому какого чёрта мы обсуждаем это здесь?", delay: 1050 },
+      { from: "mason", text: "У нас есть номер. Есть скрин. Всё.", delay: 900 },
+      { from: "mason", text: "Пусть полиция разбирается.", delay: 850 },
       { from: "derek", text: "Я уже передал.", delay: 750 },
-      { from: "mason", text: "Тогда зачем этот чат?", delay: 800 },
-      { from: "derek", text: "Потому что полиция считает, что Харпер могла просто уехать.", delay: 1150 },
+      { from: "mason", text: "Тогда зачем ты устроил этот чат?", delay: 850 },
+      { from: "derek", text: "Потому что они говорят ждать.", delay: 850 },
+      { from: "derek", text: "И что Харпер могла сама уехать.", delay: 950 },
       { from: "mia", text: "Она бы сказала.", delay: 700 },
-      { from: "mia", text: "Хотя бы кому-нибудь из нас.", delay: 850 },
+      { from: "mia", text: "Ну хоть кому-нибудь.", delay: 800 },
       { from: "brooke", text: "Оливии точно сказала бы.", delay: 850 },
-      { from: "olivia", text: "Не обязательно.", delay: 750 },
+      { from: "olivia", text: "Не факт.", delay: 700 },
       { from: "brooke", text: "Ты серьёзно?", delay: 700 },
-      { from: "olivia", text: "Я говорю только то, что мы не можем знать наверняка.", delay: 1050 },
-      { from: "derek", text: "Мне бы она сказала.", delay: 850 },
-      { from: "mason", text: "Вот именно из-за таких фраз вы сейчас и начинаете придумывать версии.", delay: 1200 },
+      { from: "olivia", text: "Да. Мы не можем знать, кому она бы что сказала.", delay: 1000 },
+      { from: "derek", text: "Мне бы сказала.", delay: 800 },
+      { from: "mason", text: "Вот. С таких фраз всё и начинается.", delay: 950 },
       { from: "derek", text: "Я ничего не придумываю.", delay: 800 },
-      { from: "derek", text: "Она исчезла на два дня.", delay: 850 },
-      { from: "derek", text: "Потом с её телефона приходит номер незнакомого человека.", delay: 1050 },
+      { from: "derek", text: "Её нет уже два дня.", delay: 850 },
+      { from: "derek", text: "А потом с её телефона прилетает номер какого-то незнакомца.", delay: 1050 },
       { from: "derek", text: "И я должен просто сидеть?", delay: 900 },
-      { from: "mason", text: "Ты должен дать полиции делать свою работу.", delay: 1000 },
+      { from: "mason", text: "Дай полиции работать, Дерек.", delay: 900 },
       { from: "derek", text: "Они её даже нормально не ищут.", delay: 850 },
-      { from: "mason", text: "Ты этого не знаешь.", delay: 750 },
+      { from: "mason", text: "Ты не знаешь, что они делают.", delay: 800 },
       { from: "derek", text: "Я с ними разговаривал.", delay: 800 },
       { from: "derek", text: "Они всё сводят к тому, что она могла уйти сама.", delay: 1000 },
       { from: "mia", text: "Харпер не стала бы вот так исчезать.", delay: 900 },
-      { from: "mason", text: "Вы сейчас говорите не фактами.", delay: 850 },
-      { from: "mason", text: "Вы говорите тем, во что хотите верить.", delay: 950 },
+      { from: "mason", text: "Это не факты.", delay: 750 },
+      { from: "mason", text: "Вы просто повторяете то, во что хотите верить.", delay: 950 },
       { from: "derek", text: "А ты, значит, у нас самый умный?", delay: 850 },
       { from: "mason", text: "Нет.", delay: 600 },
-      { from: "mason", text: "Я просто не хочу, чтобы вы окончательно всё испортили.", delay: 1050 },
+      { from: "mason", text: "Я просто не хочу потом разгребать то, что ты сейчас натворишь.", delay: 1050 },
       { from: "mia", text: "Можно вы хотя бы две минуты не будете друг на друга орать?", delay: 1100 },
       { from: "derek", text: "Я не ору.", delay: 700 },
       { from: "brooke", text: "Конечно.", delay: 650 },
-      { from: "brooke", text: "Ты просто создал чат без предупреждения, добавил сюда незнакомца и теперь со всеми споришь.", delay: 1250 },
+      { from: "brooke", text: "Ты просто без спроса создал чат, притащил сюда незнакомца и теперь орёшь, что не орёшь.", delay: 1250 },
       { from: "derek", text: "Я пытаюсь найти Харпер.", delay: 850 },
       { from: "brooke", text: "А мы, по-твоему, нет?", delay: 800 },
-      { from: "derek", text: "Тогда почему вы только рассказываете мне, что я всё делаю неправильно?", delay: 1150 },
-      { from: "brooke", text: "Потому что ты опять решил всё за остальных.", delay: 1000 },
-      { from: "derek", text: "Я никого ни к чему не заставлял.", delay: 850 },
-      { from: "brooke", text: "Ты даже не спросил, прежде чем добавить его сюда.", delay: 1000 },
-      { from: "brooke", text: "Это и называется решить за остальных.", delay: 950 },
+      { from: "derek", text: "Тогда помогите мне, а не рассказывайте, какой я идиот.", delay: 1050 },
+      { from: "brooke", text: "Потому что ты опять всё решил за нас.", delay: 950 },
+      { from: "derek", text: "Я никого не заставлял здесь сидеть.", delay: 850 },
+      { from: "brooke", text: "Ты даже не спросил, прежде чем его добавить.", delay: 950 },
+      { from: "brooke", text: "Вот об этом я и говорю.", delay: 800 },
       { type: "choice", options: [
-        { text: "Я могу выйти, если из-за меня всё это началось.", loyalty: {}, next: "intro_group_offer_leave" },
-        { text: "Может, сначала разберёмся хотя бы с тем, что известно точно?", loyalty: {}, next: "intro_group_stick_to_facts" }
+        { text: "Если вам так проще, я выйду. Меня сюда вообще Дерек добавил.", loyalty: {}, next: "intro_group_offer_leave" },
+        { text: "Вы можете хотя бы минуту не обсуждать меня так, будто меня здесь нет?", loyalty: {}, next: "intro_group_stick_to_facts" }
       ] }
     ]
   },
@@ -442,10 +416,10 @@ export const introRewriteBeats = [
     trigger: "choice:intro_group_argument:0",
     messages: [
       { from: "derek", text: "Нет.", delay: 650 },
-      { from: "derek", text: "Подожди ещё немного.", delay: 800 },
+      { from: "derek", text: "Не уходи пока.", delay: 800 },
       { from: "brooke", text: "Господи.", delay: 650 },
-      { from: "brooke", text: "Сначала добавить без спроса.", delay: 800 },
-      { from: "brooke", text: "Потом уговаривать не уходить.", delay: 850 },
+      { from: "brooke", text: "Сначала притащить без спроса.", delay: 800 },
+      { from: "brooke", text: "Потом уговаривать не уходить. Отличный план 👍", delay: 900 },
       { from: "derek", text: "Брук, хватит.", delay: 750 }
     ]
   },
@@ -454,10 +428,10 @@ export const introRewriteBeats = [
     chat: "group_main",
     trigger: "choice:intro_group_argument:1",
     messages: [
-      { from: "mason", text: "Нет.", delay: 650 },
-      { from: "mason", text: "Мы не будем обсуждать личные вещи Харпер с человеком, которого впервые видим.", delay: 1200 },
-      { from: "olivia", text: "Он прав.", delay: 700 },
-      { from: "olivia", text: "Пока мы даже не знаем, у кого был её телефон.", delay: 1000 }
+      { from: "mason", text: "Справедливо.", delay: 700 },
+      { from: "olivia", text: "Да. Хватит.", delay: 700 },
+      { from: "olivia", text: "{player} тут вообще ни при чём.", delay: 850 },
+      { from: "olivia", text: "Мы даже не знаем, у кого был телефон Харпер.", delay: 1000 }
     ]
   },
   {
@@ -465,53 +439,53 @@ export const introRewriteBeats = [
     chat: "group_main",
     trigger: "after:intro_group_offer_leave|intro_group_stick_to_facts",
     messages: [
-      { from: "tyler", text: "Короче, мы всё равно ничего сейчас не выясним.", delay: 1000 },
-      { from: "tyler", text: "Только окончательно переругаемся.", delay: 850 },
-      { from: "mason", text: "Я в этом участвовать не буду.", delay: 850 },
-      { from: "mason", text: "Дерек, скинь полиции номер и само сообщение.", delay: 1000 },
-      { from: "mason", text: "И больше ничего сам не предпринимай.", delay: 950 },
+      { from: "tyler", text: "Всё. Сейчас мы уже ничего не выясним.", delay: 950 },
+      { from: "tyler", text: "Ещё пять минут — и останется один Дерек.", delay: 900 },
+      { from: "mason", text: "Я пас.", delay: 700 },
+      { from: "mason", text: "Номер и скрин уже у полиции.", delay: 900 },
+      { from: "mason", text: "Так не лезь дальше сам. Серьёзно.", delay: 950 },
       { from: "derek", text: "Ты вот так просто уйдёшь?", delay: 800 },
       { from: "mason", text: "Да.", delay: 600 },
-      { from: "mason", text: "Потому что этот чат уже был плохой идеей.", delay: 950 },
+      { from: "mason", text: "Потому что этот чат — хреновая идея.", delay: 850 },
       { type: "system", text: "Мейсон вышел из чата.", delay: 700, characterStatus: { id: "mason", online: false } },
-      { from: "mia", text: "Отлично.", delay: 650 },
-      { from: "mia", text: "Теперь ещё и Мейсон ушёл.", delay: 800 },
-      { from: "brooke", text: "Потому что он единственный здесь думает головой.", delay: 950 },
+      { from: "mia", text: "Ну вот.", delay: 650 },
+      { from: "mia", text: "И Мейсон ушёл.", delay: 750 },
+      { from: "brooke", text: "Потому что хоть кто-то здесь думает головой.", delay: 900 },
       { from: "derek", text: "Тогда зачем ты сама ещё здесь?", delay: 850 },
-      { from: "brooke", text: "Чтобы ты хотя бы раз услышал, что тебе говорят.", delay: 1000 },
+      { from: "brooke", text: "Жду, когда ты хотя бы раз услышишь слово «нет».", delay: 1000 },
       { from: "derek", text: "Я услышал.", delay: 700 },
       { from: "brooke", text: "Нет.", delay: 600 },
-      { from: "brooke", text: "Ты уже решил, что этот человек как-то поможет.", delay: 950 },
-      { from: "brooke", text: "Хотя вчера он даже не знал, кто такая Харпер.", delay: 950 },
+      { from: "brooke", text: "Ты уже решил, что он зачем-то тебе нужен.", delay: 900 },
+      { from: "brooke", text: "Он пять минут назад даже имени Харпер не знал.", delay: 900 },
       { from: "derek", text: "Я такого не говорил.", delay: 750 },
+      { from: "brooke", text: "Не говорил.", delay: 650 },
       { from: "brooke", text: "Но ведёшь себя именно так.", delay: 800 },
       { from: "olivia", text: "Брук, остановись.", delay: 750 },
       { from: "brooke", text: "Да пожалуйста.", delay: 650 },
       { from: "brooke", text: "Разбирайтесь сами.", delay: 750 },
       { type: "system", text: "Брук вышла из чата.", delay: 700, characterStatus: { id: "brooke", online: false } },
-      { from: "mia", text: "Ну зачем она так?", delay: 750 },
-      { from: "olivia", text: "Она напугана.", delay: 750 },
-      { from: "derek", text: "Мы все напуганы.", delay: 750 },
+      { from: "mia", text: "Господи... Зачем она всё время так?", delay: 850 },
+      { from: "olivia", text: "Потому что ей страшно.", delay: 750 },
+      { from: "derek", text: "Нам всем страшно.", delay: 750 },
       { from: "mia", text: "Я знаю.", delay: 650 },
-      { from: "mia", text: "Но мне и так страшно.", delay: 800 },
-      { from: "mia", text: "А читать, как вы друг на друга кидаетесь, только хуже.", delay: 1050 },
+      { from: "mia", text: "Мне тоже.", delay: 700 },
+      { from: "mia", text: "Но от этого чата только хуже.", delay: 850 },
       { from: "olivia", text: "Миа.", delay: 650 },
-      { from: "mia", text: "Я просто выйду, ладно?", delay: 800 },
-      { from: "mia", text: "Мне нужно немного успокоиться.", delay: 850 },
+      { from: "mia", text: "Я выйду, ладно?", delay: 750 },
+      { from: "mia", text: "Мне надо хоть немного выдохнуть.", delay: 850 },
       { type: "system", text: "Миа вышла из чата.", delay: 700, characterStatus: { id: "mia", online: false } },
-      { from: "tyler", text: "Хороший чат получился.", delay: 750 },
+      { from: "tyler", text: "Минус три человека.", delay: 700 },
+      { from: "tyler", text: "Всё идёт отлично.", delay: 700 },
       { from: "derek", text: "Тайлер, не начинай.", delay: 750 },
-      { from: "tyler", text: "Я и не начинал.", delay: 700 },
-      { from: "tyler", text: "Ты собрал всех без предупреждения.", delay: 850 },
-      { from: "tyler", text: "Ну и чего ты ждал?", delay: 750 },
-      { from: "derek", text: "Что мы нормально поговорим.", delay: 850 },
+      { from: "tyler", text: "Я не начинаю.", delay: 650 },
+      { from: "tyler", text: "Ты правда ждал спокойного разговора от Брук, Мейсона и самого себя?", delay: 1150 },
       { from: "tyler", text: "Серьёзно?", delay: 650 },
-      { from: "tyler", text: "Брук, Мейсон и ты в одном чате?", delay: 850 },
-      { from: "tyler", text: "Нормально поговорим?", delay: 750 },
+      { from: "derek", text: "Что мы хотя бы поговорим.", delay: 850 },
+      { from: "tyler", text: "Ага.", delay: 600 },
       { from: "derek", text: "Очень смешно.", delay: 700 },
       { from: "tyler", text: "Я не шучу.", delay: 700 },
-      { from: "tyler", text: "Я всё равно ничего полезного здесь не скажу.", delay: 900 },
-      { from: "tyler", text: "Отправь всё полиции.", delay: 750 },
+      { from: "tyler", text: "От меня здесь толку нет.", delay: 800 },
+      { from: "tyler", text: "Скрин у полиции. На этом всё.", delay: 850 },
       { type: "system", text: "Тайлер вышел из чата.", delay: 700, characterStatus: { id: "tyler", online: false } },
       { from: "olivia", text: "Дерек.", delay: 650 },
       { from: "olivia", text: "Удали группу.", delay: 750 },
@@ -519,16 +493,16 @@ export const introRewriteBeats = [
       { from: "olivia", text: "Потом дай всем немного успокоиться.", delay: 900 },
       { from: "derek", text: "А с номером что делать?", delay: 800 },
       { from: "olivia", text: "Пока ничего.", delay: 700 },
-      { from: "olivia", text: "Не скидывай его больше никому.", delay: 850 },
-      { from: "olivia", text: "И не дави на {player}.", delay: 800 },
+      { from: "olivia", text: "Номер больше никому не пересылай.", delay: 850 },
+      { from: "olivia", text: "И перестань давить на {player}.", delay: 800 },
       { from: "derek", text: "Я не давлю.", delay: 700 },
-      { from: "olivia", text: "Ты попросил незнакомого человека остаться в чате, где на него сразу все накинулись.", delay: 1200 },
-      { from: "olivia", text: "Даже если ты не хотел давить, именно так это и выглядит.", delay: 1100 },
+      { from: "olivia", text: "Ты попросил его остаться, а потом все на него налетели.", delay: 1050 },
+      { from: "olivia", text: "Может, ты этого не замечаешь. Но да, ты давишь.", delay: 1050 },
       { from: "derek", text: "Ладно.", delay: 650 },
       { from: "derek", text: "Понял.", delay: 700 },
       { type: "choice", options: [
-        { text: "Если мне придёт что-то странное, я напишу.", loyalty: {}, next: "intro_group_report_strange" },
-        { text: "Я тоже хочу понять, почему мой номер оказался у Харпер.", loyalty: {}, next: "intro_group_want_answer" }
+        { text: "Если мне ещё что-то придёт, я напишу. Больше ничего не обещаю.", loyalty: {}, next: "intro_group_report_strange" },
+        { text: "Я не собираюсь исчезать. Я тоже хочу понять, почему прислали мой номер.", loyalty: {}, next: "intro_group_want_answer" }
       ] }
     ]
   },
@@ -538,7 +512,7 @@ export const introRewriteBeats = [
     trigger: "choice:intro_group_falls_apart:0",
     messages: [
       { from: "olivia", text: "Хорошо.", delay: 700 },
-      { from: "olivia", text: "Пока этого достаточно.", delay: 800 },
+      { from: "olivia", text: "Пока больше и не надо.", delay: 800 },
       { from: "derek", text: "Спасибо.", delay: 700 }
     ]
   },
@@ -552,7 +526,7 @@ export const introRewriteBeats = [
       { from: "derek", text: "Что?", delay: 600 },
       { from: "olivia", text: "Ты опять.", delay: 650 },
       { from: "derek", text: "Ладно.", delay: 650 },
-      { from: "derek", text: "Прости.", delay: 700 }
+      { from: "derek", text: "Не так сказал.", delay: 700 }
     ]
   },
   {
@@ -560,17 +534,17 @@ export const introRewriteBeats = [
     chat: "group_main",
     trigger: "after:intro_group_report_strange|intro_group_want_answer",
     messages: [
-      { from: "olivia", text: "Я напишу тебе позже.", delay: 800 },
-      { from: "olivia", text: "Когда здесь всё немного уляжется.", delay: 850 },
+      { from: "olivia", text: "Я напишу тебе потом.", delay: 800 },
+      { from: "olivia", text: "Не здесь.", delay: 650 },
       { type: "system", text: "Оливия вышла из чата.", delay: 700, characterStatus: { id: "olivia", online: false } },
       { from: "derek", text: "Ну вот.", delay: 650 },
-      { from: "derek", text: "В итоге все ушли.", delay: 750 },
-      { from: "derek", text: "Прости за это.", delay: 750 },
-      { from: "derek", text: "Я правда думал, что если соберу всех вместе, мы хоть что-то поймём.", delay: 1150 },
-      { from: "derek", text: "А получилось только хуже.", delay: 850 },
+      { from: "derek", text: "Все ушли.", delay: 700 },
+      { from: "derek", text: "Слушай... прости.", delay: 800 },
+      { from: "derek", text: "Я правда думал: соберу всех — и хоть что-то станет понятнее.", delay: 1100 },
+      { from: "derek", text: "А сделал только хуже.", delay: 800 },
       { type: "choice", options: [
-        { text: "Ты просто слишком резко всё сделал.", loyalty: {}, trust: { derekTrust: 1 }, next: "intro_group_too_sudden" },
-        { text: "Лучше правда удали группу.", loyalty: {}, next: "intro_group_delete_it" }
+        { text: "Промолчать.", sendMessage: false, loyalty: {}, trust: { derekTrust: 1 }, next: "intro_group_too_sudden" },
+        { text: "Да. Удали группу. Всем сейчас лучше разойтись.", loyalty: {}, next: "intro_group_delete_it" }
       ] }
     ]
   },
@@ -579,8 +553,8 @@ export const introRewriteBeats = [
     chat: "group_main",
     trigger: "choice:intro_group_olivia_leaves:0",
     messages: [
-      { from: "derek", text: "Да.", delay: 650 },
-      { from: "derek", text: "Теперь уже вижу.", delay: 750 },
+      { from: "derek", text: "Я знаю.", delay: 700 },
+      { from: "derek", text: "Слишком резко всё сделал.", delay: 800 },
       { from: "derek", text: "Надо было хотя бы предупредить остальных.", delay: 900 }
     ]
   },
@@ -590,7 +564,7 @@ export const introRewriteBeats = [
     trigger: "choice:intro_group_olivia_leaves:1",
     messages: [
       { from: "derek", text: "Удалю.", delay: 700 },
-      { from: "derek", text: "Здесь всё равно уже никого не осталось.", delay: 900 }
+      { from: "derek", text: "Здесь всё равно никого не осталось.", delay: 850 }
     ]
   },
   {
@@ -599,7 +573,7 @@ export const introRewriteBeats = [
     trigger: "after:intro_group_too_sudden|intro_group_delete_it",
     messages: [
       { from: "derek", text: "Если Харпер отправила твой номер не случайно…", delay: 950 },
-      { from: "derek", text: "Надеюсь, мы поймём зачем.", delay: 850 },
+      { from: "derek", text: "Надеюсь, мы поймём, зачем.", delay: 850 },
       { from: "narrator", text: "Дерек удалил группу «Семеро».", delay: 1000 },
       { type: "lock", targetType: "chats", id: "group_main", delay: 300 }
     ]
