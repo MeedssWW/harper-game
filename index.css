@@ -10523,15 +10523,44 @@ body.harper-booting #notification-toast {
         border-color .24s ease;
 }
 
-.chat-input-area.chat-input-area--choices {
-    min-height: 0;
-    max-height: 0;
-    padding-top: 0;
-    padding-bottom: 0;
-    opacity: 0;
-    border-top-color: transparent;
-    transform: translateY(10px);
-    pointer-events: none;
+.chat-input-area.chat-input-area--choice-mode {
+    position: relative;
+    z-index: 12;
+    border-top-color: rgba(117,153,255,.16);
+    background: rgba(10,14,21,.98);
+    box-shadow: 0 -16px 34px rgba(0,0,0,.24);
+}
+
+.chat-input-area--choice-mode .chat-input-box {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    transition:
+        color .28s ease,
+        border-color .28s ease,
+        background .28s ease,
+        transform .28s cubic-bezier(.18,.82,.2,1);
+}
+
+.chat-input-box.is-waiting-choice {
+    color: #9aa7ba;
+    border-color: rgba(117,153,255,.15);
+    animation: composerHintIn .38s cubic-bezier(.18,.82,.2,1) both;
+}
+
+.chat-input-area.has-choice-preview .chat-input-box {
+    max-height: 78px;
+    overflow-y: auto;
+    white-space: normal;
+    line-height: 1.3;
+    color: #eef3ff;
+    border-color: rgba(117,153,255,.42);
+    background: rgba(66,87,151,.22);
+    animation: composerChoiceFill .46s cubic-bezier(.18,.82,.2,1) both;
+}
+
+.chat-input-area.has-choice-preview .chat-input-mic {
+    animation: composerSendPulse .52s cubic-bezier(.18,.82,.2,1) both;
 }
 
 .choice-panel.choice-panel-enter {
@@ -10564,6 +10593,18 @@ body.harper-booting #notification-toast {
     pointer-events: auto;
 }
 
+.choice-panel.choice-panel-enter.is-visible.is-selecting {
+    max-height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    opacity: 0;
+    overflow: hidden;
+    border-top-color: transparent;
+    transform: translateY(18px);
+    pointer-events: none;
+    transition-duration: .34s;
+}
+
 .choice-panel-enter .choice-label,
 .choice-panel-enter .choice-btn {
     opacity: 0;
@@ -10588,6 +10629,21 @@ body.harper-booting #notification-toast {
         opacity: 1;
         transform: translateY(0) scale(1);
     }
+}
+
+@keyframes composerHintIn {
+    from { opacity: 0; transform: translateY(7px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes composerChoiceFill {
+    0% { opacity: .2; transform: translateY(8px) scale(.985); }
+    65% { opacity: 1; transform: translateY(0) scale(1.012); }
+    100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes composerSendPulse {
+    45% { transform: scale(1.09); box-shadow: 0 10px 28px rgba(74,101,194,.42); }
 }
 
 @media (prefers-reduced-motion: reduce) {

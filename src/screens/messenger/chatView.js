@@ -71,7 +71,7 @@ export class ChatView {
                     <img src="src/assets/icons/lucide/paperclip.svg" alt="" />
                 </div>
                 <div style="flex:1; position:relative; display:flex; align-items:center;">
-                    <div class="chat-input-box">Ответ появится здесь</div>
+                    <div class="chat-input-box" aria-live="polite">Ответ появится здесь</div>
                     <div class="chat-input-emoji" style="position:absolute; right:12px;" aria-hidden="true">
                         <img src="src/assets/icons/lucide/smile.svg" alt="" />
                     </div>
@@ -316,15 +316,11 @@ export class ChatView {
     showChoices(options, onChoose) {
         this.removeChoices();
 
-        if (this.inputAreaEl) {
-            this.inputAreaEl.style.removeProperty('display');
-            this.inputAreaEl.classList.remove('chat-input-area--choices');
-            const inputHeight = Math.ceil(
-                this.inputAreaEl.getBoundingClientRect().height
-                || this.inputAreaEl.scrollHeight
-                || 88
-            );
-            this.inputAreaEl.style.setProperty('--chat-input-height', `${inputHeight}px`);
+        const inputBox = this.inputAreaEl?.querySelector('.chat-input-box');
+        this.inputAreaEl?.classList.add('chat-input-area--choice-mode');
+        if (inputBox) {
+            inputBox.textContent = 'Выберите ответ';
+            inputBox.classList.add('is-waiting-choice');
         }
 
         const panel = document.createElement('div');
@@ -350,27 +346,39 @@ export class ChatView {
             btn.addEventListener('click', () => {
                 if (navigator.vibrate) navigator.vibrate(9);
                 const idx = parseInt(btn.dataset.index, 10);
+                const selectedText = btn.textContent.trim();
                 panel.querySelectorAll('.choice-btn').forEach(b => {
                     b.style.opacity = '0.3';
                     b.style.pointerEvents = 'none';
                 });
                 btn.style.opacity = '1';
                 btn.classList.add('selected');
+                panel.classList.add('is-selecting');
+
+                if (inputBox) {
+                    inputBox.textContent = selectedText;
+                    inputBox.classList.remove('is-waiting-choice');
+                    inputBox.classList.add('has-choice-preview');
+                }
+                this.inputAreaEl?.classList.add('has-choice-preview');
 
                 setTimeout(() => {
                     this.removeChoices();
                     onChoose(idx);
-                }, 400);
+                }, 560);
             });
         });
 
         this.choicePanelEl = panel;
-        this.container.appendChild(panel);
+        if (this.inputAreaEl?.parentNode === this.container) {
+            this.container.insertBefore(panel, this.inputAreaEl);
+        } else {
+            this.container.appendChild(panel);
+        }
 
         requestAnimationFrame(() => {
             requestAnimationFrame(() => {
                 if (this.choicePanelEl !== panel) return;
-                this.inputAreaEl?.classList.add('chat-input-area--choices');
                 panel.classList.add('is-visible');
                 this._scrollToBottom(true);
             });
@@ -387,8 +395,13 @@ export class ChatView {
         }
         if (this.inputAreaEl) {
             this.inputAreaEl.style.removeProperty('display');
-            this.inputAreaEl.classList.remove('chat-input-area--choices');
+            this.inputAreaEl.classList.remove('chat-input-area--choices', 'chat-input-area--choice-mode', 'has-choice-preview');
             this.inputAreaEl.style.removeProperty('--chat-input-height');
+            const inputBox = this.inputAreaEl.querySelector('.chat-input-box');
+            if (inputBox) {
+                inputBox.textContent = 'Ответ появится здесь';
+                inputBox.classList.remove('is-waiting-choice', 'has-choice-preview');
+            }
         }
     }
 

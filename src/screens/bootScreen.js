@@ -22,7 +22,7 @@ export function renderBootScreen({ onBegin, onComplete }) {
         </div>
         <button class="harper-boot-start" type="button">
             <span>КОСНУТЬСЯ, ЧТОБЫ НАЧАТЬ</span>
-            <small>лучше в наушниках</small>
+            <small>звук включится после касания · лучше в наушниках</small>
         </button>
         <div class="harper-boot-progress" aria-hidden="true"><span></span></div>
         <div class="harper-boot-code">RVN-07 // LINK STANDBY</div>

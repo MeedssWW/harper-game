@@ -121,13 +121,18 @@ export class AudioEngine {
         if (this._bootFallbackTimer) window.clearTimeout(this._bootFallbackTimer);
         this.loadingMusic.pause();
         this.loadingMusic.currentTime = 0;
-        this.loadingMusic.volume = this.settings.musicEnabled ? Math.min(0.42, this.settings.musicVolume * 0.92) : 0;
+        this.loadingMusic.volume = this.settings.musicEnabled ? Math.min(0.28, this.settings.musicVolume * 0.65) : 0;
+
+        // The full loading track can buffer too slowly on mobile data. Start a short
+        // musical score from Web Audio inside the tap event so the intro is never silent.
+        if (this.settings.musicEnabled) this._playBootAmbientSynth();
 
         let musicStarted = false;
         const markPlaying = () => {
             musicStarted = true;
-            this._stopBootAmbientSynth();
-            document.documentElement.dataset.harperBootAudio = 'track';
+            document.documentElement.dataset.harperBootAudio = this._bootAmbientNodes.length
+                ? 'track+score'
+                : 'track';
         };
         this.loadingMusic.addEventListener('playing', markPlaying, { once: true });
 
@@ -169,7 +174,7 @@ export class AudioEngine {
     }
 
     _playBootAmbientSynth() {
-        if (!this.settings.musicEnabled || this._bootAmbientNodes.length) return;
+        if (!this.settings.musicEnabled || this.settings.musicVolume <= 0.001 || this._bootAmbientNodes.length) return;
         const ctx = this._ensureAudioContext();
         if (!ctx) return;
         if (ctx.state === 'suspended') ctx.resume().catch(() => {});
@@ -177,32 +182,70 @@ export class AudioEngine {
         const now = ctx.currentTime;
         const master = ctx.createGain();
         const filter = ctx.createBiquadFilter();
+        const movement = ctx.createOscillator();
+        const movementGain = ctx.createGain();
+        const scoreLevel = Math.max(0.035, this.settings.musicVolume * 0.2);
         master.gain.setValueAtTime(0.0001, now);
-        master.gain.exponentialRampToValueAtTime(0.055, now + 1.1);
-        master.gain.setValueAtTime(0.055, now + 4.2);
+        master.gain.exponentialRampToValueAtTime(scoreLevel, now + 0.65);
+        master.gain.setValueAtTime(scoreLevel, now + 4.25);
         master.gain.exponentialRampToValueAtTime(0.0001, now + 5.2);
         filter.type = 'lowpass';
-        filter.frequency.setValueAtTime(720, now);
-        filter.Q.setValueAtTime(0.8, now);
+        filter.frequency.setValueAtTime(680, now);
+        filter.Q.setValueAtTime(1.1, now);
+        movement.type = 'sine';
+        movement.frequency.setValueAtTime(0.17, now);
+        movementGain.gain.setValueAtTime(230, now);
+        movement.connect(movementGain);
+        movementGain.connect(filter.frequency);
         filter.connect(master);
         master.connect(ctx.destination);
 
-        const oscillators = [82.41, 123.47, 164.81].map((frequency, index) => {
+        const padFrequencies = [73.42, 110, 146.83, 174.61, 293.66];
+        const padLevels = [0.62, 0.26, 0.18, 0.12, 0.035];
+        const padNodes = padFrequencies.flatMap((frequency, index) => {
             const osc = ctx.createOscillator();
             const gain = ctx.createGain();
-            osc.type = index === 0 ? 'sine' : 'triangle';
+            osc.type = index < 2 ? 'sine' : 'triangle';
             osc.frequency.setValueAtTime(frequency, now);
-            osc.detune.setValueAtTime(index * -7, now);
-            gain.gain.setValueAtTime(index === 0 ? 0.75 : 0.22, now);
+            osc.detune.setValueAtTime((index - 2) * -4, now);
+            gain.gain.setValueAtTime(padLevels[index], now);
             osc.connect(gain);
             gain.connect(filter);
             osc.start(now);
             osc.stop(now + 5.3);
-            return osc;
+            return [osc, gain];
         });
 
-        this._bootAmbientNodes = [master, filter, ...oscillators];
-        document.documentElement.dataset.harperBootAudio = 'synth';
+        const echoNodes = [
+            { offset: 0.35, frequency: 293.66 },
+            { offset: 1.75, frequency: 261.63 },
+            { offset: 3.15, frequency: 220 }
+        ].flatMap(({ offset, frequency }) => {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(frequency, now + offset);
+            gain.gain.setValueAtTime(0.0001, now + offset);
+            gain.gain.exponentialRampToValueAtTime(0.11, now + offset + 0.08);
+            gain.gain.exponentialRampToValueAtTime(0.0001, now + offset + 1.15);
+            osc.connect(gain);
+            gain.connect(filter);
+            osc.start(now + offset);
+            osc.stop(now + offset + 1.2);
+            return [osc, gain];
+        });
+
+        movement.start(now);
+        movement.stop(now + 5.3);
+        this._bootAmbientNodes = [
+            master,
+            filter,
+            movement,
+            movementGain,
+            ...padNodes,
+            ...echoNodes
+        ];
+        document.documentElement.dataset.harperBootAudio = 'score';
     }
 
     _stopBootAmbientSynth() {
