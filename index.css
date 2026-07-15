@@ -10081,13 +10081,25 @@ body.harper-booting #notification-toast {
     position: absolute;
     z-index: 2;
     inset: -15%;
-    opacity: .19;
+    opacity: .08;
     transform: rotate(9deg);
     background: repeating-linear-gradient(90deg, transparent 0 15px, rgba(205,220,235,.28) 16px, transparent 17px 31px);
     background-size: 42px 100%;
     filter: blur(.45px);
-    animation: harperRain .55s linear infinite;
+    animation: harperRain .8s linear infinite;
     pointer-events: none;
+}
+
+.harper-boot-rain-canvas {
+    position: absolute;
+    z-index: 2;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    mix-blend-mode: screen;
+    filter: drop-shadow(0 0 2px rgba(180, 211, 231, .12));
 }
 
 .harper-boot-vignette {

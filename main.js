@@ -6,7 +6,7 @@ import { stateManager } from './src/engine/stateManager.js';
 import { storyEngine } from './src/engine/storyEngine.js?v=121';
 import { screenManager } from './src/screens/screenManager.js';
 import { renderLockScreen } from './src/screens/lockScreen.js?v=70';
-import { renderBootScreen } from './src/screens/bootScreen.js?v=123';
+import { renderBootScreen } from './src/screens/bootScreen.js?v=124';
 import { renderNameScreen } from './src/screens/nameScreen.js';
 import { renderHomeScreen } from './src/screens/homeScreen.js?v=115';
 import { CHATS, renderChatList } from './src/screens/messenger/chatList.js?v=123';

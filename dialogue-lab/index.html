@@ -1,0 +1,956 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>HARPER Dialogue Lab</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #172033;
+      --muted: #6f7889;
+      --line: #dce2ea;
+      --panel: #ffffff;
+      --soft: #f2f5fa;
+      --accent: #16a676;
+      --accent-2: #3157d5;
+      --danger: #c23a3a;
+      --phone-top: #7d8aa3;
+      --bubble: #76829c;
+      --shadow: 0 24px 70px rgba(21, 29, 45, .18);
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      height: 100%;
+      margin: 0;
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 12% 8%, rgba(22, 166, 118, .13), transparent 28%),
+        radial-gradient(circle at 86% 18%, rgba(49, 87, 213, .14), transparent 32%),
+        linear-gradient(145deg, #e8edf5 0%, #f7f9fc 48%, #e6ebf3 100%);
+    }
+
+    body { min-height: 100%; overflow: hidden; }
+    button, input, select, textarea { font: inherit; }
+    button { border: 0; cursor: pointer; }
+
+    .app {
+      height: 100vh;
+      display: grid;
+      grid-template-columns: minmax(360px, 470px) minmax(420px, 1fr) minmax(330px, 430px);
+      gap: 20px;
+      padding: 20px;
+    }
+
+    .panel {
+      min-height: 0;
+      border: 1px solid rgba(255, 255, 255, .72);
+      border-radius: 22px;
+      background: rgba(255, 255, 255, .8);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+      overflow: hidden;
+    }
+
+    .editor, .exporter { display: flex; flex-direction: column; }
+
+    .panel-head {
+      padding: 24px 24px 18px;
+      border-bottom: 1px solid rgba(220, 226, 234, .86);
+    }
+
+    .eyebrow {
+      margin: 0 0 8px;
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+
+    h1, h2 { margin: 0; letter-spacing: 0; }
+    h1 { font-size: 30px; line-height: 1.05; font-weight: 900; }
+    h2 { font-size: 18px; font-weight: 900; }
+
+    .sub {
+      margin: 10px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.45;
+    }
+
+    .form { padding: 18px; overflow: auto; }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+    .field { display: grid; gap: 7px; margin-bottom: 13px; }
+    label { color: #3d4657; font-size: 12px; font-weight: 800; }
+
+    input, select, textarea {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: rgba(255, 255, 255, .95);
+      color: var(--ink);
+      outline: none;
+      transition: border-color .16s ease, box-shadow .16s ease, background .16s ease;
+    }
+
+    input, select { height: 44px; padding: 0 12px; }
+    textarea { min-height: 138px; padding: 13px 14px; resize: vertical; line-height: 1.45; }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: rgba(49, 87, 213, .55);
+      box-shadow: 0 0 0 4px rgba(49, 87, 213, .12);
+      background: #fff;
+    }
+
+    .checks { display: grid; gap: 8px; margin: 4px 0 14px; }
+    .check { display: flex; align-items: center; gap: 9px; color: #465166; font-size: 13px; font-weight: 700; }
+    .check input { width: 18px; height: 18px; accent-color: var(--accent); }
+
+    .actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
+
+    .btn {
+      height: 46px;
+      border-radius: 15px;
+      font-weight: 900;
+      color: #fff;
+      background: var(--ink);
+      box-shadow: 0 12px 28px rgba(23, 32, 51, .18);
+    }
+
+    .btn.primary { background: linear-gradient(135deg, var(--accent), #23bd8d); }
+    .btn.blue { background: linear-gradient(135deg, var(--accent-2), #6e7ee8); }
+    .btn.light { color: var(--ink); background: #eef2f7; box-shadow: none; }
+    .btn.danger { color: var(--danger); background: #fff2f2; box-shadow: none; }
+
+    .branch-help {
+      margin: -2px 0 14px;
+      padding: 12px;
+      border: 1px solid rgba(49, 87, 213, .16);
+      border-radius: 15px;
+      background: rgba(49, 87, 213, .07);
+      color: #465166;
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 1.45;
+    }
+
+    .preview-wrap { min-height: 0; display: grid; place-items: center; padding: 8px; }
+
+    .phone {
+      width: min(100%, 430px);
+      height: min(100%, 900px);
+      min-height: 720px;
+      border-radius: 38px;
+      background: #0b101b;
+      padding: 12px;
+      box-shadow: 0 34px 90px rgba(10, 16, 27, .34);
+    }
+
+    .screen {
+      position: relative;
+      height: 100%;
+      overflow: hidden;
+      border-radius: 30px;
+      background: #eef3fb;
+    }
+
+    .status {
+      height: 34px;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      padding: 0 24px;
+      color: rgba(255, 255, 255, .93);
+      font-size: 13px;
+      font-weight: 800;
+      background: var(--phone-top);
+    }
+
+    .status .right { justify-self: end; display: flex; gap: 8px; align-items: center; }
+
+    .chat-top {
+      height: 116px;
+      display: grid;
+      grid-template-columns: 52px 58px 1fr;
+      gap: 12px;
+      align-items: center;
+      padding: 12px 24px 22px;
+      background: var(--phone-top);
+      color: #fff;
+      box-shadow: 0 10px 30px rgba(77, 88, 115, .22);
+    }
+
+    .back {
+      width: 45px;
+      height: 45px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, .12);
+      font-size: 34px;
+      line-height: 1;
+    }
+
+    .chat-avatar {
+      width: 58px;
+      height: 58px;
+      border-radius: 50%;
+      border: 3px solid rgba(255, 255, 255, .78);
+      object-fit: cover;
+      background: #c7cfdd;
+    }
+
+    .chat-title { min-width: 0; }
+    .chat-title strong {
+      display: block;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-size: 28px;
+      line-height: 1.05;
+      font-weight: 900;
+    }
+    .chat-title span { display: block; margin-top: 4px; color: rgba(255,255,255,.78); font-size: 15px; font-weight: 800; }
+
+    .messages { height: calc(100% - 222px); overflow: auto; padding: 18px 16px 20px; scroll-behavior: smooth; }
+
+    .row { display: grid; grid-template-columns: 34px minmax(0, 1fr); gap: 10px; align-items: end; margin: 0 0 11px; }
+    .row.out { grid-template-columns: minmax(0, 1fr) 34px; }
+    .row.out .mini-avatar { grid-column: 2; }
+    .row.out .bubble {
+      grid-column: 1;
+      justify-self: end;
+      background: #fff;
+      color: var(--ink);
+      box-shadow: 0 12px 24px rgba(27, 36, 56, .09);
+      border-radius: 15px 15px 5px 15px;
+    }
+
+    .mini-avatar {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      border: 2px solid #fff;
+      object-fit: cover;
+      background: #d7deea;
+      box-shadow: 0 6px 14px rgba(24, 34, 52, .17);
+    }
+
+    .bubble {
+      width: fit-content;
+      max-width: min(300px, 84%);
+      padding: 11px 14px 9px;
+      border-radius: 15px 15px 15px 5px;
+      color: #fff;
+      background: var(--bubble);
+      box-shadow: 0 13px 25px rgba(88, 101, 128, .22);
+      word-break: break-word;
+    }
+
+    .speaker-name { margin: 0 0 4px; font-size: 12px; font-weight: 900; line-height: 1; }
+    .bubble-text { white-space: pre-wrap; font-size: 15px; line-height: 1.35; font-weight: 800; letter-spacing: 0; }
+    .time { margin-top: 5px; color: rgba(255,255,255,.72); text-align: right; font-size: 11px; font-weight: 700; }
+    .row.out .time { color: #99a2b4; }
+
+    .system-line, .branch-line {
+      margin: 14px auto;
+      width: fit-content;
+      max-width: 86%;
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, .78);
+      color: #8b95a7;
+      font-size: 12px;
+      font-weight: 800;
+      text-align: center;
+    }
+
+    .branch-line { background: rgba(49, 87, 213, .1); color: #3157d5; }
+
+    .choice-panel {
+      margin: 16px -16px 12px;
+      padding: 17px 18px 18px;
+      background: rgba(255,255,255,.96);
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .choice-title {
+      margin: 0 0 12px;
+      color: #a4a9b4;
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: .14em;
+      text-align: center;
+      text-transform: uppercase;
+    }
+
+    .choice {
+      width: 100%;
+      margin-top: 9px;
+      padding: 15px 17px;
+      border: 1px solid var(--line);
+      border-radius: 17px;
+      background: #f5f7fb;
+      color: var(--ink);
+      font-size: 15px;
+      font-weight: 900;
+      line-height: 1.3;
+      text-align: left;
+    }
+
+    .choice.active {
+      border-color: rgba(49, 87, 213, .55);
+      background: #e9eefc;
+      box-shadow: inset 4px 0 0 var(--accent-2);
+    }
+
+    .notes-card {
+      margin: 14px auto;
+      max-width: 92%;
+      padding: 18px;
+      border-radius: 22px;
+      background: #fffef8;
+      box-shadow: 0 16px 34px rgba(49, 54, 70, .14);
+      border: 1px solid #efe7c8;
+    }
+
+    .notes-title {
+      margin: 0 0 13px;
+      color: #a87320;
+      font-size: 13px;
+      font-weight: 900;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .notes-text {
+      white-space: pre-wrap;
+      color: #293244;
+      font-size: 14px;
+      font-weight: 700;
+      line-height: 1.55;
+    }
+
+    .composer {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 72px;
+      display: grid;
+      grid-template-columns: 32px 1fr 46px;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 18px 14px;
+      background: rgba(255,255,255,.98);
+      border-top: 1px solid var(--line);
+    }
+
+    .paperclip { color: #8692a6; font-size: 25px; font-weight: 800; transform: rotate(-12deg); }
+    .fake-input { height: 46px; display: flex; align-items: center; padding: 0 18px; border-radius: 999px; background: #f0f2f6; color: #9aa3b4; font-size: 17px; font-weight: 500; }
+    .send { width: 0; height: 0; border-style: solid; border-width: 15px 0 15px 31px; border-color: transparent transparent transparent #1d2b55; background: transparent; filter: drop-shadow(0 5px 8px rgba(29,43,85,.2)); }
+
+    .export-tabs { display: flex; gap: 8px; padding: 14px 18px 0; }
+    .tab { height: 36px; padding: 0 13px; border-radius: 999px; color: #596477; background: #edf1f7; font-size: 13px; font-weight: 900; }
+    .tab.active { color: #fff; background: var(--ink); }
+
+    .export-box {
+      flex: 1;
+      min-height: 0;
+      margin: 14px 18px 18px;
+      padding: 14px;
+      border: 1px solid #1f2937;
+      border-radius: 16px;
+      background: #101827;
+      color: #d7e0ee;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 12px;
+      line-height: 1.55;
+      resize: none;
+    }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 22px;
+      transform: translateX(-50%) translateY(18px);
+      opacity: 0;
+      pointer-events: none;
+      padding: 12px 16px;
+      border-radius: 999px;
+      background: rgba(16,24,39,.94);
+      color: #fff;
+      font-size: 13px;
+      font-weight: 800;
+      transition: opacity .18s ease, transform .18s ease;
+      box-shadow: 0 18px 36px rgba(16,24,39,.22);
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    @media (max-width: 1180px) {
+      body { overflow: auto; }
+      .app { height: auto; min-height: 100vh; grid-template-columns: 1fr; }
+      .phone { height: 820px; min-height: 720px; }
+      .exporter { min-height: 520px; }
+    }
+
+    @media (max-width: 520px) {
+      .app { padding: 10px; gap: 12px; }
+      .panel { border-radius: 18px; }
+      .panel-head { padding: 18px; }
+      h1 { font-size: 25px; }
+      .grid-2, .actions { grid-template-columns: 1fr; }
+      .phone { width: 100%; height: 760px; min-height: 760px; border-radius: 0; padding: 0; }
+      .screen { border-radius: 0; }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <section class="panel editor">
+      <div class="panel-head">
+        <p class="eyebrow">HARPER</p>
+        <h1>Лаборатория диалогов</h1>
+        <p class="sub">Черновик отдельно от игры. Пиши реплики, проверяй ритм в телефоне и собирай ветки без ручной путаницы.</p>
+      </div>
+
+      <div class="form">
+        <div class="grid-2">
+          <div class="field">
+            <label for="speaker">Кто пишет</label>
+            <select id="speaker"></select>
+          </div>
+          <div class="field">
+            <label for="kind">Тип</label>
+            <select id="kind">
+              <option value="message">Сообщение</option>
+              <option value="choice">Выбор игрока</option>
+              <option value="system">Системная строка</option>
+              <option value="note">Текст без автора</option>
+              <option value="notes">Заметки</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="field">
+            <label for="branch">Куда добавить</label>
+            <select id="branch">
+              <option value="common">Общая линия</option>
+              <option value="1">Ветка 1</option>
+              <option value="2">Ветка 2</option>
+              <option value="3">Ветка 3</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="previewBranch">Показать путь</label>
+            <select id="previewBranch">
+              <option value="1">Путь 1</option>
+              <option value="2">Путь 2</option>
+              <option value="3">Путь 3</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="branch-help">После выбора ставь реакцию на первый ответ в “Ветка 1”, на второй в “Ветка 2”. Когда развилка закончилась, снова выбирай “Общая линия”.</div>
+
+        <div class="grid-2">
+          <div class="field">
+            <label for="chatTitle">Название чата</label>
+            <input id="chatTitle" value="Семеро">
+          </div>
+          <div class="field">
+            <label for="chatSubtitle">Подпись</label>
+            <input id="chatSubtitle" value="6 участников">
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="text">Реплика / текст события</label>
+          <textarea id="text" placeholder="Например:
+Что происходит?
+Кто добавил меня сюда?"></textarea>
+        </div>
+
+        <div class="checks">
+          <label class="check"><input id="splitLines" type="checkbox"> каждая строка отдельным пузырём</label>
+          <label class="check"><input id="showNames" type="checkbox" checked> показывать имена в групповом чате</label>
+        </div>
+
+        <div class="grid-2">
+          <div class="field">
+            <label for="minutes">Время сцены</label>
+            <input id="minutes" value="20:17">
+          </div>
+          <div class="field">
+            <label for="delay">Delay для экспорта</label>
+            <input id="delay" type="number" min="0" step="100" value="900">
+          </div>
+        </div>
+
+        <div class="actions">
+          <button class="btn primary" id="add">Добавить</button>
+          <button class="btn blue" id="addTyping">Печатает...</button>
+          <button class="btn light" id="undo">Убрать последнее</button>
+          <button class="btn danger" id="clear">Очистить сцену</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="preview-wrap">
+      <div class="phone" aria-label="Превью телефона">
+        <div class="screen">
+          <div class="status">
+            <div>⌁ ▯ 87%</div>
+            <div id="statusTime">20:17</div>
+            <div class="right">●</div>
+          </div>
+
+          <header class="chat-top">
+            <div class="back">‹</div>
+            <img class="chat-avatar" id="chatAvatar" alt="" src="../src/assets/avatars/avatar_harper_live.png">
+            <div class="chat-title">
+              <strong id="previewTitle">Семеро</strong>
+              <span id="previewSubtitle">6 участников</span>
+            </div>
+          </header>
+
+          <div class="messages" id="messages"></div>
+
+          <div class="composer">
+            <div class="paperclip">⌇</div>
+            <div class="fake-input">Сообщение</div>
+            <div class="send" aria-hidden="true"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel exporter">
+      <div class="panel-head">
+        <h2>Экспорт</h2>
+        <p class="sub">В JSON теперь сохраняется поле branch. Общая линия видна всегда, ветки видны только для выбранного пути.</p>
+      </div>
+      <div class="export-tabs">
+        <button class="tab active" data-export="json">JSON</button>
+        <button class="tab" data-export="script">Сценарий</button>
+      </div>
+      <textarea class="export-box" id="exportBox" readonly></textarea>
+      <div class="actions" style="padding: 0 18px 18px; margin: 0;">
+        <button class="btn light" id="copyExport">Скопировать</button>
+        <button class="btn light" id="downloadExport">Скачать JSON</button>
+      </div>
+    </section>
+  </main>
+
+  <div class="toast" id="toast">Готово</div>
+
+  <script>
+    const STORAGE_KEY = "harper_dialogue_lab_v2";
+
+    const speakers = {
+      player: { id: "player", name: "Игрок", short: "ГГ", color: "#3157d5", side: "out", avatar: "../src/assets/icons/lucide/user-round.svg" },
+      unknown: { id: "unknown", name: "Неизвестный", short: "Unknown", color: "#111827", avatar: "../src/assets/avatars/avatar_harper_live.png" },
+      derek: { id: "derek", name: "Дерек Миллер", short: "Дерек", color: "#4ea3ff", avatar: "../src/assets/avatars/avatar_derek_live.png" },
+      mia: { id: "mia", name: "Миа Картер", short: "Миа", color: "#39d879", avatar: "../src/assets/avatars/avatar_mia_live.png" },
+      olivia: { id: "olivia", name: "Оливия Грант", short: "Оливия", color: "#b271ff", avatar: "../src/assets/avatars/avatar_olivia_live.png" },
+      brooke: { id: "brooke", name: "Брук Хейз", short: "Брук", color: "#8b98aa", avatar: "../src/assets/avatars/avatar_brooke_live.png" },
+      mason: { id: "mason", name: "Мейсон Коул", short: "Мейсон", color: "#ff6f7e", avatar: "../src/assets/avatars/avatar_mason_live.png" },
+      tyler: { id: "tyler", name: "Тайлер Росс", short: "Тайлер", color: "#4fd7cc", avatar: "../src/assets/avatars/avatar_tyler_live.png" },
+      harper: { id: "harper", name: "Харпер Вэнс", short: "Харпер", color: "#f5a541", avatar: "../src/assets/avatars/avatar_harper_live.png" }
+    };
+
+    const noteDraft = `Харпер Вэнс пропала два дня назад.
+
+Её парень Дерек сказал, что сегодня она отправила ему только одно сообщение — мой номер.
+
+Последней Харпер видела её подруга. Они сидели в кафе, когда Харпер кто-то позвонил. После звонка она сказала, что ей нужно срочно с кем-то встретиться, и ушла.
+
+С тех пор её никто не видел.
+
+Дерек уверен, что она не могла просто сбежать.`;
+
+    const defaults = {
+      chatTitle: "Семеро",
+      chatSubtitle: "6 участников",
+      minutes: "20:17",
+      showNames: true,
+      previewBranch: "1",
+      exportMode: "json",
+      messages: [
+        { kind: "system", text: "Дерек создал чат", time: "20:17", branch: "common" },
+        { kind: "message", from: "derek", text: "Привет", time: "20:17", delay: 700, branch: "common" },
+        { kind: "message", from: "derek", text: "Ты не знаешь Харпер Вэнс?", time: "20:17", delay: 900, branch: "common" },
+        { kind: "choice", options: ["Привет. Понятия не имею, кто это.", "Откуда у тебя мой номер?"], time: "20:17", delay: 900, branch: "common" },
+        { kind: "message", from: "player", text: "Привет. Понятия не имею, кто это.", time: "20:17", delay: 900, branch: "1" },
+        { kind: "message", from: "player", text: "Откуда у тебя мой номер?", time: "20:17", delay: 900, branch: "2" },
+        { kind: "message", from: "derek", text: "Я её парень. Она пропала два дня назад.", time: "20:17", delay: 900, branch: "common" }
+      ]
+    };
+
+    let state = loadState();
+
+    const el = {
+      speaker: document.getElementById("speaker"),
+      kind: document.getElementById("kind"),
+      branch: document.getElementById("branch"),
+      previewBranch: document.getElementById("previewBranch"),
+      chatTitle: document.getElementById("chatTitle"),
+      chatSubtitle: document.getElementById("chatSubtitle"),
+      text: document.getElementById("text"),
+      splitLines: document.getElementById("splitLines"),
+      showNames: document.getElementById("showNames"),
+      minutes: document.getElementById("minutes"),
+      delay: document.getElementById("delay"),
+      add: document.getElementById("add"),
+      addTyping: document.getElementById("addTyping"),
+      undo: document.getElementById("undo"),
+      clear: document.getElementById("clear"),
+      messages: document.getElementById("messages"),
+      previewTitle: document.getElementById("previewTitle"),
+      previewSubtitle: document.getElementById("previewSubtitle"),
+      statusTime: document.getElementById("statusTime"),
+      exportBox: document.getElementById("exportBox"),
+      copyExport: document.getElementById("copyExport"),
+      downloadExport: document.getElementById("downloadExport"),
+      toast: document.getElementById("toast")
+    };
+
+    init();
+
+    function init() {
+      Object.values(speakers).forEach((speaker) => {
+        const option = document.createElement("option");
+        option.value = speaker.id;
+        option.textContent = speaker.name;
+        el.speaker.appendChild(option);
+      });
+
+      el.chatTitle.value = state.chatTitle;
+      el.chatSubtitle.value = state.chatSubtitle;
+      el.minutes.value = state.minutes;
+      el.showNames.checked = state.showNames;
+      el.previewBranch.value = state.previewBranch || "1";
+
+      el.kind.addEventListener("change", () => {
+        if (el.kind.value === "notes" && !el.text.value.trim()) el.text.value = noteDraft;
+      });
+      el.add.addEventListener("click", addFromForm);
+      el.addTyping.addEventListener("click", addTyping);
+      el.undo.addEventListener("click", undo);
+      el.clear.addEventListener("click", clearScene);
+      el.copyExport.addEventListener("click", copyExport);
+      el.downloadExport.addEventListener("click", downloadExport);
+      el.chatTitle.addEventListener("input", syncMeta);
+      el.chatSubtitle.addEventListener("input", syncMeta);
+      el.minutes.addEventListener("input", syncMeta);
+      el.showNames.addEventListener("change", syncMeta);
+      el.previewBranch.addEventListener("change", syncMeta);
+
+      document.querySelectorAll("[data-export]").forEach((button) => {
+        button.addEventListener("click", () => {
+          state.exportMode = button.dataset.export;
+          document.querySelectorAll("[data-export]").forEach((b) => b.classList.toggle("active", b === button));
+          persist();
+          render();
+        });
+      });
+
+      render();
+    }
+
+    function loadState() {
+      try {
+        const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
+        return saved && Array.isArray(saved.messages) ? { ...defaults, ...saved } : structuredClone(defaults);
+      } catch {
+        return structuredClone(defaults);
+      }
+    }
+
+    function persist() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    }
+
+    function currentBranch() {
+      return el.branch.value || "common";
+    }
+
+    function branchLabel(branch) {
+      if (!branch || branch === "common") return "общая линия";
+      return `ветка ${branch}`;
+    }
+
+    function isVisibleInPreview(message) {
+      const branch = message.branch || "common";
+      return branch === "common" || branch === state.previewBranch;
+    }
+
+    function syncMeta() {
+      state.chatTitle = el.chatTitle.value.trim() || "Без названия";
+      state.chatSubtitle = el.chatSubtitle.value.trim();
+      state.minutes = el.minutes.value.trim() || "20:17";
+      state.showNames = el.showNames.checked;
+      state.previewBranch = el.previewBranch.value || "1";
+      persist();
+      render();
+    }
+
+    function addFromForm() {
+      syncMeta();
+      const text = el.text.value.trim();
+      if (!text) {
+        toast("Сначала напиши текст");
+        return;
+      }
+
+      const kind = el.kind.value;
+      const from = el.speaker.value;
+      const delay = Number(el.delay.value || 0);
+      const branch = currentBranch();
+
+      if (kind === "choice") {
+        const options = text.split(/\n+/).map((line) => line.trim()).filter(Boolean);
+        state.messages.push({ kind: "choice", options, time: state.minutes, delay, branch: "common" });
+      } else if (kind === "notes") {
+        state.messages.push({ kind: "notes", text, time: state.minutes, delay, branch });
+      } else {
+        const pieces = el.splitLines.checked && kind !== "note"
+          ? text.split(/\n+/).map((line) => line.trim()).filter(Boolean)
+          : [text];
+        pieces.forEach((line) => {
+          state.messages.push({ kind, from, text: line, time: state.minutes, delay, branch });
+        });
+      }
+
+      el.text.value = "";
+      persist();
+      render(true);
+    }
+
+    function addTyping() {
+      syncMeta();
+      state.messages.push({ kind: "typing", from: el.speaker.value, time: state.minutes, delay: Number(el.delay.value || 0), branch: currentBranch() });
+      persist();
+      render(true);
+    }
+
+    function undo() {
+      state.messages.pop();
+      persist();
+      render(true);
+    }
+
+    function clearScene() {
+      if (!confirm("Очистить текущую сцену?")) return;
+      state.messages = [];
+      persist();
+      render();
+    }
+
+    async function copyExport() {
+      await navigator.clipboard.writeText(el.exportBox.value);
+      toast("Экспорт скопирован");
+    }
+
+    function downloadExport() {
+      const blob = new Blob([el.exportBox.value], { type: "application/json;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "harper-dialogue-scene.json";
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function render(scrollToEnd = false) {
+      el.previewTitle.textContent = state.chatTitle;
+      el.previewSubtitle.textContent = state.chatSubtitle;
+      el.statusTime.textContent = state.minutes;
+      el.messages.innerHTML = "";
+
+      state.messages.forEach((message) => {
+        if (!isVisibleInPreview(message)) return;
+
+        if (message.branch && message.branch !== "common") {
+          const prev = el.messages.lastElementChild;
+          if (!prev || prev.dataset.branchMarker !== message.branch) {
+            const marker = document.createElement("div");
+            marker.className = "branch-line";
+            marker.dataset.branchMarker = message.branch;
+            marker.textContent = `Показан путь ${message.branch}`;
+            el.messages.appendChild(marker);
+          }
+        }
+
+        if (message.kind === "system" || message.kind === "note") {
+          el.messages.appendChild(renderSystem(message));
+          return;
+        }
+
+        if (message.kind === "notes") {
+          el.messages.appendChild(renderNotes(message));
+          return;
+        }
+
+        if (message.kind === "choice") {
+          el.messages.appendChild(renderChoices(message));
+          return;
+        }
+
+        el.messages.appendChild(renderBubble(message));
+      });
+
+      renderExport();
+      if (scrollToEnd) requestAnimationFrame(() => { el.messages.scrollTop = el.messages.scrollHeight; });
+    }
+
+    function renderSystem(message) {
+      const div = document.createElement("div");
+      div.className = "system-line";
+      div.textContent = message.text;
+      return div;
+    }
+
+    function renderNotes(message) {
+      const wrap = document.createElement("div");
+      wrap.className = "notes-card";
+      const title = document.createElement("p");
+      title.className = "notes-title";
+      title.textContent = "Заметки";
+      const text = document.createElement("div");
+      text.className = "notes-text";
+      text.textContent = message.text || "";
+      wrap.appendChild(title);
+      wrap.appendChild(text);
+      return wrap;
+    }
+
+    function renderChoices(message) {
+      const panel = document.createElement("div");
+      panel.className = "choice-panel";
+      const title = document.createElement("p");
+      title.className = "choice-title";
+      title.textContent = "Выберите ответ";
+      panel.appendChild(title);
+
+      (message.options || []).forEach((option, index) => {
+        const path = String(index + 1);
+        const button = document.createElement("button");
+        button.className = `choice ${state.previewBranch === path ? "active" : ""}`;
+        button.textContent = option;
+        button.addEventListener("click", () => {
+          state.previewBranch = path;
+          el.previewBranch.value = path;
+          persist();
+          render(true);
+        });
+        panel.appendChild(button);
+      });
+
+      return panel;
+    }
+
+    function renderBubble(message) {
+      const speaker = speakers[message.from] || speakers.unknown;
+      const row = document.createElement("div");
+      row.className = `row ${speaker.side === "out" ? "out" : ""}`;
+
+      const avatar = document.createElement("img");
+      avatar.className = "mini-avatar";
+      avatar.alt = "";
+      avatar.src = speaker.avatar;
+
+      const bubble = document.createElement("div");
+      bubble.className = "bubble";
+
+      if (message.kind === "typing") {
+        const text = document.createElement("div");
+        text.className = "bubble-text";
+        text.textContent = "...";
+        bubble.appendChild(text);
+      } else {
+        if (state.showNames && speaker.side !== "out") {
+          const name = document.createElement("div");
+          name.className = "speaker-name";
+          name.style.color = speaker.color;
+          name.textContent = speaker.short;
+          bubble.appendChild(name);
+        }
+
+        const text = document.createElement("div");
+        text.className = "bubble-text";
+        text.textContent = message.text || "";
+        bubble.appendChild(text);
+      }
+
+      const time = document.createElement("div");
+      time.className = "time";
+      time.textContent = message.time || state.minutes;
+      bubble.appendChild(time);
+
+      if (speaker.side === "out") {
+        row.appendChild(bubble);
+        row.appendChild(avatar);
+      } else {
+        row.appendChild(avatar);
+        row.appendChild(bubble);
+      }
+
+      return row;
+    }
+
+    function renderExport() {
+      if ((state.exportMode || "json") === "script") {
+        el.exportBox.value = state.messages.map((message) => {
+          const branch = `[${branchLabel(message.branch)}] `;
+          if (message.kind === "choice") {
+            return `${branch}ВЫБОР:\n` + (message.options || []).map((o, i) => `${i + 1}. ${o}`).join("\n");
+          }
+          if (message.kind === "system" || message.kind === "note") return `${branch}[${message.text}]`;
+          if (message.kind === "notes") return `${branch}[ЗАМЕТКИ]\n${message.text}`;
+          if (message.kind === "typing") return `${branch}${speakerName(message.from)} печатает...`;
+          return `${branch}${speakerName(message.from)}: ${message.text}`;
+        }).join("\n\n");
+        return;
+      }
+
+      const payload = {
+        title: state.chatTitle,
+        subtitle: state.chatSubtitle,
+        time: state.minutes,
+        previewBranch: state.previewBranch,
+        messages: state.messages.map((message) => {
+          const base = { branch: message.branch || "common", delay: message.delay || 0 };
+          if (message.kind === "choice") return { type: "choice", options: (message.options || []).map((text) => ({ text })), ...base };
+          if (message.kind === "system" || message.kind === "note") return { type: message.kind, text: message.text, ...base };
+          if (message.kind === "notes") return { type: "notes_auto", text: message.text, ...base };
+          if (message.kind === "typing") return { type: "typing", from: message.from, ...base };
+          return { type: "message", from: message.from, text: message.text, time: message.time, ...base };
+        })
+      };
+
+      el.exportBox.value = JSON.stringify(payload, null, 2);
+    }
+
+    function speakerName(id) {
+      return speakers[id]?.name || id || "Unknown";
+    }
+
+    function toast(text) {
+      el.toast.textContent = text;
+      el.toast.classList.add("show");
+      clearTimeout(toast.timer);
+      toast.timer = setTimeout(() => el.toast.classList.remove("show"), 1600);
+    }
+  </script>
+</body>
+</html>
