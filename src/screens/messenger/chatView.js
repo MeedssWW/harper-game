@@ -316,16 +316,33 @@ export class ChatView {
     showChoices(options, onChoose) {
         this.removeChoices();
 
-        if (this.inputAreaEl) this.inputAreaEl.style.display = 'none';
+        if (this.inputAreaEl) {
+            this.inputAreaEl.style.removeProperty('display');
+            this.inputAreaEl.classList.remove('chat-input-area--choices');
+            const inputHeight = Math.ceil(
+                this.inputAreaEl.getBoundingClientRect().height
+                || this.inputAreaEl.scrollHeight
+                || 88
+            );
+            this.inputAreaEl.style.setProperty('--chat-input-height', `${inputHeight}px`);
+        }
 
         const panel = document.createElement('div');
-        panel.className = 'choice-panel';
+        panel.className = 'choice-panel choice-panel-enter';
         panel.id = 'choice-panel';
+        panel.setAttribute('role', 'group');
+        panel.setAttribute('aria-label', 'Варианты ответа');
+
+        const panelHeight = Math.min(
+            Math.round((this.container.clientHeight || 820) * 0.52),
+            430
+        );
+        panel.style.setProperty('--choice-panel-open-height', `${panelHeight}px`);
 
         let html = '<div class="choice-label">Выберите ответ</div>';
         options.forEach((opt, i) => {
             const choiceText = (opt.text || '').replace(/\{player\}/g, stateManager.getPlayerName());
-            html += `<button class="choice-btn" data-index="${i}">${this._escapeHtml(choiceText)}</button>`;
+            html += `<button class="choice-btn" data-index="${i}" style="--choice-index:${i}">${this._escapeHtml(choiceText)}</button>`;
         });
         panel.innerHTML = html;
 
@@ -349,6 +366,18 @@ export class ChatView {
 
         this.choicePanelEl = panel;
         this.container.appendChild(panel);
+
+        requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+                if (this.choicePanelEl !== panel) return;
+                this.inputAreaEl?.classList.add('chat-input-area--choices');
+                panel.classList.add('is-visible');
+                this._scrollToBottom(true);
+            });
+        });
+        setTimeout(() => {
+            if (this.choicePanelEl === panel) this._scrollToBottom(true);
+        }, 560);
     }
 
     removeChoices() {
@@ -356,7 +385,11 @@ export class ChatView {
             this.choicePanelEl.parentNode.removeChild(this.choicePanelEl);
             this.choicePanelEl = null;
         }
-        if (this.inputAreaEl) this.inputAreaEl.style.display = 'flex';
+        if (this.inputAreaEl) {
+            this.inputAreaEl.style.removeProperty('display');
+            this.inputAreaEl.classList.remove('chat-input-area--choices');
+            this.inputAreaEl.style.removeProperty('--chat-input-height');
+        }
     }
 
     _renderMessage(message, animate) {

@@ -10496,6 +10496,114 @@ body.harper-booting #notification-toast {
 .chat-input-mic::before {
     content: none !important;
 }
+
+/* Dialogue choices unfold with the composer instead of snapping into place. */
+.chat-input-area {
+    max-height: var(--chat-input-height, 120px);
+    overflow: hidden;
+    transition:
+        max-height .46s cubic-bezier(.18,.82,.2,1),
+        min-height .46s cubic-bezier(.18,.82,.2,1),
+        padding-top .46s cubic-bezier(.18,.82,.2,1),
+        padding-bottom .46s cubic-bezier(.18,.82,.2,1),
+        opacity .24s ease,
+        transform .46s cubic-bezier(.18,.82,.2,1),
+        border-color .24s ease;
+}
+
+.chat-input-area.chat-input-area--choices {
+    min-height: 0;
+    max-height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    opacity: 0;
+    border-top-color: transparent;
+    transform: translateY(10px);
+    pointer-events: none;
+}
+
+.choice-panel.choice-panel-enter {
+    max-height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    opacity: 0;
+    overflow: hidden;
+    border-top-color: transparent;
+    transform: translateY(18px);
+    pointer-events: none;
+    animation: none;
+    transition:
+        max-height .56s cubic-bezier(.18,.82,.2,1),
+        padding-top .56s cubic-bezier(.18,.82,.2,1),
+        padding-bottom .56s cubic-bezier(.18,.82,.2,1),
+        opacity .28s ease,
+        transform .56s cubic-bezier(.18,.82,.2,1),
+        border-color .28s ease;
+}
+
+.choice-panel.choice-panel-enter.is-visible {
+    max-height: var(--choice-panel-open-height, 430px);
+    padding-top: 10px;
+    padding-bottom: calc(12px + env(safe-area-inset-bottom));
+    opacity: 1;
+    overflow-y: auto;
+    border-top-color: rgba(255,255,255,.08);
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+.choice-panel-enter .choice-label,
+.choice-panel-enter .choice-btn {
+    opacity: 0;
+    transform: translateY(12px) scale(.985);
+}
+
+.choice-panel-enter.is-visible .choice-label,
+.choice-panel-enter.is-visible .choice-btn {
+    animation: choiceItemReveal .4s cubic-bezier(.18,.82,.2,1) forwards;
+}
+
+.choice-panel-enter.is-visible .choice-label {
+    animation-delay: .1s;
+}
+
+.choice-panel-enter.is-visible .choice-btn {
+    animation-delay: calc(.15s + (var(--choice-index, 0) * .07s));
+}
+
+@keyframes choiceItemReveal {
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .chat-input-area {
+        transition: none;
+    }
+
+    .choice-panel.choice-panel-enter,
+    .choice-panel.choice-panel-enter.is-visible {
+        max-height: var(--choice-panel-open-height, 430px);
+        padding-top: 10px;
+        padding-bottom: calc(12px + env(safe-area-inset-bottom));
+        opacity: 1;
+        overflow-y: auto;
+        border-top-color: rgba(255,255,255,.08);
+        transform: none;
+        transition: none;
+    }
+
+    .choice-panel-enter .choice-label,
+    .choice-panel-enter .choice-btn,
+    .choice-panel-enter.is-visible .choice-label,
+    .choice-panel-enter.is-visible .choice-btn {
+        opacity: 1;
+        transform: none;
+        animation: none;
+    }
+}
 #screen-container > .settings-screen .settings-screen-shell,
 #screen-container > .browser-screen .invest-app,
 #screen-container > .caseIntroTask-screen .case-task-screen {

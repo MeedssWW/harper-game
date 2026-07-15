@@ -10,7 +10,7 @@ import { renderBootScreen } from './src/screens/bootScreen.js?v=123';
 import { renderNameScreen } from './src/screens/nameScreen.js';
 import { renderHomeScreen } from './src/screens/homeScreen.js?v=115';
 import { CHATS, renderChatList } from './src/screens/messenger/chatList.js?v=123';
-import { ChatView } from './src/screens/messenger/chatView.js?v=123';
+import { ChatView } from './src/screens/messenger/chatView.js?v=124';
 import { renderTransitionScreen } from './src/screens/transitionScreen.js?v=70';
 import { renderContactList, renderContactProfile } from './src/screens/contacts/contacts.js?v=123';
 import { renderGallery } from './src/screens/gallery/gallery.js';
