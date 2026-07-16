@@ -78,6 +78,15 @@ export function renderBrowser({ onBack }) {
     };
 
     const renderRavenFeed = () => {
+        stateManager.setFlag('ravenFeedUnlocked', true);
+        results.innerHTML = `
+            <section class="browser-start">
+                <div class="browser-start-logo">R</div>
+                <h3>RavenFeed уже добавлен на главный экран</h3>
+                <p>Городская лента открывается отдельным приложением.</p>
+            </section>
+        `;
+        return;
         const flags = stateManager.get('flags') || {};
         const playerPhoto = flags.playerHackPhoto || flags.playerFrontCameraPhoto || '';
         const playerPhoneNumber = flags.playerPhoneNumber || '+1 (503) 555-0172';
@@ -131,11 +140,6 @@ export function renderBrowser({ onBack }) {
     input.addEventListener('keydown', (event) => {
         if (event.key === 'Enter') runSearch(input.value);
     });
-
-    if (stateManager.hasFlag('act1ViralPost') && !stateManager.hasFlag('ravenwatchPostPublished')) {
-        input.value = 'ravenfeed';
-        renderRavenFeed();
-    }
 
     fragment.appendChild(wrapper);
     return fragment;

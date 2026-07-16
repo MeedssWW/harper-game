@@ -1,6 +1,6 @@
 import { miaLateSceneBeats } from './miaLateScene.js?v=126';
 import { chapter1FinaleRewriteBeats as chapter1FinaleBeats } from './chapter1FinaleRewrite.js?v=126';
-import { introRewriteBeats } from './introRewrite.js?v=126';
+import { introRewriteBeats } from './introRewrite.js?v=127';
 import { oliviaIntroFinalBeats } from './oliviaIntroFinal.js?v=126';
 import { miaIntroRewriteBeats } from './miaIntroRewrite.js?v=126';
 import { derekMorningRewriteBeats } from './derekMorningRewrite.js?v=126';
@@ -10,6 +10,7 @@ import { backupFoundRewriteBeats } from './backupFoundRewrite.js?v=126';
 import { postLeakRewriteBeats } from './postLeakRewrite.js?v=126';
 import { naturalizeDialogueBeats } from './dialogueNaturalization.js?v=1';
 import { authorDialogueBeats } from './dialogueAuthorPass.js?v=2';
+import { episode1LivingRewriteBeats } from './episode1LivingRewrite.js?v=2';
 
 const legacyChapter1 = {
   id: "act1",
@@ -3277,20 +3278,11 @@ const firstMiaLateBeat = legacyChapter1.beats.findIndex(beat => beat.id === 'mia
 
 const activeChapter1Beats = [
   ...introRewriteBeats,
-  ...oliviaIntroFinalBeats,
-  ...miaIntroRewriteBeats,
-  ...legacyChapter1.beats.slice(firstPostMiaBeat, firstLegacyDerekMorningBeat),
-  ...derekMorningRewriteBeats,
-  ...oliviaMorningRewriteBeats,
-  ...postOliviaRoutesRewriteBeats,
-  ...backupFoundRewriteBeats,
-  ...legacyChapter1.beats.slice(firstUnknownAfterHackBeat, firstDerekAfterBrookeBeat),
-  ...postLeakRewriteBeats,
-  ...legacyChapter1.beats.slice(firstMiaLateBeat)
+  ...episode1LivingRewriteBeats
 ];
 
 export const chapter1 = {
   ...legacyChapter1,
-  title: "Акт 1: Номер Харпер",
+  title: "Эпизод 1: Незнакомый номер",
   beats: authorDialogueBeats(naturalizeDialogueBeats(activeChapter1Beats))
 };

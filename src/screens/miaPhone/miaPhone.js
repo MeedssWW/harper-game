@@ -31,7 +31,7 @@ const DEVICE_CHATS = [
     {
         id: 'harper',
         title: 'Харпер',
-        meta: 'День встречи у старого моста',
+        meta: 'День, когда Харпер брала телефон',
         messages: [
             ['Миа', 'Ты уже там?'],
             ['Харпер', 'Да.'],
@@ -76,7 +76,7 @@ function renderDeviceList(wrapper, onDone) {
             </div>
             <div class="mia-device-status">
                 <strong>только просмотр</strong>
-                <span id="remote-status">За два дня до исчезновения Харпер</span>
+                <span id="remote-status">Копия сделана после того дня</span>
             </div>
         </header>
         <main class="mia-device-body">
@@ -252,12 +252,12 @@ async function runTakeover(wrapper, onDone) {
     await wait(700);
 
     await showHijackHome(wrapper);
-    await showHijackChat(wrapper, 'Larks', [
-        ['Оливия', 'Я отправила фото из кафе.'],
-        ['Миа', 'У старого моста она была другой.'],
-        ['Тайлер', 'Larks и Riverwalk рядом.'],
-        ['Оливия', 'Отметь только то, что мы знаем точно.'],
-        ['Миа', 'До вечера.']
+    await showHijackChat(wrapper, 'RavenFeed', [
+        ['Оливия', 'Пончик известнее мэра.'],
+        ['Миа', 'И это правильно.'],
+        ['Дерек', 'Тот фильм был нормальный.'],
+        ['Брук', 'Нет.'],
+        ['Оливия', 'Вот и поговорили.']
     ]);
     await showHijackHome(wrapper, true);
     await showHijackChat(wrapper, 'Оливия Грант', [
@@ -309,9 +309,9 @@ async function showHijackHome(wrapper, fast = false) {
                 <h1>Сообщения</h1>
             </header>
             <div class="hijack-chat-list">
-                <div><strong>Larks</strong><span>Миа: До вечера.</span></div>
-                <div><strong>Оливия Грант</strong><span>Спасибо.</span></div>
-                <div><strong>Дерек Миллер</strong><span>Я напишу позже.</span></div>
+                <div><strong>RavenFeed</strong><span>Оливия: Вот и поговорили.</span></div>
+                <div><strong>Оливия Грант</strong><span>Ладно, до связи.</span></div>
+                <div><strong>Дерек Миллер</strong><span>Не буду тебя дёргать.</span></div>
                 <div><strong>Миа Картер</strong><span>Удалённый доступ</span></div>
             </div>
         </section>
@@ -357,10 +357,10 @@ async function showHijackCase(wrapper) {
                 <h1>Дело Харпер Вэнс</h1>
             </header>
             <div class="hijack-notes" id="hijack-notes">
-                <article><b>ФАКТ</b><strong>Larks</strong><p>Харпер была там с Оливией.</p></article>
-                <article><b>ФАКТ</b><strong>Riverwalk</strong><p>Миа видела Харпер у старого моста.</p></article>
-                <article><b>ДЕТАЛЬ</b><strong>Тёмно-зелёный седан</strong><p>Одна и та же машина могла появляться в двух местах.</p></article>
-                <article><b>ВОПРОС</b><strong>Кому она написала?</strong><p>Сообщение с телефона Мии пока не найдено.</p></article>
+                <article><b>ФАКТ</b><strong>Номер игрока</strong><p>Он пришёл Дереку с телефона Харпер.</p></article>
+                <article><b>ФАКТ</b><strong>Резервная копия</strong><p>Харпер пользовалась старым телефоном Мии.</p></article>
+                <article><b>НЕИЗВЕСТНО</b><strong>Удалённый чат</strong><p>Контакт и текст сообщения не восстановлены.</p></article>
+                <article><b>ВОПРОС</b><strong>Кому она написала?</strong><p>В копии осталась только ссылка на VID_1842.mp4.</p></article>
             </div>
         </section>
     `;

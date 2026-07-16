@@ -3,7 +3,7 @@
 // ============================================
 
 const STATE_KEY = 'harper_act1_v4';
-const STORY_VERSION = 'harper_act1_post_leak_finale_2026_07_13_v13';
+const STORY_VERSION = 'harper_episode1_living_ravenfeed_2026_07_16_v14';
 
 const defaultState = {
     storyVersion: STORY_VERSION,

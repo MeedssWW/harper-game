@@ -9,10 +9,10 @@ export function renderChapterEnd({ onDone } = {}) {
 
     wrapper.innerHTML = `
         <section class="chapter-end-panel">
-            <div class="chapter-end-title">ГЛАВА 1 ЗАВЕРШЕНА</div>
+            <div class="chapter-end-title">ЭПИЗОД 1 ЗАВЕРШЁН</div>
             <div class="chapter-end-divider"></div>
-            <p>ГЛАВА 2</p>
-            <h1>ПОСЛЕДНИЙ КОНТАКТ</h1>
+            <p>ЭПИЗОД 2</p>
+            <h1>ЧУЖАЯ ВЕРСИЯ</h1>
             <button id="chapter-end-continue" type="button">Продолжить</button>
         </section>
     `;

@@ -7,7 +7,7 @@ import { stateManager } from '../../engine/stateManager.js';
 import { chapter1 } from '../../data/chapter1.js?v=129';
 
 const STATE_KEY = 'harper_act1_v4';
-const STORY_VERSION = 'harper_act1_post_leak_finale_2026_07_13_v13';
+const STORY_VERSION = 'harper_episode1_living_ravenfeed_2026_07_16_v14';
 
 const CHECKPOINTS = [
     {
@@ -117,6 +117,58 @@ const CHECKPOINTS = [
     }
 ];
 
+const LIVING_CHECKPOINTS = [
+    {
+        id: 'living_after_group',
+        title: 'После группы',
+        subtitle: 'Оливия пишет лично и открывает RavenFeed',
+        throughBeat: 'intro_group_seven',
+        unlockedChats: ['private_derek', 'private_olivia'],
+        unlockedContacts: ['derek', 'olivia', 'mia', 'mason', 'brooke', 'tyler'],
+        knownContacts: ['derek', 'olivia', 'mia', 'mason', 'brooke', 'tyler']
+    },
+    {
+        id: 'living_after_feed',
+        title: 'После RavenFeed',
+        subtitle: 'Обычные разговоры с Мией и Дереком',
+        throughBeat: 'ep1_olivia_profile_polite',
+        unlockedChats: ['private_derek', 'private_olivia', 'private_mia'],
+        unlockedContacts: ['derek', 'olivia', 'mia', 'mason', 'brooke', 'tyler'],
+        knownContacts: ['derek', 'olivia', 'mia', 'mason', 'brooke', 'tyler'],
+        flags: { ravenFeedUnlocked: true, ravenFeedOpened: true }
+    },
+    {
+        id: 'living_before_phone',
+        title: 'Перед телефоном Мии',
+        subtitle: 'Миа должна вспомнить старое устройство',
+        throughBeat: 'ep1_derek_end',
+        unlockedChats: ['private_derek', 'private_olivia', 'private_mia'],
+        unlockedContacts: ['derek', 'olivia', 'mia', 'mason', 'brooke', 'tyler'],
+        knownContacts: ['derek', 'olivia', 'mia', 'mason', 'brooke', 'tyler'],
+        flags: { ravenFeedUnlocked: true, ravenFeedOpened: true }
+    },
+    {
+        id: 'living_before_backup',
+        title: 'Перед резервной копией',
+        subtitle: 'Миа предлагает проверить старый телефон',
+        throughBeat: 'ep1_phone_understand',
+        unlockedChats: ['private_derek', 'private_olivia', 'private_mia'],
+        unlockedContacts: ['derek', 'olivia', 'mia', 'mason', 'brooke', 'tyler'],
+        knownContacts: ['derek', 'olivia', 'mia', 'mason', 'brooke', 'tyler'],
+        flags: { ravenFeedUnlocked: true, ravenFeedOpened: true, oldPhoneRemembered: true }
+    },
+    {
+        id: 'living_before_final',
+        title: 'Перед финальной публикацией',
+        subtitle: 'Проверка обвиняющего поста в RavenFeed',
+        throughBeat: 'ep1_false_calm',
+        unlockedChats: ['private_derek', 'private_olivia', 'private_mia', 'private_unknown'],
+        unlockedContacts: ['derek', 'olivia', 'mia', 'mason', 'brooke', 'tyler', 'unknown'],
+        knownContacts: ['derek', 'olivia', 'mia', 'mason', 'brooke', 'tyler', 'unknown'],
+        flags: { ravenFeedUnlocked: true, ravenFeedOpened: true, remoteSessionInterrupted: true, playerPhoneCompromised: true, playerHackPhotoCreated: true, unknownFirstContact: true }
+    }
+];
+
 export function renderSettings({ onBack }) {
     const fragment = document.createDocumentFragment();
     const wrapper = document.createElement('div');
@@ -159,7 +211,7 @@ export function renderSettings({ onBack }) {
                 <div class="settings-group-title">Чекпоинты</div>
                 <p class="settings-note">Тестовый переключатель. Переносит прогресс к выбранному месту и перезагружает игру.</p>
                 <div class="settings-checkpoint-grid">
-                    ${CHECKPOINTS.map(point => `
+                    ${LIVING_CHECKPOINTS.map(point => `
                         <button class="settings-checkpoint-btn" data-checkpoint="${point.id}" type="button">
                             <strong>${point.title}</strong>
                             <span>${point.subtitle}</span>
@@ -242,7 +294,7 @@ function bindCheckpointButton(wrapper, button) {
         if (handled) return;
         handled = true;
 
-        const checkpoint = CHECKPOINTS.find(item => item.id === button.dataset.checkpoint);
+        const checkpoint = LIVING_CHECKPOINTS.find(item => item.id === button.dataset.checkpoint);
         if (!checkpoint) return;
 
         button.classList.add('is-applying');

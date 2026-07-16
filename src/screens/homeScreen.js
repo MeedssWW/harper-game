@@ -17,6 +17,7 @@ export function renderHomeScreen({ onAppOpen }) {
         { id: 'casefile', label: 'Дело', action: 'caseFile', icon: iconClues(), badge: getCaseBadge(), visible: isCaseFileVisible() },
         { id: 'map', label: 'Карта', action: 'map', icon: iconMap(), visible: isMapAppVisible() },
         { id: 'browser', label: 'Браузер', action: 'browser', icon: iconBrowser() },
+        { id: 'social', label: 'RavenFeed', action: 'social', icon: iconSocial(), visible: stateManager.hasFlag('ravenFeedUnlocked') },
         { id: 'settings', label: 'Настройки', action: 'settings', icon: iconSettings() }
     ].filter(app => app.visible !== false);
 
