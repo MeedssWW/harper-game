@@ -8,6 +8,7 @@ import { oliviaMorningRewriteBeats } from './oliviaMorningRewrite.js?v=126';
 import { postOliviaRoutesRewriteBeats } from './postOliviaRoutesRewrite.js?v=126';
 import { backupFoundRewriteBeats } from './backupFoundRewrite.js?v=126';
 import { postLeakRewriteBeats } from './postLeakRewrite.js?v=126';
+import { naturalizeDialogueBeats } from './dialogueNaturalization.js?v=1';
 
 const legacyChapter1 = {
   id: "act1",
@@ -3273,20 +3274,22 @@ const firstUnknownAfterHackBeat = legacyChapter1.beats.findIndex(beat => beat.id
 const firstDerekAfterBrookeBeat = legacyChapter1.beats.findIndex(beat => beat.id === 'derek_after_brooke_start');
 const firstMiaLateBeat = legacyChapter1.beats.findIndex(beat => beat.id === 'mia_late_evening_start');
 
+const activeChapter1Beats = [
+  ...introRewriteBeats,
+  ...oliviaIntroFinalBeats,
+  ...miaIntroRewriteBeats,
+  ...legacyChapter1.beats.slice(firstPostMiaBeat, firstLegacyDerekMorningBeat),
+  ...derekMorningRewriteBeats,
+  ...oliviaMorningRewriteBeats,
+  ...postOliviaRoutesRewriteBeats,
+  ...backupFoundRewriteBeats,
+  ...legacyChapter1.beats.slice(firstUnknownAfterHackBeat, firstDerekAfterBrookeBeat),
+  ...postLeakRewriteBeats,
+  ...legacyChapter1.beats.slice(firstMiaLateBeat)
+];
+
 export const chapter1 = {
   ...legacyChapter1,
   title: "Акт 1: Номер Харпер",
-  beats: [
-    ...introRewriteBeats,
-    ...oliviaIntroFinalBeats,
-    ...miaIntroRewriteBeats,
-    ...legacyChapter1.beats.slice(firstPostMiaBeat, firstLegacyDerekMorningBeat),
-    ...derekMorningRewriteBeats,
-    ...oliviaMorningRewriteBeats,
-    ...postOliviaRoutesRewriteBeats,
-    ...backupFoundRewriteBeats,
-    ...legacyChapter1.beats.slice(firstUnknownAfterHackBeat, firstDerekAfterBrookeBeat),
-    ...postLeakRewriteBeats,
-    ...legacyChapter1.beats.slice(firstMiaLateBeat)
-  ]
+  beats: naturalizeDialogueBeats(activeChapter1Beats)
 };

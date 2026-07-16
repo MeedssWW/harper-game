@@ -4,7 +4,7 @@
 
 import { audioEngine } from '../../engine/audioEngine.js?v=123';
 import { stateManager } from '../../engine/stateManager.js';
-import { chapter1 } from '../../data/chapter1.js?v=126';
+import { chapter1 } from '../../data/chapter1.js?v=127';
 
 const STATE_KEY = 'harper_act1_v4';
 const STORY_VERSION = 'harper_act1_post_leak_finale_2026_07_13_v13';
