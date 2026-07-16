@@ -64,14 +64,15 @@ export const introRewriteBeats = [
     chat: "private_derek",
     trigger: "after:intro_derek_would_remember|intro_derek_who_is_she|intro_derek_number_source",
     messages: [
-      { from: "derek", text: "Короче, это моя девушка.", delay: 850 },
-      { from: "derek", text: "Она пропала два дня назад, и её телефон почти всё это время был недоступен.", delay: 1150 },
-      { from: "derek", text: "А сегодня с её номера пришло сообщение, и внутри был только твой номер.", delay: 1200 },
+      { from: "derek", text: "Ладно, объясню нормально.", delay: 800 },
+      { from: "derek", text: "Мы с Харпер встречаемся, и два дня назад она пропала.", delay: 1100 },
+      { from: "derek", text: "Почти всё это время её телефон был выключен.", delay: 950 },
+      { from: "derek", text: "А сегодня с её номера пришло сообщение, где был только твой номер.", delay: 1200 },
       { from: "derek", text: "Ни текста, ничего.", delay: 750 },
       { type: "choice", options: [
-        { text: "Я её не знаю. Ты точно не ошибся в цифрах?", loyalty: {}, next: "intro_derek_error_answer" },
-        { text: "Подожди. Ты уверен, что писала она?", loyalty: {}, next: "intro_derek_sender_uncertain" },
-        { text: "А если её телефон сейчас у кого-то другого?", loyalty: {}, next: "intro_derek_phone_other" }
+        { text: "Подожди... Я вообще впервые слышу о ней.", loyalty: {}, next: "intro_derek_error_answer" },
+        { text: "Похоже на какую-то ошибку. Мы с ней даже не знакомы.", loyalty: {}, next: "intro_derek_sender_uncertain" },
+        { text: "Честно, я даже не знаю, что тебе на это ответить.", loyalty: {}, next: "intro_derek_phone_other" }
       ] }
     ]
   },
@@ -80,9 +81,8 @@ export const introRewriteBeats = [
     chat: "private_derek",
     trigger: "choice:intro_derek_explains_v2:0",
     messages: [
-      { from: "derek", text: "Да, я несколько раз проверил.", delay: 900 },
-      { from: "derek", text: "Всё совпадает.", delay: 800 },
-      { from: "derek", text: "Это точно твой номер.", delay: 900 }
+      { from: "derek", text: "Да, я понял.", delay: 700 },
+      { from: "derek", text: "Но номер точно твой, я несколько раз проверил.", delay: 1000 }
     ]
   },
   {
@@ -90,8 +90,8 @@ export const introRewriteBeats = [
     chat: "private_derek",
     trigger: "choice:intro_derek_explains_v2:1",
     messages: [
-      { from: "derek", text: "Нет, я не уверен, что это писала Харпер.", delay: 950 },
-      { from: "derek", text: "Я знаю только, что сообщение пришло с её номера, а у кого был телефон — понятия не имею.", delay: 1200 }
+      { from: "derek", text: "Я тоже сначала решил, что ошибся.", delay: 900 },
+      { from: "derek", text: "Но всё совпало, это точно твой номер.", delay: 1000 }
     ]
   },
   {
@@ -99,8 +99,8 @@ export const introRewriteBeats = [
     chat: "private_derek",
     trigger: "choice:intro_derek_explains_v2:2",
     messages: [
-      { from: "derek", text: "Вполне может быть, потому что телефон до сих пор не нашли.", delay: 1000 },
-      { from: "derek", text: "Либо это была она, либо кто-то специально подсунул мне твой номер.", delay: 1150 }
+      { from: "derek", text: "Понимаю. Я сам не знаю, что думать.", delay: 900 },
+      { from: "derek", text: "Поэтому и пишу тебе, потому что больше зацепиться вообще не за что.", delay: 1100 }
     ]
   },
   {

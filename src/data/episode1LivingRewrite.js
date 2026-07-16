@@ -113,7 +113,8 @@ export const episode1LivingRewriteBeats = [
       { type: 'pause', delay: 2800 },
       { type: 'system', text: 'Миа в сети.', delay: 450, characterStatus: { id: 'mia', online: true } },
       say('mia', 'Привет ещё раз.'),
-      say('mia', 'Оливия сказала, что скинула тебе RavenFeed.'),
+      say('mia', 'Вижу, Оливия уже подписалась на тебя в RavenFeed.'),
+      say('mia', 'Значит, приглашение дошло.'),
       say('mia', 'Это она так извиняется. Обычно ссылками и кофе.'),
       { type: 'choice', options: [
         choice('Кофе пока не пришёл.', 'ep1_mia_coffee'),
@@ -137,7 +138,7 @@ export const episode1LivingRewriteBeats = [
       ] }
     ]
   },
-  { id: 'ep1_mia_outfit_good', chat: 'private_mia', trigger: 'choice:ep1_mia_outfit:0', messages: [say('mia', 'Вот. Наконец-то объективное мнение незнакомца из другого города.'), say('mia', 'Сейчас отправлю Оливии скрин.') ] },
+  { id: 'ep1_mia_outfit_good', chat: 'private_mia', trigger: 'choice:ep1_mia_outfit:0', messages: [say('mia', 'Вот. Наконец-то объективное мнение незнакомца из другого города.'), say('mia', 'Засчитаю один голос в пользу куртки.') ] },
   { id: 'ep1_mia_outfit_joke', chat: 'private_mia', trigger: 'choice:ep1_mia_outfit:1', messages: [say('mia', 'Очень плохой. В подвале. Вокалист опоздал.'), say('mia', 'Ладно, убедил. Куртку оставляю.') ] },
   { id: 'ep1_mia_outfit_silent', chat: 'private_mia', trigger: 'choice:ep1_mia_outfit:2', messages: [say('mia', 'Поняла.'), say('mia', 'Настолько плохо.'), say('mia', 'Спасибо, это было жестоко 😭') ] },
   {

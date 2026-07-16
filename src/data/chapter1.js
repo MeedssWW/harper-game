@@ -1,6 +1,6 @@
 import { miaLateSceneBeats } from './miaLateScene.js?v=126';
 import { chapter1FinaleRewriteBeats as chapter1FinaleBeats } from './chapter1FinaleRewrite.js?v=126';
-import { introRewriteBeats } from './introRewrite.js?v=127';
+import { introRewriteBeats } from './introRewrite.js?v=128';
 import { oliviaIntroFinalBeats } from './oliviaIntroFinal.js?v=126';
 import { miaIntroRewriteBeats } from './miaIntroRewrite.js?v=126';
 import { derekMorningRewriteBeats } from './derekMorningRewrite.js?v=126';
@@ -9,8 +9,8 @@ import { postOliviaRoutesRewriteBeats } from './postOliviaRoutesRewrite.js?v=126
 import { backupFoundRewriteBeats } from './backupFoundRewrite.js?v=126';
 import { postLeakRewriteBeats } from './postLeakRewrite.js?v=126';
 import { naturalizeDialogueBeats } from './dialogueNaturalization.js?v=1';
-import { authorDialogueBeats } from './dialogueAuthorPass.js?v=2';
-import { episode1LivingRewriteBeats } from './episode1LivingRewrite.js?v=2';
+import { authorDialogueBeats } from './dialogueAuthorPass.js?v=4';
+import { episode1LivingRewriteBeats } from './episode1LivingRewrite.js?v=3';
 
 const legacyChapter1 = {
   id: "act1",
