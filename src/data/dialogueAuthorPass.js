@@ -281,10 +281,9 @@ const joinHumanClauses = text => {
 
 const styleTyler = message => {
   if (message.from !== "tyler" || !message.text) return message;
-  let text = message.text;
-  if (/^[А-ЯЁ]/u.test(text)) text = text[0].toLocaleLowerCase("ru-RU") + text.slice(1);
-  text = text.replace(/\.$/, "");
-  return { ...message, text };
+  // Tyler is terse, but he writes cleanly. Lowercasing every message made him
+  // look careless and contradicted his established voice.
+  return message;
 };
 
 export function authorDialogueBeats(beats) {

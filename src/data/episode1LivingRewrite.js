@@ -65,7 +65,7 @@ export const episode1LivingRewriteBeats = [
       ] }
     ]
   },
-  { id: 'ep1_feed_worry', chat: 'private_olivia', trigger: 'choice:ep1_olivia_feed_link:1', messages: [say('olivia', 'Нет. И я очень надеюсь, что так и останется.'), say('olivia', 'Пока там только объявление о поисках Харпер.') , { type: 'choice', options: [choice('Ладно. Открою.', 'ep1_open_ravenfeed')] }] },
+  { id: 'ep1_feed_worry', chat: 'private_olivia', trigger: 'choice:ep1_olivia_feed_link:1', messages: [say('olivia', 'Нет. И я очень надеюсь, что так и останется.'), say('olivia', 'Если что-то появится, я скажу.') , { type: 'choice', options: [choice('Ладно. Открою.', 'ep1_open_ravenfeed')] }] },
   {
     id: 'ep1_open_ravenfeed', chat: 'private_olivia', trigger: 'after:ep1_feed_worry',
     messages: [{ type: 'navigate', screen: 'social', delay: 250 }, { type: 'wait_flag', flag: 'ravenFeedOpened', delay: 300 }]
@@ -75,24 +75,34 @@ export const episode1LivingRewriteBeats = [
     messages: [{ type: 'navigate', screen: 'social', delay: 250 }, { type: 'wait_flag', flag: 'ravenFeedOpened', delay: 300 }]
   },
   {
-    id: 'ep1_olivia_after_feed',
+    id: 'ep1_ravenfeed_first_look',
     chat: 'private_olivia',
     trigger: 'after:ep1_open_ravenfeed|ep1_open_ravenfeed_direct',
+    messages: [{ type: 'pause', delay: 2200 }]
+  },
+  {
+    id: 'ep1_olivia_after_feed',
+    chat: 'private_olivia',
+    trigger: 'after:ep1_ravenfeed_first_look',
+    setFlags: { brookeSearchPostLive: true },
     messages: [
       { type: 'pause', delay: 1700 },
-      say('olivia', 'Ну как? Очень захватывающая жизнь у нас?'),
+      { type: 'app_notification', title: 'RavenFeed', text: 'Брук Хейз опубликовала объявление о поисках Харпер', options: { app: 'social' }, delay: 700 },
+      say('olivia', 'Брук только что выложила объявление о поисках.'),
+      say('olivia', 'Если будешь читать комментарии, не принимай каждую версию за факт.'),
+      say('olivia', 'А вообще... ну как тебе город?'),
       { type: 'choice', options: [
         choice('Я уже переживаю за собаку в жёлтом дождевике.', 'ep1_feed_dog'),
         choice('Теперь Рейвенвуд хотя бы похож на настоящий город.', 'ep1_feed_city'),
-        choice('У вас даже задержку поезда обсуждают как семейную драму.', 'ep1_feed_train')
+        choice('Пока просто посмотрю, ладно?', 'ep1_olivia_feed_only')
       ] }
     ]
   },
   { id: 'ep1_feed_dog', chat: 'private_olivia', trigger: 'choice:ep1_olivia_after_feed:0', messages: [say('olivia', 'Это Пончик. За него можешь не переживать, он известнее мэра.'), say('olivia', 'У него, кажется, больше подписчиков, чем у меня.') ] },
   { id: 'ep1_feed_city', chat: 'private_olivia', trigger: 'choice:ep1_olivia_after_feed:1', messages: [say('olivia', 'Он и есть настоящий. Просто маленький, мокрый и все друг друга знают через одного.') ] },
-  { id: 'ep1_feed_train', chat: 'private_olivia', trigger: 'choice:ep1_olivia_after_feed:2', messages: [say('olivia', 'Потому что линия N7 опоздала на семь минут.'), say('olivia', 'Для Рейвенвуда это почти государственный переворот.') ] },
+  { id: 'ep1_olivia_feed_only', chat: 'private_olivia', trigger: 'choice:ep1_olivia_after_feed:2', messages: [say('olivia', 'Да, конечно.'), say('olivia', 'Не буду мешать.'), { type: 'system', text: 'Оливия не в сети.', delay: 700, characterStatus: { id: 'olivia', online: false } }] },
   {
-    id: 'ep1_olivia_normal_end', chat: 'private_olivia', trigger: 'after:ep1_feed_dog|ep1_feed_city|ep1_feed_train',
+    id: 'ep1_olivia_normal_end', chat: 'private_olivia', trigger: 'after:ep1_feed_dog|ep1_feed_city',
     messages: [
       say('olivia', 'Если нажмёшь на имя, откроется профиль. Только не листай мои старые фото слишком далеко, ладно?'),
       { type: 'choice', options: [
@@ -107,7 +117,7 @@ export const episode1LivingRewriteBeats = [
   {
     id: 'ep1_mia_first_normal',
     chat: 'private_mia',
-    trigger: 'after:ep1_olivia_profile_tease|ep1_olivia_profile_polite',
+    trigger: 'after:ep1_olivia_profile_tease|ep1_olivia_profile_polite|ep1_olivia_feed_only',
     identify: ['mia'],
     messages: [
       { type: 'pause', delay: 2800 },
@@ -142,7 +152,7 @@ export const episode1LivingRewriteBeats = [
   { id: 'ep1_mia_outfit_joke', chat: 'private_mia', trigger: 'choice:ep1_mia_outfit:1', messages: [say('mia', 'Очень плохой. В подвале. Вокалист опоздал.'), say('mia', 'Ладно, убедил. Куртку оставляю.') ] },
   { id: 'ep1_mia_outfit_silent', chat: 'private_mia', trigger: 'choice:ep1_mia_outfit:2', messages: [say('mia', 'Поняла.'), say('mia', 'Настолько плохо.'), say('mia', 'Спасибо, это было жестоко 😭') ] },
   {
-    id: 'ep1_mia_harper_memory', chat: 'private_mia', trigger: 'after:ep1_mia_outfit_good|ep1_mia_outfit_joke|ep1_mia_outfit_silent',
+    id: 'ep1_mia_harper_memory', chat: 'private_mia', trigger: 'afterTrustFlag:ep1_mia_outfit_good|ep1_mia_outfit_joke|ep1_mia_outfit_silent:miaTrust:1::true',
     messages: [
       say('mia', 'Харпер её ненавидела, кстати.'),
       say('mia', 'Говорила, что в ней я похожа на мокрый пакет.'),
@@ -155,27 +165,66 @@ export const episode1LivingRewriteBeats = [
   },
   { id: 'ep1_mia_memory_warm', chat: 'private_mia', trigger: 'choice:ep1_mia_harper_memory:0', messages: [say('mia', 'Конечно нравилась.'), say('mia', 'Но признать это было бы слишком просто.') ] },
   { id: 'ep1_mia_memory_fun', chat: 'private_mia', trigger: 'choice:ep1_mia_harper_memory:1', messages: [say('mia', 'Постоянно.'), say('mia', 'Один раз сказала, что мой плейлист звучит как очередь в аптеке.'), say('mia', 'Я до сих пор не понимаю, что это значит.') ] },
+  {
+    id: 'ep1_mia_memory_skipped',
+    chat: 'private_mia',
+    trigger: 'afterNotTrustFlag:ep1_mia_outfit_good|ep1_mia_outfit_joke|ep1_mia_outfit_silent:miaTrust:1::true',
+    messages: [say('mia', 'Ладно, спасибо за честный ответ.'), say('mia', 'Я ненадолго пропаду.'), { type: 'system', text: 'Миа не в сети.', delay: 650, characterStatus: { id: 'mia', online: false } }]
+  },
+
+  {
+    id: 'ep1_notes_open',
+    chat: 'private_mia',
+    trigger: 'after:ep1_mia_memory_warm|ep1_mia_memory_fun|ep1_mia_memory_skipped',
+    messages: [
+      { type: 'note_auto', id: 'harper_intro_summary', title: 'Харпер Вэнс', text: 'Харпер Вэнс пропала два дня назад.\n\nСегодня с её телефона Дереку пришло сообщение, в котором был только мой номер. Неизвестно, кто отправил сообщение.\n\nЯ никогда не был в Рейвенвуде и не знаю Харпер. Группа «Семеро» распалась сразу после знакомства. Оливия прислала мне доступ к RavenFeed.', noteCompleteFlag: 'harperIntroNoteWritten', notificationText: 'Запиши только то, что известно точно', delay: 450 },
+      { type: 'wait_flag', flag: 'harperIntroNoteWritten', delay: 400 }
+    ]
+  },
+
+  {
+    id: 'ep1_derek_photos',
+    chat: 'private_derek',
+    trigger: 'after:ep1_notes_open',
+    messages: [
+      { type: 'pause', delay: 2300 },
+      { type: 'system', text: 'Дерек в сети.', delay: 450, characterStatus: { id: 'derek', online: true } },
+      say('derek', 'Я нашёл ещё несколько фотографий Харпер.'),
+      say('derek', 'Посмотри, пожалуйста. Вдруг лицо покажется знакомым.'),
+      say('derek', 'Допрашивать тебя заново не буду.'),
+      { from: 'derek', type: 'image', src: 'src/assets/harper_photos/harper_party_crown.webp?v=116', caption: 'Харпер на дне рождения', delay: 650 },
+      { from: 'derek', type: 'image', src: 'src/assets/harper_photos/harper_mia_olivia_sun.webp?v=116', caption: 'Харпер, Миа и Оливия', delay: 650 },
+      { from: 'derek', type: 'image', src: 'src/assets/harper_photos/harper_derek_blurred_selfie.webp?v=116', caption: 'Харпер и Дерек', delay: 650 },
+      { from: 'derek', type: 'image', src: 'src/assets/harper_photos/harper_street_cat.webp?v=116', caption: 'Харпер и уличный кот', delay: 650 },
+      { type: 'choice', options: [
+        choice('Нет, я её не узнаю.', 'ep1_photos_no'),
+        choice('Не узнаю, но теперь она хотя бы не просто имя.', 'ep1_photos_human', { trust: { derekTrust: 1 } }),
+        choice('Я уже сказал, что не знаю её.', 'ep1_photos_boundary')
+      ] }
+    ]
+  },
+  { id: 'ep1_photos_no', chat: 'private_derek', trigger: 'choice:ep1_derek_photos:0', messages: [say('derek', 'Понял.'), say('derek', 'Стоило проверить.') ] },
+  { id: 'ep1_photos_human', chat: 'private_derek', trigger: 'choice:ep1_derek_photos:1', messages: [say('derek', 'Да.'), say('derek', 'Она не просто имя.') ] },
+  { id: 'ep1_photos_boundary', chat: 'private_derek', trigger: 'choice:ep1_derek_photos:2', messages: [say('derek', 'Знаю.'), say('derek', 'Извини. Больше не буду просить пересматривать фотографии.') ] },
 
   {
     id: 'ep1_derek_small_talk',
     chat: 'private_derek',
-    trigger: 'after:ep1_mia_memory_warm|ep1_mia_memory_fun',
+    trigger: 'after:ep1_photos_no|ep1_photos_human|ep1_photos_boundary',
     messages: [
-      { type: 'pause', delay: 2400 },
-      { type: 'system', text: 'Дерек в сети.', delay: 450, characterStatus: { id: 'derek', online: true } },
       say('derek', 'Оливия дала тебе RavenFeed?'),
       { type: 'choice', options: [
         choice('Да. Теперь знаю, что ваш поезд всегда опаздывает.', 'ep1_derek_train'),
         choice('Да. И что ты играешь в футбол.', 'ep1_derek_football'),
-        choice('Да. Ты проверяешь, что я там смотрю?', 'ep1_derek_suspicious')
+        choice('Да. Но я сейчас не очень хочу болтать.', 'ep1_derek_not_now')
       ] }
     ]
   },
   { id: 'ep1_derek_train', chat: 'private_derek', trigger: 'choice:ep1_derek_small_talk:0', messages: [say('derek', 'Не всегда.'), say('derek', 'Только когда тебе куда-то надо.'), say('derek', 'В этом его талант.') ] },
   { id: 'ep1_derek_football', chat: 'private_derek', trigger: 'choice:ep1_derek_small_talk:1', messages: [say('derek', 'Играл.'), say('derek', 'Сейчас иногда выхожу с ребятами, если нужен кто-то на замену.'), say('derek', 'Это не так интересно, как выглядит в профиле.') ] },
-  { id: 'ep1_derek_suspicious', chat: 'private_derek', trigger: 'choice:ep1_derek_small_talk:2', messages: [say('derek', 'Нет.'), say('derek', 'Просто увидел, что Оливия подписалась на новый аккаунт.'), say('derek', 'У нас маленький город. Тут сложно ничего не заметить.') ] },
+  { id: 'ep1_derek_not_now', chat: 'private_derek', trigger: 'choice:ep1_derek_small_talk:2', messages: [say('derek', 'Понял.'), say('derek', 'Тогда не буду.'), say('derek', 'И за тот чат всё равно извини.'), { type: 'system', text: 'Дерек не в сети.', delay: 650, characterStatus: { id: 'derek', online: false } }] },
   {
-    id: 'ep1_derek_soften', chat: 'private_derek', trigger: 'after:ep1_derek_train|ep1_derek_football|ep1_derek_suspicious',
+    id: 'ep1_derek_soften', chat: 'private_derek', trigger: 'after:ep1_derek_train|ep1_derek_football',
     messages: [
       say('derek', 'И ещё... за тот чат извини.'),
       say('derek', 'Я думал, если соберу всех, мы спокойно разберёмся. Получилось наоборот.'),
@@ -194,13 +243,15 @@ export const episode1LivingRewriteBeats = [
   {
     id: 'ep1_mia_phone_memory',
     chat: 'private_mia',
-    trigger: 'after:ep1_derek_end',
+    trigger: 'after:ep1_derek_end|ep1_derek_not_now',
     setFlags: { oldPhoneRemembered: true },
     messages: [
       { type: 'pause', delay: 3200 },
       { type: 'system', text: 'Миа в сети.', delay: 450, characterStatus: { id: 'mia', online: true } },
       say('mia', 'Слушай.'),
-      say('mia', 'Я сейчас искала другое фото и вспомнила одну вещь.'),
+      say('mia', 'После разговора про куртку я полезла искать старые фотографии.'),
+      say('mia', 'И наткнулась на папку, которую переносила со старого телефона.'),
+      say('mia', 'Тут я вспомнила одну вещь.'),
       say('mia', 'За несколько дней до исчезновения Харпер брала мой старый телефон.'),
       say('mia', 'У неё сел свой, и она сказала, что ей надо быстро кому-то написать.'),
       say('mia', 'Потом вернула и сказала, что удалила чат.'),
@@ -242,11 +293,11 @@ export const episode1LivingRewriteBeats = [
   },
   {
     id: 'ep1_backup_decline', chat: 'private_mia', trigger: 'choice:ep1_mia_backup_offer:2', setFlags: { playerDeclinedBackupAccess: true },
-    messages: [say('mia', 'Наверное, ты прав.'), say('mia', 'Я сама открыла только список удалённых данных. Там один чат и вложение VID_1842.mp4.'), say('mia', 'Странно. Ссылка на файл только что сама появилась в окне доступа.'), { from: 'mia', type: 'app', title: 'VID_1842.mp4', subtitle: 'Неизвестный внешний сервер', text: 'Проверить вложение', documentId: 'mia_remote_access', delay: 700 }, { type: 'wait_flag', flag: 'remoteSessionInterrupted', delay: 500 }]
+    messages: [say('mia', 'Наверное, ты прав.'), say('mia', 'Закрываю копию и жду полицию.'), { type: 'pause', delay: 1200 }, { type: 'app_notification', title: 'Новое вложение', text: 'VID_1842.mp4 · отправитель не определён', options: {}, delay: 700 }, say('mia', 'Подожди. Это не я отправила.'), say('mia', 'Я вообще уже закрыла программу.'), { from: 'narrator', type: 'app', title: 'VID_1842.mp4', subtitle: 'Отправитель не определён · внешний сервер', text: 'Открыть вложение', documentId: 'mia_remote_access', delay: 700 }, { type: 'wait_flag', flag: 'remoteSessionInterrupted', delay: 500 }]
   },
   {
     id: 'ep1_backup_decline_unsure', chat: 'private_mia', trigger: 'choice:ep1_backup_unsure:1', setFlags: { playerDeclinedBackupAccess: true },
-    messages: [say('mia', 'Ладно. Закрываю.'), say('mia', 'Подожди. Почему у меня ссылка на удалённое видео стала активной?'), say('mia', 'Я ничего не нажимала.'), { from: 'mia', type: 'app', title: 'VID_1842.mp4', subtitle: 'Неизвестный внешний сервер', text: 'Проверить вложение', documentId: 'mia_remote_access', delay: 700 }, { type: 'wait_flag', flag: 'remoteSessionInterrupted', delay: 500 }]
+    messages: [say('mia', 'Ладно. Закрываю.'), { type: 'pause', delay: 1200 }, { type: 'app_notification', title: 'Новое вложение', text: 'VID_1842.mp4 · отправитель не определён', options: {}, delay: 700 }, say('mia', 'Это не я.'), say('mia', 'Серьёзно. Ничего не открывай у себя, если не хочешь.'), { from: 'narrator', type: 'app', title: 'VID_1842.mp4', subtitle: 'Отправитель не определён · внешний сервер', text: 'Открыть вложение', documentId: 'mia_remote_access', delay: 700 }, { type: 'wait_flag', flag: 'remoteSessionInterrupted', delay: 500 }]
   },
 
   {
@@ -262,17 +313,19 @@ export const episode1LivingRewriteBeats = [
       { type: 'choice', options: [
         choice('Кто ты?', 'ep1_unknown_who'),
         choice('Что сейчас произошло с моим телефоном?', 'ep1_unknown_what'),
-        choice('Это ты включил камеру?', 'ep1_unknown_camera')
+        choice('Это ты включил камеру?', 'ep1_unknown_camera'),
+        choice('Не отвечать.', 'ep1_unknown_silence', { sendMessage: false })
       ] }
     ]
   },
   { id: 'ep1_unknown_who', chat: 'private_unknown', trigger: 'choice:ep1_unknown_first:0', messages: [say('unknown', 'Потом.'), say('unknown', 'Сначала пойми: до меня к твоему телефону уже кто-то подключился.') ] },
-  { id: 'ep1_unknown_what', chat: 'private_unknown', trigger: 'choice:ep1_unknown_first:1', messages: [say('unknown', 'В копии лежал не видеофайл, а ссылка на внешний сервер.'), say('unknown', 'Когда ты открыл её, сервер получил доступ к устройству.') ] },
+  { id: 'ep1_unknown_what', chat: 'private_unknown', trigger: 'choice:ep1_unknown_first:1', messages: [say('unknown', 'В копии лежал не видеофайл, а ссылка на внешний сервер.'), say('unknown', 'Судя по журналу, переход по ней открыл внешнее соединение.') ] },
   { id: 'ep1_unknown_camera', chat: 'private_unknown', trigger: 'choice:ep1_unknown_first:2', messages: [say('unknown', 'Нет.'), say('unknown', 'Я закрыл чужое соединение. Камеру успели включить до меня.') ] },
+  { id: 'ep1_unknown_silence', chat: 'private_unknown', trigger: 'choice:ep1_unknown_first:3', messages: [say('unknown', 'Можешь не отвечать.'), say('unknown', 'Но файл второй раз не открывай.') ] },
   {
-    id: 'ep1_unknown_explains', chat: 'private_unknown', trigger: 'after:ep1_unknown_who|ep1_unknown_what|ep1_unknown_camera',
+    id: 'ep1_unknown_explains', chat: 'private_unknown', trigger: 'after:ep1_unknown_who|ep1_unknown_what|ep1_unknown_camera|ep1_unknown_silence',
     messages: [
-      say('unknown', 'Кто-то успел открыть список чатов, заметки и фронтальную камеру.'),
+      say('unknown', 'В журнале остались обращения к списку чатов, заметкам и фронтальной камере.'),
       say('unknown', 'Соединение длилось меньше минуты, но этого хватило.'),
       { type: 'choice', options: [
         choice('Они сделали мою фотографию.', 'ep1_unknown_photo'),
@@ -288,21 +341,23 @@ export const episode1LivingRewriteBeats = [
     id: 'ep1_unknown_warning', chat: 'private_unknown', trigger: 'after:ep1_unknown_photo|ep1_unknown_stolen|ep1_unknown_server',
     messages: [
       say('unknown', 'Смени пароль и не пересылай ссылку.'),
-      say('unknown', 'Если кто-то пришлёт тебе скрин с твоего телефона, не отвечай сразу.'),
+      say('unknown', 'И пока не отвечай тем, кто ссылается на данные с твоего телефона.'),
       { type: 'choice', options: [
         choice('Почему я должен тебе верить?', 'ep1_unknown_trust'),
         choice('Миа должна знать, что произошло.', 'ep1_unknown_mia'),
-        choice('Я всё ещё не понимаю, на чьей ты стороне.', 'ep1_unknown_side')
+        choice('Я всё ещё не понимаю, на чьей ты стороне.', 'ep1_unknown_side'),
+        choice('Заблокировать контакт.', 'ep1_unknown_blocked', { sendMessage: false, setFlag: 'unknownBlocked' })
       ] }
     ]
   },
   { id: 'ep1_unknown_trust', chat: 'private_unknown', trigger: 'choice:ep1_unknown_warning:0', messages: [say('unknown', 'Не должен.'), say('unknown', 'Проверь журнал: моё соединение открылось после чужого и сразу закрылось.') ] },
   { id: 'ep1_unknown_mia', chat: 'private_unknown', trigger: 'choice:ep1_unknown_warning:1', messages: [say('unknown', 'Про взлом скажи, но про меня пока лучше промолчи.'), say('unknown', 'Если обо мне узнают, сервер сразу сменят.') ] },
   { id: 'ep1_unknown_side', chat: 'private_unknown', trigger: 'choice:ep1_unknown_warning:2', messages: [say('unknown', 'И правильно, после такого никому не верь.'), say('unknown', 'Просто учти, что к твоему телефону уже есть чужой доступ.') ] },
+  { id: 'ep1_unknown_blocked', chat: 'private_unknown', trigger: 'choice:ep1_unknown_warning:3', messages: [{ type: 'system', text: 'Контакт заблокирован.', delay: 650 }, { type: 'system', text: 'Неизвестный не в сети.', delay: 500, characterStatus: { id: 'unknown', online: false } }] },
   { id: 'ep1_unknown_offline', chat: 'private_unknown', trigger: 'after:ep1_unknown_trust|ep1_unknown_mia|ep1_unknown_side', messages: [say('unknown', 'Я напишу, если пойму, кто принял подключение.'), { type: 'system', text: 'Неизвестный не в сети.', delay: 650, characterStatus: { id: 'unknown', online: false } }] },
 
   {
-    id: 'ep1_mia_after_hack', chat: 'private_mia', trigger: 'after:ep1_unknown_offline',
+    id: 'ep1_mia_after_hack', chat: 'private_mia', trigger: 'after:ep1_unknown_offline|ep1_unknown_blocked',
     messages: [
       { type: 'pause', delay: 1900 },
       { type: 'system', text: 'Миа в сети.', delay: 450, characterStatus: { id: 'mia', online: true } },
@@ -333,7 +388,44 @@ export const episode1LivingRewriteBeats = [
   { id: 'ep1_mia_close_access', chat: 'private_mia', trigger: 'choice:ep1_mia_after_hack_response:1', messages: [say('mia', 'Уже закрыла.'), say('mia', 'И отправила следователю только имя файла, без самой ссылки.') ] },
   { id: 'ep1_mia_shared_blame', chat: 'private_mia', trigger: 'choice:ep1_mia_after_hack_response:2', messages: [say('mia', 'Да.'), say('mia', 'Пожалуй, это самый честный вариант.') ] },
   {
-    id: 'ep1_false_calm', chat: 'private_mia', trigger: 'after:ep1_mia_not_fault|ep1_mia_close_access|ep1_mia_shared_blame',
+    id: 'ep1_mia_privacy_respected',
+    chat: 'private_mia',
+    trigger: 'flagsValueAfter:ep1_mia_not_fault|ep1_mia_close_access|ep1_mia_shared_blame:miaBackupAccessGranted:true:miaPrivateChatsOpened:false',
+    messages: [
+      say('mia', 'Доступ я закрыла.'),
+      say('mia', 'И вижу историю.'),
+      say('mia', 'Ты правда не полез в мои переписки.'),
+      { type: 'choice', options: [
+        choice('Ты попросила этого не делать.', 'ep1_mia_privacy_thanks', { trust: { miaTrust: 1 }, setFlag: 'miaRespectedPrivacy' }),
+        choice('Они не относятся к Харпер.', 'ep1_mia_privacy_thanks', { trust: { miaTrust: 1 }, setFlag: 'miaRespectedPrivacy' })
+      ] }
+    ]
+  },
+  { id: 'ep1_mia_privacy_thanks', chat: 'private_mia', trigger: 'after:ep1_mia_privacy_respected', messages: [say('mia', 'Спасибо.'), say('mia', 'Серьёзно.')] },
+  {
+    id: 'ep1_mia_privacy_broken',
+    chat: 'private_mia',
+    trigger: 'flagsValueAfter:ep1_mia_not_fault|ep1_mia_close_access|ep1_mia_shared_blame:miaBackupAccessGranted:true:miaPrivateChatsOpened:true',
+    messages: [
+      say('mia', 'Подожди.'),
+      say('mia', 'В истории написано, что ты открывал мои личные чаты.'),
+      say('mia', 'Я же прямо попросила туда не заходить.'),
+      { type: 'choice', options: [
+        choice('Да. Это было неправильно. Извини.', 'ep1_mia_privacy_apology', { trust: { miaTrust: -2 }, setFlag: 'miaPrivacyViolated' }),
+        choice('Ты сама дала мне доступ.', 'ep1_mia_privacy_defensive', { trust: { miaTrust: -3 }, setFlag: 'miaPrivacyViolated' })
+      ] }
+    ]
+  },
+  { id: 'ep1_mia_privacy_apology', chat: 'private_mia', trigger: 'choice:ep1_mia_privacy_broken:0', messages: [say('mia', 'Я услышала.'), say('mia', 'Но сейчас я не хочу об этом говорить.')] },
+  { id: 'ep1_mia_privacy_defensive', chat: 'private_mia', trigger: 'choice:ep1_mia_privacy_broken:1', messages: [say('mia', 'К копии. Не к моей жизни.'), say('mia', 'Больше доступа не будет.')] },
+  {
+    id: 'ep1_mia_privacy_declined',
+    chat: 'private_mia',
+    trigger: 'flagValueAfter:ep1_mia_not_fault|ep1_mia_close_access|ep1_mia_shared_blame:playerDeclinedBackupAccess:true',
+    messages: [say('mia', 'Доступ закрыла.'), say('mia', 'Больше эту ссылку не трогаю.')]
+  },
+  {
+    id: 'ep1_false_calm', chat: 'private_mia', trigger: 'after:ep1_mia_privacy_thanks|ep1_mia_privacy_apology|ep1_mia_privacy_defensive|ep1_mia_privacy_declined',
     messages: [say('mia', 'Я немного отойду от телефона.'), say('mia', 'И ты тоже отойди. Серьёзно.'), { type: 'system', text: 'Миа не в сети.', delay: 650, characterStatus: { id: 'mia', online: false } }]
   },
   {
@@ -348,27 +440,91 @@ export const episode1LivingRewriteBeats = [
     ]
   },
   {
-    id: 'ep1_unknown_final',
-    chat: 'private_unknown',
-    trigger: 'after:ep1_public_frame_alert',
+    id: 'ep1_olivia_final_high',
+    chat: 'private_olivia',
+    trigger: 'afterTrustFlag:ep1_public_frame_alert:oliviaTrust:1:act1ViralPost:true',
     messages: [
-      { type: 'navigate', screen: 'chat', params: { chatId: 'private_unknown' }, delay: 350 },
-      { type: 'system', text: 'Неизвестный в сети.', delay: 450, characterStatus: { id: 'unknown', online: true } },
-      say('unknown', 'Снимок всё-таки успели забрать.'),
-      say('unknown', 'Его только что выложили в RavenFeed.'),
-      say('unknown', 'Теперь весь Рейвенвуд видит твоё лицо.'),
+      { type: 'pause', delay: 1200 },
+      { type: 'system', text: 'Оливия в сети.', delay: 450, characterStatus: { id: 'olivia', online: true } },
+      say('olivia', 'Ты видел публикацию?'),
+      say('olivia', 'Я не думаю, что ты сам отдал им это фото.'),
+      say('olivia', 'Но откуда оно взялось?'),
       { type: 'choice', options: [
-        choice('Значит, это из-за того файла.', 'ep1_final_who'),
-        choice('Они выставляют меня виноватым.', 'ep1_final_why'),
-        choice('Промолчать.', 'ep1_final_silent', { sendMessage: false })
+        choice('Мой телефон взломали после открытия файла.', 'ep1_olivia_final_high_explain', { setFlag: 'oliviaKnowsAboutHack' }),
+        choice('Я сам пока понимаю не больше твоего.', 'ep1_olivia_final_high_uncertain')
       ] }
     ]
   },
-  { id: 'ep1_final_who', chat: 'private_unknown', trigger: 'choice:ep1_unknown_final:0', messages: [say('unknown', 'Да.'), say('unknown', 'Снимок мог получить только тот, кто был внутри твоего телефона.') ] },
-  { id: 'ep1_final_why', chat: 'private_unknown', trigger: 'choice:ep1_unknown_final:1', messages: [say('unknown', 'Похоже на то.'), say('unknown', 'Теперь любой слух про тебя будет выглядеть правдой.') ] },
-  { id: 'ep1_final_silent', chat: 'private_unknown', trigger: 'choice:ep1_unknown_final:2', messages: [say('unknown', 'Лучше пока ничего не пиши.'), say('unknown', 'Они могут выложить и твой ответ.') ] },
   {
-    id: 'ep1_chapter_end', chat: 'private_unknown', trigger: 'after:ep1_final_who|ep1_final_why|ep1_final_silent', setFlags: { episode1LivingComplete: true },
-    messages: [say('unknown', 'Не отвечай им пока.'), { type: 'system', text: 'Неизвестный не в сети.', delay: 700, characterStatus: { id: 'unknown', online: false } }, { type: 'navigate', screen: 'chapterEnd', delay: 950 }]
+    id: 'ep1_olivia_final_low',
+    chat: 'private_olivia',
+    trigger: 'afterNotTrustFlag:ep1_public_frame_alert:oliviaTrust:1:act1ViralPost:true',
+    messages: [
+      { type: 'pause', delay: 1200 },
+      { type: 'system', text: 'Оливия в сети.', delay: 450, characterStatus: { id: 'olivia', online: true } },
+      say('olivia', 'Ты видел, что выложили?'),
+      say('olivia', 'Я не собираюсь обвинять тебя из-за одного поста.'),
+      say('olivia', 'Но там твоё лицо и список наших аккаунтов. Мне нужно понять, что произошло.'),
+      { type: 'choice', options: [
+        choice('Кто-то получил доступ к моему телефону.', 'ep1_olivia_final_low_explain', { setFlag: 'oliviaKnowsAboutHack' }),
+        choice('Я ничего им не отправлял.', 'ep1_olivia_final_low_boundary')
+      ] }
+    ]
+  },
+  { id: 'ep1_olivia_final_high_explain', chat: 'private_olivia', trigger: 'choice:ep1_olivia_final_high:0', messages: [say('olivia', 'Хорошо.'), say('olivia', 'То есть фото появилось во время взлома, а публикация уже после.'), say('olivia', 'Я напишу об этом под постом. Без имени Неизвестного и без догадок.')] },
+  { id: 'ep1_olivia_final_high_uncertain', chat: 'private_olivia', trigger: 'choice:ep1_olivia_final_high:1', messages: [say('olivia', 'Ладно.'), say('olivia', 'Тогда не буду вытягивать из тебя версию, которой пока нет.'), say('olivia', 'Но сохрани всё, что осталось после сбоя.')] },
+  { id: 'ep1_olivia_final_low_explain', chat: 'private_olivia', trigger: 'choice:ep1_olivia_final_low:0', messages: [say('olivia', 'Поняла.'), say('olivia', 'Сохрани журнал подключений и ничего не удаляй.'), say('olivia', 'Я пока скажу только, что публикация ничего не доказывает.')] },
+  { id: 'ep1_olivia_final_low_boundary', chat: 'private_olivia', trigger: 'choice:ep1_olivia_final_low:1', messages: [say('olivia', 'Я услышала.'), say('olivia', 'Просто сейчас это единственное объяснение, которое у меня есть от тебя.'), say('olivia', 'Я не буду делать выводы раньше времени.')] },
+
+  {
+    id: 'ep1_mia_final_high',
+    chat: 'private_mia',
+    trigger: 'afterTrustFlag:ep1_olivia_final_high_explain|ep1_olivia_final_high_uncertain|ep1_olivia_final_low_explain|ep1_olivia_final_low_boundary:miaTrust:1::true',
+    messages: [
+      { type: 'pause', delay: 900 },
+      { type: 'system', text: 'Миа в сети.', delay: 450, characterStatus: { id: 'mia', online: true } },
+      say('mia', 'На фото правда ты?'),
+      say('mia', 'Я не спрашиваю, чтобы обвинить.'),
+      say('mia', 'Просто скажи, что с тобой всё нормально.'),
+      { type: 'choice', options: [
+        choice('Да, это я. Фото сделали во время взлома.', 'ep1_mia_final_high_reveal', { setFlag: 'miaKnowsAboutHack' }),
+        choice('Я сам пока не понимаю, что они успели сделать.', 'ep1_mia_final_high_overwhelmed')
+      ] }
+    ]
+  },
+  {
+    id: 'ep1_mia_final_low',
+    chat: 'private_mia',
+    trigger: 'afterNotTrustFlag:ep1_olivia_final_high_explain|ep1_olivia_final_high_uncertain|ep1_olivia_final_low_explain|ep1_olivia_final_low_boundary:miaTrust:1::true',
+    messages: [
+      { type: 'pause', delay: 900 },
+      { type: 'system', text: 'Миа в сети.', delay: 450, characterStatus: { id: 'mia', online: true } },
+      say('mia', 'Это правда ты на фото?'),
+      say('mia', 'Я не понимаю, откуда оно взялось.'),
+      say('mia', 'После той ссылки мне уже страшно делать выводы.'),
+      { type: 'choice', options: [
+        choice('Да. Снимок сделали без моего разрешения.', 'ep1_mia_final_low_reveal', { setFlag: 'miaKnowsAboutHack' }),
+        choice('Я пока не хочу это обсуждать.', 'ep1_mia_final_low_hold')
+      ] }
+    ]
+  },
+  { id: 'ep1_mia_final_high_reveal', chat: 'private_mia', trigger: 'choice:ep1_mia_final_high:0', messages: [say('mia', 'Чёрт.'), say('mia', 'Значит, это правда из-за ссылки.'), say('mia', 'Прости. Я знаю, что уже говорила, но всё равно.')] },
+  { id: 'ep1_mia_final_high_overwhelmed', chat: 'private_mia', trigger: 'choice:ep1_mia_final_high:1', messages: [say('mia', 'Ладно.'), say('mia', 'Я рядом. То есть... в чате.'), say('mia', 'Просто не оставайся с этим совсем один.')] },
+  { id: 'ep1_mia_final_low_reveal', chat: 'private_mia', trigger: 'choice:ep1_mia_final_low:0', messages: [say('mia', 'Хорошо.'), say('mia', 'Спасибо, что сказал.'), say('mia', 'Я напишу следователю, что фото могло уйти через ссылку.')] },
+  { id: 'ep1_mia_final_low_hold', chat: 'private_mia', trigger: 'choice:ep1_mia_final_low:1', messages: [say('mia', 'Поняла.'), say('mia', 'Не буду давить.'), say('mia', 'Но ссылку я всё равно передам полиции как опасную.')] },
+
+  {
+    id: 'ep1_brooke_public_demand',
+    chat: 'private_mia',
+    trigger: 'after:ep1_mia_final_high_reveal|ep1_mia_final_high_overwhelmed|ep1_mia_final_low_reveal|ep1_mia_final_low_hold',
+    setFlags: { brookeDemandedExplanation: true },
+    messages: [
+      { type: 'pause', delay: 850 },
+      { type: 'app_notification', title: 'RavenFeed · Брук Хейз', text: '{player}, ответь. Откуда у Ravenwood Truth твоё фото и кто рассказал им про номер?', options: { app: 'social' }, delay: 1000 }
+    ]
+  },
+  {
+    id: 'ep1_chapter_end', chat: 'private_mia', trigger: 'after:ep1_brooke_public_demand', setFlags: { episode1LivingComplete: true },
+    messages: [{ type: 'navigate', screen: 'chapterEnd', delay: 1400 }]
   }
 ];

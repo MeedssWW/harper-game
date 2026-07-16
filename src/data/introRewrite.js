@@ -166,10 +166,10 @@ export const introRewriteBeats = [
       { from: "derek", text: "Хочу спросить её друзей.", delay: 850 },
       { from: "derek", text: "Может, они что-то знают.", delay: 950 },
       { from: "derek", text: "Вдруг хоть кто-то поймёт, откуда взялся твой номер.", delay: 1150 },
-      { from: "derek", text: "Короче, добавлю тебя в наш чат.", delay: 950 },
+      { from: "derek", text: "Я добавлю тебя в наш чат.", delay: 950 },
       { type: "choice", options: [
-        { text: "Подожди. Не раздавай мой номер кому попало. Только этот чат — и всё.", loyalty: {}, next: "intro_derek_privacy_answer" },
-        { text: "Только сразу скажи им, что я вообще не в курсе происходящего.", loyalty: {}, next: "intro_derek_warn_them" }
+        { text: "Стоп. Мой номер больше никому не отправляй. Если добавишь — только в этот чат.", loyalty: {}, next: "intro_derek_privacy_answer" },
+        { text: "Сначала скажи им, что я вообще впервые слышу о Харпер.", loyalty: {}, next: "intro_derek_warn_them" }
       ] }
     ]
   },
@@ -197,10 +197,10 @@ export const introRewriteBeats = [
     chat: "private_derek",
     trigger: "after:intro_derek_privacy_answer|intro_derek_warn_them",
     messages: [
-      { from: "derek", text: "Не выходи оттуда сразу, ладно?", delay: 950 },
-      { from: "derek", text: "Хотя бы послушай, что они скажут.", delay: 950 },
+      { from: "derek", text: "Если начнут спрашивать, просто ответь как есть.", delay: 950 },
+      { from: "derek", text: "Ладно?", delay: 650 },
       { type: "choice", options: [
-        { text: "Ладно. Но я ничего не обещаю.", loyalty: {}, next: "intro_derek_no_promises" },
+        { text: "Ладно. Но если на меня набросятся, я выйду.", loyalty: {}, next: "intro_derek_no_promises" },
         { text: "Хорошо. Посмотрим, что они знают.", loyalty: {}, next: "intro_derek_agree" }
       ] }
     ]
@@ -225,9 +225,7 @@ export const introRewriteBeats = [
     chat: "private_derek",
     trigger: "after:intro_derek_no_promises|intro_derek_agree",
     messages: [
-      { from: "derek", text: "Сейчас добавлю.", delay: 850 },
-      { type: "note_auto", id: "harper_intro_summary", title: "Харпер Вэнс", text: "Харпер Вэнс пропала два дня назад.\n\nСегодня с её телефона Дереку пришло сообщение, в котором был только мой номер. Телефон Харпер полиция пока не нашла.\n\nЯ никогда не был в Рейвенвуде и не знаю Харпер. Дерек собирается добавить меня в общий чат с её друзьями.", noteCompleteFlag: "harperIntroNoteWritten", delay: 350 },
-      { type: "wait_flag", flag: "harperIntroNoteWritten", delay: 400 }
+      { from: "derek", text: "Сейчас добавлю.", delay: 850 }
     ]
   },
   {
@@ -258,6 +256,8 @@ export const introRewriteBeats = [
       { from: "mia", text: "Из сообщения с её телефона?", delay: 850 },
       { from: "derek", text: "Да.", delay: 600 },
       { from: "derek", text: "Именно он.", delay: 650 },
+      { from: "narrator", text: "Дерек отправил снимок экрана.", delay: 700 },
+      { from: "narrator", text: "На снимке — сообщение с номера Харпер. Внутри только номер {player}.", delay: 850 },
       { from: "mia", text: "И он правда ничего не знает?", delay: 900 },
       { from: "derek", text: "Так говорит.", delay: 750 },
       { type: "system", text: "Оливия в сети.", delay: 450, characterStatus: { id: "olivia", online: true } },

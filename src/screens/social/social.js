@@ -12,8 +12,25 @@ const PEOPLE = {
     sam: { name: 'Сэм Ортега', handle: '@sam.o', avatar: `${A}/resident-sam.webp`, bio: 'N7, футбол и слишком много острого соуса' }
 };
 
+const SEARCH_POST = {
+    id: 'search-harper',
+    author: 'Брук Хейз',
+    handle: '@brooke.hayes',
+    avatar: 'src/assets/avatars/avatar_brooke_live.png',
+    image: 'src/assets/harper_photos/harper_cafe.jpg',
+    likes: 318,
+    age: 'только что',
+    profile: 'brooke',
+    text: 'Харпер Вэнс не выходит на связь уже два дня. Если вы видели её или знаете, где она может быть, пишите полиции. Пожалуйста, не несите в комментарии слухи и не звоните её семье. Репост поможет.',
+    comments: [
+        ['derek', 'Все контакты для информации есть на фото.'],
+        ['nadia', 'репостнула. надеюсь, она скоро найдётся'],
+        ['mason', 'Если что-то знаете — передавайте полиции. Не ищите в одиночку.'],
+        ['june', 'распространила у себя']
+    ]
+};
+
 const BASE_POSTS = [
-    { id: 'search-harper', author: 'Ravenwood Search', handle: '@ravenwood.search', avatar: 'src/assets/avatars/avatar_harper_live.png', image: 'src/assets/harper_photos/harper_cafe.jpg', likes: 318, age: 'закреплено', profile: 'harper', text: 'Харпер Вэнс не выходит на связь уже два дня. Если вы видели её или знаете, где она может быть, пожалуйста, пишите полиции, а не в комментарии. Репост тоже поможет.', comments: [['brooke', 'Пожалуйста, не кидайте сюда слухи. Только если правда что-то знаете.'], ['derek', 'И не звоните её маме. Все контакты есть в публикации.'], ['nadia', 'репостнула. надеюсь, она скоро найдётся'], ['mason', 'Передавайте информацию полиции. Не пытайтесь искать в одиночку.']] },
     { id: 'ponchik', author: 'Надя Форд', handle: '@nadia.f', avatar: `${A}/resident-nadia.webp`, image: `${A}/post-dog-raincoat.webp`, likes: 146, age: '18 мин', profile: 'nadia', text: 'Пончик снова отказался идти домой, пока не проверил каждую лужу. Жёлтый дождевик не помог.', comments: [['mia', 'ОН ИДЕАЛЬНЫЙ'], ['olivia', 'Миа, ты писала это ещё под четырьмя его фото.'], ['mia', 'и напишу под пятым']] },
     { id: 'north-line', author: 'North Line Alerts', handle: '@northline.alerts', avatar: `${A}/page-northline.webp`, image: `${A}/post-rain-platform.webp`, likes: 53, age: '31 мин', text: 'Линия N7 задерживается примерно на семь минут из-за сигнала у старого переезда.', comments: [['sam', 'то есть на свои обычные семь минут'], ['tyler', 'Главное — назвать это событием, а не расписанием.'], ['june', 'я опять поверила табло 🤡']] },
     { id: 'olivia-city', author: 'Оливия Грант', handle: '@olivia.grant', avatar: 'src/assets/social_profiles/v3/olivia/life-2.webp', image: 'src/assets/social_profiles/v3/olivia/life-1.webp', likes: 91, age: '2 ч', profile: 'olivia', text: 'Orpheum всё ещё выглядит лучше снаружи, чем любой фильм, который там показывают.', comments: [['mia', 'не трогай кинотеатр'], ['olivia', 'Я трогаю фильмы. Кинотеатр красивый.'], ['derek', 'Тот фильм был нормальный.'], ['brooke', 'Нет.']] },
@@ -42,17 +59,33 @@ export function renderSocial({ onBack }) {
         wrapper.querySelectorAll('.rf-like').forEach(button => button.addEventListener('click', () => { const liked = button.classList.toggle('liked'); const base = Number(button.dataset.likes || 0); button.querySelector('span').textContent = String(base + (liked ? 1 : 0)); }));
         wrapper.querySelector('#rf-search')?.addEventListener('click', () => { tab = 'people'; draw(); setTimeout(() => wrapper.querySelector('.rf-people-grid')?.classList.add('pulse'), 20); });
     };
+    const onStoryFlag = ({ flag }) => {
+        if (!wrapper.isConnected) {
+            stateManager.off('flag', onStoryFlag);
+            return;
+        }
+        if (flag === 'brookeSearchPostLive' || flag === 'act1ViralPost') draw();
+    };
+    stateManager.on('flag', onStoryFlag);
     draw();
     return wrapper;
 }
 
-function getVisiblePosts() { const posts = [...BASE_POSTS]; if (stateManager.hasFlag('act1ViralPost')) posts.unshift(buildFramingPost()); return posts; }
+function getVisiblePosts() {
+    const posts = [...BASE_POSTS];
+    if (stateManager.hasFlag('brookeSearchPostLive')) posts.unshift(SEARCH_POST);
+    if (stateManager.hasFlag('act1ViralPost')) posts.unshift(buildFramingPost());
+    return posts;
+}
 
 function buildFramingPost() {
     const playerName = stateManager.getPlayerName();
     const flags = stateManager.get('flags') || {};
     const playerPhoto = flags.playerHackPhoto || flags.playerFrontCameraPhoto || '';
-    return { id: 'player-framed', author: 'Ravenwood Truth', handle: '@ravenwood.truth', avatar: `${A}/page-truth.webp`, image: playerPhoto, playerFallback: true, likes: 487, age: 'сейчас', danger: true, flag: 'viralPostOpened', text: `${playerName} говорит, что никогда не видел Харпер Вэнс. Тогда почему с её телефона отправили именно его номер? Сегодня нам прислали снимок с его телефона и список людей, с которыми он уже связался. Случайное совпадение или человек, о котором Рейвенвуд должен был узнать раньше?`, comments: [['nadia', 'вы серьёзно выложили лицо человека без доказательств?'], ['brooke', 'Откуда у вас этот снимок?'], ['sam', 'полиция вообще это видела?'], ['olivia', 'Удалите публикацию. Вы не знаете, что произошло.'], ['mia', 'Фото украли с его телефона. Не разносите это дальше.'], ['june', 'уже разлетелось по всему городу'], ['derek', 'Я не давал вам его номер.']] };
+    const miaComment = stateManager.hasFlag('miaKnowsAboutHack')
+        ? 'Фото украли с его телефона. Не разносите это дальше.'
+        : 'Откуда у вас вообще это фото?';
+    return { id: 'player-framed', author: 'Ravenwood Truth', handle: '@ravenwood.truth', avatar: `${A}/page-truth.webp`, image: playerPhoto, playerFallback: true, likes: 487, age: 'сейчас', danger: true, flag: 'viralPostOpened', text: `${playerName} говорит, что никогда не видел Харпер Вэнс. Тогда почему с её телефона отправили именно его номер? Сегодня нам прислали снимок с его устройства и список недавних контактов. Случайность или Рейвенвуд должен был узнать о нём раньше?`, comments: [['nadia', 'вы серьёзно выложили лицо человека без доказательств?'], ['sam', 'полиция вообще это видела?'], ['olivia', 'Удалите публикацию. Вы не знаете, что произошло.'], ['mia', miaComment], ['june', 'уже разлетелось по всему городу'], ['derek', 'Я не давал вам его номер.'], ['brooke', `${playerName}, ответь. Откуда у них твоё фото и кто рассказал им про номер?`]] };
 }
 
 function renderPost(post) {

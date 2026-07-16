@@ -1,16 +1,7 @@
-import { miaLateSceneBeats } from './miaLateScene.js?v=126';
-import { chapter1FinaleRewriteBeats as chapter1FinaleBeats } from './chapter1FinaleRewrite.js?v=126';
-import { introRewriteBeats } from './introRewrite.js?v=128';
-import { oliviaIntroFinalBeats } from './oliviaIntroFinal.js?v=126';
-import { miaIntroRewriteBeats } from './miaIntroRewrite.js?v=126';
-import { derekMorningRewriteBeats } from './derekMorningRewrite.js?v=126';
-import { oliviaMorningRewriteBeats } from './oliviaMorningRewrite.js?v=126';
-import { postOliviaRoutesRewriteBeats } from './postOliviaRoutesRewrite.js?v=126';
-import { backupFoundRewriteBeats } from './backupFoundRewrite.js?v=126';
-import { postLeakRewriteBeats } from './postLeakRewrite.js?v=126';
+import { introRewriteBeats } from './introRewrite.js?v=129';
 import { naturalizeDialogueBeats } from './dialogueNaturalization.js?v=1';
-import { authorDialogueBeats } from './dialogueAuthorPass.js?v=4';
-import { episode1LivingRewriteBeats } from './episode1LivingRewrite.js?v=3';
+import { authorDialogueBeats } from './dialogueAuthorPass.js?v=5';
+import { episode1LivingRewriteBeats } from './episode1LivingRewrite.js?v=4';
 
 const legacyChapter1 = {
   id: "act1",
@@ -3264,17 +3255,8 @@ const legacyChapter1 = {
         { type: "system", text: "Мейсон вышел из сети.", delay: 900, characterStatus: { id: "mason", online: false } }
       ]
     },
-    ...miaLateSceneBeats,
-    ...chapter1FinaleBeats
   ]
 };
-
-const firstPostMiaBeat = legacyChapter1.beats.findIndex(beat => beat.id === 'intro_case_sort_task');
-const firstLegacyDerekMorningBeat = legacyChapter1.beats.findIndex(beat => beat.id === 'morning_derek_photos');
-const firstMiaRemoteBeat = legacyChapter1.beats.findIndex(beat => beat.id === 'mia_remote_phone_start');
-const firstUnknownAfterHackBeat = legacyChapter1.beats.findIndex(beat => beat.id === 'unknown_after_hack_start');
-const firstDerekAfterBrookeBeat = legacyChapter1.beats.findIndex(beat => beat.id === 'derek_after_brooke_start');
-const firstMiaLateBeat = legacyChapter1.beats.findIndex(beat => beat.id === 'mia_late_evening_start');
 
 const activeChapter1Beats = [
   ...introRewriteBeats,
@@ -3282,7 +3264,7 @@ const activeChapter1Beats = [
 ];
 
 export const chapter1 = {
-  ...legacyChapter1,
+  id: "act1",
   title: "Эпизод 1: Незнакомый номер",
   beats: authorDialogueBeats(naturalizeDialogueBeats(activeChapter1Beats))
 };

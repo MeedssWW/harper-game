@@ -254,26 +254,22 @@ async function runTakeover(wrapper, onDone) {
     await showHijackHome(wrapper);
     await showHijackChat(wrapper, 'RavenFeed', [
         ['Оливия', 'Пончик известнее мэра.'],
-        ['Миа', 'И это правильно.'],
+        ['Миа', 'и это правильно'],
         ['Дерек', 'Тот фильм был нормальный.'],
-        ['Брук', 'Нет.'],
-        ['Оливия', 'Вот и поговорили.']
+        ['Брук', 'Нет.']
     ]);
     await showHijackHome(wrapper, true);
     await showHijackChat(wrapper, 'Оливия Грант', [
-        ['Оливия', 'Я заглянула на минуту.'],
-        ['Оливия', 'Увидела, что ты закончил с картой.'],
-        ['Игрок', 'Пока это всего две точки.'],
-        ['Оливия', 'Но раньше у нас не было даже этого.'],
-        ['Оливия', 'Спасибо.']
+        ['Оливия', 'Я скинула приглашение.'],
+        ['Оливия', 'Посмотри, если хочешь.'],
+        ['Оливия', 'Брук только что выложила объявление о поисках.'],
+        ['Оливия', 'Не принимай каждую версию в комментариях за факт.']
     ]);
     await showHijackHome(wrapper, true);
     await showHijackChat(wrapper, 'Дерек Миллер', [
-        ['Дерек', 'Ты точно никогда ее не видел?'],
-        ['Игрок', 'Нет. Я всё ещё вижу её впервые.'],
-        ['Дерек', 'Понял.'],
-        ['Дерек', 'Я сегодня ещё попробую поговорить с полицией.'],
-        ['Дерек', 'Я напишу позже.']
+        ['Дерек', 'Я нашёл ещё несколько фотографий Харпер.'],
+        ['Дерек', 'Посмотри, пожалуйста.'],
+        ['Дерек', 'Допрашивать тебя заново не буду.']
     ]);
     await showHijackHome(wrapper, true);
     await showHijackCase(wrapper);
@@ -309,9 +305,9 @@ async function showHijackHome(wrapper, fast = false) {
                 <h1>Сообщения</h1>
             </header>
             <div class="hijack-chat-list">
-                <div><strong>RavenFeed</strong><span>Оливия: Вот и поговорили.</span></div>
-                <div><strong>Оливия Грант</strong><span>Ладно, до связи.</span></div>
-                <div><strong>Дерек Миллер</strong><span>Не буду тебя дёргать.</span></div>
+                <div><strong>RavenFeed</strong><span>Брук Хейз: Харпер Вэнс не выходит на связь...</span></div>
+                <div><strong>Оливия Грант</strong><span>Не принимай каждую версию за факт.</span></div>
+                <div><strong>Дерек Миллер</strong><span>Допрашивать тебя заново не буду.</span></div>
                 <div><strong>Миа Картер</strong><span>Удалённый доступ</span></div>
             </div>
         </section>
@@ -358,7 +354,7 @@ async function showHijackCase(wrapper) {
             </header>
             <div class="hijack-notes" id="hijack-notes">
                 <article><b>ФАКТ</b><strong>Номер игрока</strong><p>Он пришёл Дереку с телефона Харпер.</p></article>
-                <article><b>ФАКТ</b><strong>Резервная копия</strong><p>Харпер пользовалась старым телефоном Мии.</p></article>
+                <article><b>ПОКАЗАНИЯ МИИ</b><strong>Старый телефон</strong><p>По словам Мии, Харпер брала её телефон на несколько минут.</p></article>
                 <article><b>НЕИЗВЕСТНО</b><strong>Удалённый чат</strong><p>Контакт и текст сообщения не восстановлены.</p></article>
                 <article><b>ВОПРОС</b><strong>Кому она написала?</strong><p>В копии осталась только ссылка на VID_1842.mp4.</p></article>
             </div>

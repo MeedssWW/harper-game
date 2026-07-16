@@ -16,9 +16,9 @@ import { renderContactList, renderContactProfile } from './src/screens/contacts/
 import { renderGallery } from './src/screens/gallery/gallery.js?v=126';
 import { renderNotes } from './src/screens/notes/notes.js?v=126';
 import { renderMap } from './src/screens/map/map.js?v=126';
-import { renderMiaPhone } from './src/screens/miaPhone/miaPhone.js?v=141';
+import { renderMiaPhone } from './src/screens/miaPhone/miaPhone.js?v=142';
 import { renderBrowser } from './src/screens/browser/browser.js?v=126';
-import { renderSocial } from './src/screens/social/social.js?v=140';
+import { renderSocial } from './src/screens/social/social.js?v=141';
 import { renderClues } from './src/screens/clues/clues.js?v=126';
 import { renderCaseIntroTask } from './src/screens/caseFile/caseIntroTask.js?v=126';
 import { renderFrameAnalysis } from './src/screens/frameAnalysis/frameAnalysis.js?v=126';
@@ -29,7 +29,7 @@ import { renderPoliceDecision } from './src/screens/policeDecision/policeDecisio
 import { renderChapterEnd } from './src/screens/chapterEnd/chapterEnd.js?v=140';
 import { audioEngine } from './src/engine/audioEngine.js?v=124';
 import { characters } from './src/data/characters.js?v=123';
-import { chapter1 } from './src/data/chapter1.js?v=144';
+import { chapter1 } from './src/data/chapter1.js?v=145';
 
 // ---- App State ----
 let activeChatView = null;
