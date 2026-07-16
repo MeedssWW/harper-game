@@ -5,11 +5,12 @@
 const copy = new Map([
   // Derek: impatient, guilty, trying to regain control rather than briefing the player.
   ["intro_derek_explains_v2|Короче, дело в Харпер.", "Ладно, давай с самого начала."],
-  ["intro_derek_explains_v2|Она пропала два дня назад.", "Харпер пропала два дня назад."],
+  ["intro_derek_explains_v2|Харпер моя девушка.", "Мою девушку зовут Харпер."],
+  ["intro_derek_explains_v2|Она пропала два дня назад.", "Она пропала два дня назад."],
   ["intro_derek_explains_v2|А сегодня с её номера вдруг пришло сообщение.", "А сегодня её телефон вдруг ожил."],
-  ["intro_derek_explains_v2|В сообщении был только твой номер.", "Мне пришло сообщение. Внутри только твой номер."],
-  ["intro_derek_explains_v2|Я её не знаю. Ты точно не ошибся в цифрах?", "Я впервые слышу это имя. Может, ты цифру перепутал?"],
-  ["intro_derek_explains_v2|Подожди. Ты уверен, что писала она?", "Подожди. А ты уверен, что это вообще писала Харпер?"],
+  ["intro_derek_explains_v2|В сообщении был только твой номер.", "Мне пришло сообщение, и внутри был только твой номер."],
+  ["intro_derek_explains_v2|Я её не знаю. Ты точно не ошибся в цифрах?", "Я впервые слышу это имя. Для начала ещё раз проверь номер."],
+  ["intro_derek_explains_v2|Подожди. Ты уверен, что писала она?", "Ты ведь даже не уверен, что это писала Харпер."],
   ["intro_derek_group_offer|Я почти не спал.", "Я вторую ночь почти не сплю."],
   ["intro_derek_group_offer|Хочу спросить её друзей.", "Надо спросить остальных."],
   ["intro_derek_group_offer|Может, они что-то знают.", "Может, Харпер говорила кому-то из них про тебя."],
@@ -23,7 +24,7 @@ const copy = new Map([
   ["intro_group_seven_start|Так говорит.", "Говорит, что не понимает."],
   ["intro_group_seven_start|И ты сразу притащил его сюда?", "И поэтому ты сразу тащишь его сюда, даже никого не спросив?"],
   ["intro_group_seven_start|Но зачем кому-то отправлять именно его?", "Но почему тогда именно он? Ну не из воздуха же номер взялся."],
-  ["intro_group_seven_start|Может, чтобы мы вот так и дёрнулись.", "Может, именно этого от нас и хотели. Чтобы мы все дёрнулись."],
+  ["intro_group_seven_start|Может, чтобы мы вот так и дёрнулись.", "Может, кто-то именно этого и хотел, чтобы мы запаниковали."],
   ["intro_group_seven_start|Я не знаю Харпер. До Дерека я даже имени её не слышал.", "Я не знаю Харпер. До сообщения Дерека даже имени такого не слышал."],
   ["intro_group_seven_start|Я сам ничего не понимаю. Пытаюсь выяснить, как мой номер туда попал.", "Я понимаю не больше вашего. Просто хочу узнать, какого чёрта там мой номер."],
 
@@ -67,7 +68,7 @@ const copy = new Map([
   ["olivia_intro_v2_phone_logic|Тогда у кого-то есть её телефон.", "А если не Харпер, её телефон у кого-то ещё."],
   ["olivia_intro_v2_phone_logic|И зачем-то вывел Дерека именно на тебя.", "И этот человек специально вывел Дерека на тебя."],
   ["olivia_intro_v2_phone_logic|Если честно... второй вариант пугает меня сильнее.", "Вот второй вариант мне совсем не нравится."],
-  ["olivia_intro_v2_phone_logic|Вот только зачем ей мой номер?", "Ладно. А мой номер ей зачем?"],
+  ["olivia_intro_v2_phone_logic|Вот только зачем ей мой номер?", "И всё равно непонятно, зачем ей понадобился мой номер."],
   ["olivia_intro_v2_phone_logic|Она часто что-то делала и никому не объясняла?", "Она вообще часто влезала во что-то и молчала до последнего?"],
   ["olivia_intro_v2_belief|Так ты мне веришь или пока нет?", "Сейчас это прозвучало как очень вежливое «я тебе не верю»."],
   ["olivia_intro_v2_belief|Или ты тоже меня подозреваешь?", "То есть ты всё-таки меня подозреваешь."],
@@ -199,6 +200,25 @@ const copy = new Map([
   ["postleak_mason|Сразу: никто туда не едет.", "Сразу говорю: даже не думайте туда ехать."],
   ["postleak_mason|Ты впервые пишешь мне лично и сразу что-то запрещаешь.", "Милое знакомство: первое личное сообщение от тебя сразу начинается с приказа."],
 
+  // The player reacts more often than he interviews everyone around him.
+  ["olivia_intro_v2_larks_memory|Larks это кафе?", "Larks мне вообще ничего не говорит."],
+  ["olivia_intro_v2_larks_cafe|Да.", "Это кафе."],
+  ["mia_intro_v2_harper_hated_chat|Вы с Харпер давно дружили?", "Звучит так, будто вы давно дружили."],
+  ["mia_intro_v2_harper_hated_chat|А какой Харпер была именно с тобой?", "Хочется понять, какой она была именно с тобой."],
+  ["mia_intro_v2_harper_hated_chat|Тебе точно нормально сейчас о ней говорить?", "Если тебе тяжело, можем не продолжать."],
+  ["morning_olivia_found_photo|Ты раньше не замечала, что там на фоне?", "То есть снимок всё это время был у тебя."],
+  ["morning_olivia_held_back|Чего именно?", "Значит, есть ещё что-то."],
+  ["morning_olivia_held_back|Почему не рассказала?", "Вчера ты решила, что мне это знать не нужно."],
+  ["morning_olivia_held_back|Ты специально решила промолчать?", "Получается, ты специально промолчала."],
+  ["separate_following_info|Кроме машины, что ещё тебе сейчас вспоминается?", "Попробуй вспомнить, что ещё было у моста."],
+  ["separate_following_info|Она хоть намекнула, кого боялась?", "Она так и не сказала, кого боялась."],
+  ["separate_following_info|Это был страх? Или просто нервы?", "По твоему описанию это больше похоже на страх."],
+  ["brooke_after_call_start|Какое тебе дело до моего списка чатов?", "До моего списка чатов тебе вообще не было дела."],
+  ["brooke_after_call_start|Ты из-за одного названия уже решила устроить допрос?", "Ты уже устроила допрос из-за одного названия."],
+  ["postleak_tyler_pass|А North Yard это вообще что?", "North Yard мне вообще ничего не говорит."],
+  ["postleak_tyler_pass|Если по-честному: насколько уверен?", "Только без угадываний. Скажи, насколько уверен."],
+  ["postleak_tyler_pass|А обычная парковочная наклейка так выглядеть не может?", "Это всё ещё может быть обычная парковочная наклейка."],
+
   // Late chapter: preserve the strongest emotional scenes, only remove remaining report-like choices.
   ["mia_late_derek_argument|Я спросила, написать ли Дереку. Чтобы он забрал её или хотя бы позвонил.", "Я спросила, может, позвонить Дереку. Чтобы он её забрал или хотя бы поговорил с ней."],
   ["mia_late_derek_argument|Она сразу попросила не лезть и сказала, что они поссорились и она не хочет с ним разговаривать.", "Она сразу сказала: «Не лезь, мы поссорились, я не хочу его слышать»."],
@@ -232,6 +252,35 @@ const remove = new Set([
 
 const rewrite = (beatId, text) => copy.get(`${beatId}|${text}`) || text;
 
+const conversationalSenders = new Set([
+  "player", "derek", "olivia", "mia", "brooke", "mason", "tyler"
+]);
+
+const properClauseStarts = /^(?:Харпер|Оливия|Миа|Дерек|Брук|Мейсон|Тайлер|Larks|Рейвенвуд|Полиция)\b/u;
+
+const lowerClauseStart = text => {
+  if (!text || properClauseStarts.test(text)) return text;
+  return text[0].toLocaleLowerCase("ru-RU") + text.slice(1);
+};
+
+// Real chat messages usually connect one thought instead of presenting every
+// clause as a dramatic sentence fragment. Keep deliberate pauses, but join the
+// common mechanical patterns left by the first copy pass.
+const joinHumanClauses = text => {
+  if (!text || typeof text !== "string") return text;
+
+  let result = text
+    .replace(/\. (Но|И|А|Потому что|Поэтому|Чтобы|Только|Просто|Хотя) /gu,
+      (_, connector) => `, ${connector.toLocaleLowerCase("ru-RU")} `);
+
+  result = result.replace(
+    /^(Да|Нет|Ладно|Хорошо|Конечно|Ага|Понимаю|Извини|Правильно)\. (.+)$/u,
+    (_, lead, rest) => `${lead}, ${lowerClauseStart(rest)}`
+  );
+
+  return result;
+};
+
 const styleTyler = message => {
   if (message.from !== "tyler" || !message.text) return message;
   let text = message.text;
@@ -251,13 +300,17 @@ export function authorDialogueBeats(beats) {
             ...message,
             options: (message.options || []).map(option => ({
               ...option,
-              text: rewrite(beat.id, option.text)
+              text: joinHumanClauses(rewrite(beat.id, option.text))
             }))
           };
         }
 
         if (!message.text) return message;
-        return styleTyler({ ...message, text: rewrite(beat.id, message.text) });
+        const text = rewrite(beat.id, message.text);
+        return styleTyler({
+          ...message,
+          text: conversationalSenders.has(message.from) ? joinHumanClauses(text) : text
+        });
       })
   }));
 }

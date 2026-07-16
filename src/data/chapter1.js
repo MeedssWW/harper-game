@@ -9,7 +9,7 @@ import { postOliviaRoutesRewriteBeats } from './postOliviaRoutesRewrite.js?v=126
 import { backupFoundRewriteBeats } from './backupFoundRewrite.js?v=126';
 import { postLeakRewriteBeats } from './postLeakRewrite.js?v=126';
 import { naturalizeDialogueBeats } from './dialogueNaturalization.js?v=1';
-import { authorDialogueBeats } from './dialogueAuthorPass.js?v=1';
+import { authorDialogueBeats } from './dialogueAuthorPass.js?v=2';
 
 const legacyChapter1 = {
   id: "act1",

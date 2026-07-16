@@ -23,13 +23,13 @@ import { renderClues } from './src/screens/clues/clues.js?v=126';
 import { renderCaseIntroTask } from './src/screens/caseFile/caseIntroTask.js?v=126';
 import { renderFrameAnalysis } from './src/screens/frameAnalysis/frameAnalysis.js?v=126';
 import { renderLizaPhone } from './src/screens/lizaPhone/lizaPhone.js?v=126';
-import { renderSettings } from './src/screens/settings/settings.js?v=129';
+import { renderSettings } from './src/screens/settings/settings.js?v=130';
 import { renderUnknownCall } from './src/screens/call/unknownCall.js?v=126';
 import { renderPoliceDecision } from './src/screens/policeDecision/policeDecision.js?v=70';
 import { renderChapterEnd } from './src/screens/chapterEnd/chapterEnd.js?v=70';
 import { audioEngine } from './src/engine/audioEngine.js?v=124';
 import { characters } from './src/data/characters.js?v=123';
-import { chapter1 } from './src/data/chapter1.js?v=128';
+import { chapter1 } from './src/data/chapter1.js?v=129';
 
 // ---- App State ----
 let activeChatView = null;
