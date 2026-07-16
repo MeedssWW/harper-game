@@ -67,13 +67,10 @@ export function renderSocial({ onBack }) {
 
     wrapper.innerHTML = `
         <div class="invest-header social-topbar">
-            <button class="messenger-back-btn" id="social-back">←</button>
+            <button class="messenger-back-btn" id="social-back" type="button" aria-label="Назад"><img class="ui-lucide is-light" src="src/assets/icons/lucide/chevron-left.svg" alt="" /></button>
             <span class="social-logo">Лента</span>
             <button class="social-top-icon" type="button" aria-label="Обновить">
-                <svg viewBox="0 0 24 24" aria-hidden="true">
-                    <path fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" d="M20 11a8 8 0 1 0-2.34 5.66"/>
-                    <path fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" d="M20 4v7h-7"/>
-                </svg>
+                <img class="ui-lucide is-light" src="src/assets/icons/lucide/refresh-cw.svg" alt="" />
             </button>
         </div>
         <div class="social-feed">
@@ -94,7 +91,7 @@ export function renderSocial({ onBack }) {
             const liked = button.classList.toggle('liked');
             const countEl = wrapper.querySelector(`[data-like-count="${button.dataset.likeTarget}"]`);
             const base = Number(button.dataset.baseLikes);
-            button.textContent = liked ? '♥' : '♡';
+            button.setAttribute('aria-pressed', String(liked));
             if (countEl) countEl.textContent = `${base + (liked ? 1 : 0)} отметок`;
         });
     });
@@ -133,9 +130,9 @@ function renderPost(post, index) {
             </div>
             ${post.image ? `<img class="social-image" src="${post.image}" alt="">` : ''}
             <div class="social-actions">
-                <button class="social-like-btn" type="button" data-like-target="${key}" data-base-likes="${post.likes}">♡</button>
-                <span>💬</span>
-                <span>↗</span>
+                <button class="social-like-btn" type="button" data-like-target="${key}" data-base-likes="${post.likes}" aria-label="Нравится" aria-pressed="false"><img class="ui-lucide is-light" src="src/assets/icons/lucide/heart.svg" alt="" /></button>
+                <span aria-label="Комментарии"><img class="ui-lucide is-light" src="src/assets/icons/lucide/message-circle.svg" alt="" /></span>
+                <span aria-label="Поделиться"><img class="ui-lucide is-light" src="src/assets/icons/lucide/send-horizontal.svg" alt="" /></span>
             </div>
             <div class="social-like-count" data-like-count="${key}">${post.likes} отметок</div>
             <p>${text}</p>

@@ -4,7 +4,7 @@
 
 import { audioEngine } from '../../engine/audioEngine.js?v=123';
 import { stateManager } from '../../engine/stateManager.js';
-import { chapter1 } from '../../data/chapter1.js?v=120';
+import { chapter1 } from '../../data/chapter1.js?v=126';
 
 const STATE_KEY = 'harper_act1_v4';
 const STORY_VERSION = 'harper_act1_post_leak_finale_2026_07_13_v13';
@@ -109,7 +109,10 @@ const CHECKPOINTS = [
             externalConnectionBlocked: true,
             unknownChatUnlocked: true,
             miaHackUpdateWritten: true,
-            miaKnowsAboutAttack: true
+            miaKnowsAboutAttack: true,
+            playerDeclinedBackupAccess: true,
+            miaBackupAccessGranted: false,
+            miaPrivateChatsOpened: false
         }
     }
 ];
@@ -124,7 +127,7 @@ export function renderSettings({ onBack }) {
     wrapper.innerHTML = `
         <header class="settings-header">
             <button class="settings-back-btn" id="settings-back" type="button" aria-label="Назад">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" d="m15 5-7 7 7 7"/></svg>
+                <img class="ui-lucide is-light" src="src/assets/icons/lucide/chevron-left.svg" alt="" />
             </button>
             <div>
                 <h1>Настройки</h1>
@@ -169,7 +172,7 @@ export function renderSettings({ onBack }) {
                 <div class="settings-group-title">Прогресс</div>
                 <p class="settings-note">Сброс удалит историю, выборы, открытые чаты и лояльность.</p>
                 <button class="settings-reset-btn" id="settings-reset-progress" type="button">
-                    <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" d="M3 3v5h5"/></svg>
+                    <img class="ui-lucide is-light" src="src/assets/icons/lucide/rotate-ccw.svg" alt="" />
                     Сбросить прогресс
                 </button>
             </section>

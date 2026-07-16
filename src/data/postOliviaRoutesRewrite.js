@@ -41,14 +41,14 @@ export const postOliviaRoutesRewriteBeats = [
   B("larks_photo_tense", "group_larks", "choice:larks_photo_context:2", [M("Вот! Мне тоже."), M("У неё так лицо менялось, когда она делала вид, что всё ок."), O("А я тогда ничего не заметила.")]),
 
   B("larks_sedan_reveal", "group_larks", "after:larks_photo_car|larks_photo_person|larks_photo_tense", [
-    O("Только давайте без «мы нашли улику»."), O("Машина могла просто стоять у кафе."),
+    O("Только не решайте сразу, что дело в машине."), O("Она могла просто стоять у кафе."),
     O("И Харпер могла смотреть вообще не на неё."), M("Стоп."), M("Она тёмно-зелёная."), O("Да..."),
     M("Харпер спрашивала меня про такую машину."), O("Когда?"), M("На следующий день."), M("У старого моста."),
     O("Она прямо сказала: тёмно-зелёная?"), M("Да."), M("Спросила, не видела ли я рядом тёмно-зелёный седан."),
     M("Я ещё подумала: с чего вдруг такой вопрос? И забыла."),
     C([
-      option("Она объяснила, почему спрашивает?", "larks_sedan_why"),
-      option("Ты тогда видела машину?", "larks_sedan_seen"),
+      option("Она сказала, зачем спрашивает?", "larks_sedan_why"),
+      option("И ты оглянулась? Машины уже не было?", "larks_sedan_seen"),
       option("Тебя сейчас саму это пугает?", "larks_sedan_scared")
     ])
   ]),
@@ -64,7 +64,7 @@ export const postOliviaRoutesRewriteBeats = [
     C([
       option("И ты решила, что дело в Дереке?", "larks_bridge_why_home"),
       option("Она кого-то ждала или, наоборот, пряталась?", "larks_bridge_waiting"),
-      option("Похоже, она почти решилась тебе что-то сказать.", "larks_bridge_tell")
+      option("Похоже, она хотела что-то сказать и передумала.", "larks_bridge_tell")
     ])
   ]),
   B("larks_bridge_why_home", "group_larks", "choice:larks_bridge_story:0", [M("Ага."), M("Подумала, они опять поругались."), M("И не стала лезть. Молодец, Миа.")]),
@@ -95,7 +95,7 @@ export const postOliviaRoutesRewriteBeats = [
     O("Или одна и та же машина."), O("Но она и сама сомневалась."),
     C([
       option("То есть это повторилось. Не один раз.", "larks_twice"),
-      option("Она рассказала вам по кусочку. И ни одна не видела всей картины.", "larks_didnt_know"),
+      option("Вы обе слышали половину. И не знали про вторую.", "larks_didnt_know"),
       option("Ладно... вот теперь мне правда не по себе.", "larks_uneasy")
     ])
   ]),
@@ -110,7 +110,7 @@ export const postOliviaRoutesRewriteBeats = [
     O("А на фотографии у Larks — машина такого же цвета."), M("Может, та же."), O("Может."), O("Но пока только может быть."),
     C([
       option("Подождите. Я вообще не представляю, где Larks и этот мост.", "larks_map_unknown"),
-      option("Скинете обе точки? Хочу хотя бы увидеть, насколько они далеко друг от друга.", "larks_map_names")
+      option("Скиньте точки на карте. Для меня это пока просто названия.", "larks_map_names")
     ])
   ]),
   B("larks_map_unknown", "group_larks", "choice:larks_known_summary:0", [O("Точно..."), O("Я всё время забываю, что ты вообще не знаешь Рейвенвуд.")]),
@@ -126,8 +126,8 @@ export const postOliviaRoutesRewriteBeats = [
   B("larks_after_map", "group_larks", "flagAfter:ravenwoodMapAddedToCase:larks_group_map_document", [
     O("Получилось открыть?"),
     C([
-      option("Да. Теперь хотя бы понимаю, о каких местах вы говорите. До этого это были просто названия.", "larks_after_map_understand"),
-      option("Да. Но пока это просто два места в разные дни — они ничего не объясняют.", "larks_after_map_two"),
+      option("Да. Теперь хотя бы понимаю, о чём вы говорите.", "larks_after_map_understand"),
+      option("Да. Но пока это просто два места в разные дни.", "larks_after_map_two"),
       option("Странно видеть всё это на карте настоящего города.", "larks_after_map_strange")
     ])
   ]),
@@ -141,7 +141,7 @@ export const postOliviaRoutesRewriteBeats = [
     M("Постараюсь."), M("Хотя голова уже сама это делает."), O("Тогда на сегодня хватит."),
     O("Если следователь ответит про фото — напишу."), M("И я, если ответят про машину."),
     C([
-      option("Хорошо. Вопросов пока больше, чем ответов, но хотя бы понятно, что проверять.", "larks_end_questions"),
+      option("Ладно. Пока всё равно одни вопросы.", "larks_end_questions"),
       option("Только попробуйте хотя бы немного отдохнуть.", "larks_end_rest"),
       option("Напишите, если появится что-то конкретное.", "larks_end_concrete")
     ])
@@ -159,12 +159,12 @@ export const postOliviaRoutesRewriteBeats = [
     M("Вы тут?"), O("Да."), M("Я всё это время прокручивала встречу у моста."), M("Прямо по минутам."),
     M("Как пришла."), M("О чём говорили."), M("Как она ушла."), M("И... я ещё кое-что вспомнила."),
     C([
-      option("Что именно?", "larks_phone_what"), option("Это опять про машину?", "larks_phone_car"),
+      option("Что на этот раз?", "larks_phone_what"), option("Это опять про машину?", "larks_phone_car"),
       option("Миа, ты меня сейчас пугаешь.", "larks_phone_bad")
     ])
   ]),
   B("larks_phone_what", "group_larks", "choice:larks_old_phone_start:0", [M("Про телефон.")]),
-  B("larks_phone_car", "group_larks", "choice:larks_old_phone_start:1", [M("Нет."), M("Кажется, это может быть важнее.")]),
+  B("larks_phone_car", "group_larks", "choice:larks_old_phone_start:1", [M("Нет."), M("И, кажется... это хуже.")]),
   B("larks_phone_bad", "group_larks", "choice:larks_old_phone_start:2", [M("Прости."), M("Может, это вообще пустяк."), M("Но промолчать я уже не могу.")]),
 
   B("larks_phone_story", "group_larks", "after:larks_phone_what|larks_phone_car|larks_phone_bad", [
@@ -201,7 +201,7 @@ export const postOliviaRoutesRewriteBeats = [
     O("Сначала следователю."), M("Да, поняла."), M("Найду."), M("Сначала сфотографирую, как он лежал."), M("Потом напишу им."),
     C([
       option("Главное, не потеряй теперь ещё и этот телефон.", "larks_phone_joke"),
-      option("Напиши, когда найдёшь, даже если он не включится. Хотя бы будем знать, что телефон у тебя.", "larks_phone_write"), option("Надеюсь, от того сообщения хоть что-то осталось.", "larks_phone_restore")
+      option("Напиши, когда найдёшь. Даже если он не включится.", "larks_phone_write"), option("Надеюсь, от того сообщения хоть что-то осталось.", "larks_phone_restore")
     ])
   ]),
   B("larks_phone_joke", "group_larks", "choice:larks_phone_find:0", [M("Очень смешно."), M("Хотя я даже не знаю, в каком он ящике."), M("Ладно."), M("Заслужила.")]),
@@ -216,7 +216,7 @@ export const postOliviaRoutesRewriteBeats = [
     { type: "pause", delay: 3600 }, { type: "system", text: "Миа в сети.", delay: 600, characterStatus: { id: "mia", online: true } },
     M("Привет ещё раз."), M("Оливия показала фото из Larks."), M("И у меня сейчас кое-что щёлкнуло."),
     C([
-      option("Что именно?", "separate_car_what"), option("Это про машину на фотографии?", "separate_car_photo"),
+      option("Что вспомнила?", "separate_car_what"), option("Это про машину на фотографии?", "separate_car_photo"),
       option("Только не говори, что там ещё один странный номер.", "separate_car_number")
     ])
   ]),
@@ -228,7 +228,7 @@ export const postOliviaRoutesRewriteBeats = [
     M("На следующий день после Larks мы встретились у старого моста."), M("Харпер была какая-то... дёрганая."),
     M("Всё время оглядывалась."), M("А потом спросила, не видела ли я рядом тёмно-зелёный седан."),
     C([
-      option("Ты тогда видела машину?", "separate_car_seen"), option("Она объяснила, почему спрашивает?", "separate_car_why"),
+      option("Ты оглянулась? Машины уже не было?", "separate_car_seen"), option("Она сказала, зачем спрашивает?", "separate_car_why"),
       option("Тебя сейчас саму это пугает?", "separate_car_scared")
     ])
   ]),
@@ -242,7 +242,7 @@ export const postOliviaRoutesRewriteBeats = [
     C([
       option("Хорошо, что ты сразу сообщила.", "separate_police_good"),
       option("Тогда ты и правда не могла знать, что это важно.", "separate_police_understand", { miaTrust: 1 }),
-      option("Такие детали лучше больше не откладывать. Даже если они кажутся случайными.", "separate_police_details", { miaTrust: -1 })
+      option("Миа, такое надо было сказать полиции сразу.", "separate_police_details", { miaTrust: -1 })
     ])
   ]),
   B("separate_police_good", "private_mia", "choice:separate_police_car:0", [M("Да."), M("Не хочу потом опять вспоминать что-то через два дня.")]),
@@ -276,7 +276,7 @@ export const postOliviaRoutesRewriteBeats = [
   B("separate_olivia_location_start", "private_olivia", "after:separate_mia_location_sent", [
     O("Миа уже рассказала тебе про старый мост?"),
     C([
-      option("Да. И прислала место.", "separate_olivia_yes"), option("Да. И теперь машина у Larks выглядит уже не так случайно. Особенно после её вопроса Мие.", "separate_olivia_car"), option("Да. Но одного цвета пока мало — это всё ещё может быть совпадением.", "separate_olivia_coincidence", { oliviaTrust: 1 })
+      option("Да. И прислала место.", "separate_olivia_yes"), option("Да. После слов Мии машина уже не выглядит случайной.", "separate_olivia_car"), option("Да. Но одного цвета пока мало — это всё ещё может быть совпадением.", "separate_olivia_coincidence", { oliviaTrust: 1 })
     ])
   ]),
   B("separate_olivia_yes", "private_olivia", "choice:separate_olivia_location_start:0", [O("Хорошо.")]),
@@ -292,7 +292,7 @@ export const postOliviaRoutesRewriteBeats = [
   B("separate_after_map", "private_olivia", "flagAfter:ravenwoodMapAddedToCase:separate_map_document", [
     O("Получилось открыть?"),
     C([
-      option("Да. Теперь хотя бы понимаю, где всё происходило. До этого это были просто два названия.", "separate_map_where"), option("Да. Но это всего два места в разные дни — и между ними целый день.", "separate_map_two"), option("Да. Рейвенвуд уже не кажется совсем чужим. Странный, конечно, способ знакомиться с городом.", "separate_map_city")
+      option("Да. Теперь хотя бы понимаю, где это всё.", "separate_map_where"), option("Да. Но это просто два места в разные дни.", "separate_map_two"), option("Да. Странный способ знакомиться с Рейвенвудом.", "separate_map_city")
     ])
   ]),
   B("separate_map_where", "private_olivia", "choice:separate_after_map:0", [O("Хорошо."), O("А то для нас эти названия привычные.")]),
@@ -319,7 +319,7 @@ export const postOliviaRoutesRewriteBeats = [
     M("У Харпер под конец почти сел телефон."), M("Потом выключился совсем."), M("И она попросила мой."),
     M("Сказала, ей нужно быстро кинуть одно сообщение."),
     C([
-      option("Ты видела, кому она писала?", "separate_phone_who"), option("Что было потом?", "separate_phone_after"),
+      option("Ты видела, кому она писала?", "separate_phone_who"), option("И она что-то отправила?", "separate_phone_after"),
       option("У моста, я так понимаю, зарядить свой она не могла.", "separate_phone_charge")
     ])
   ]),

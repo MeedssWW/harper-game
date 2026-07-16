@@ -4,6 +4,7 @@
 
 import { stateManager } from '../../engine/stateManager.js';
 
+const ICON_ROOT = 'src/assets/icons/lucide';
 const VIDEO_SRC = 'src/assets/videos/vid_1842_fragment.mp4?v=90';
 const POSTER_SRC = 'src/assets/videos/vid_1842_fragment_poster.jpg?v=90';
 const STILL_SRC = 'src/assets/case/still_1842.png?v=90';
@@ -30,10 +31,11 @@ export function renderFrameAnalysis({ onDone } = {}) {
     function renderVideoStep(message = '') {
         wrapper.innerHTML = `
             <header class="frame-analysis-header">
-                <button class="frame-back-btn" id="frame-back" type="button" aria-label="Назад">‹</button>
-                <span>Дело Харпер Вэнс</span>
+                <button class="frame-back-btn" id="frame-back" type="button" aria-label="Назад">${lucideIcon('chevron-left')}</button>
+                <div class="frame-step"><b>01</b><i></i><span>03</span></div>
+                <span class="frame-analysis-kicker">${lucideIcon('search')} Дело Харпер Вэнс</span>
                 <h1>VID_1842_fragment.mp4</h1>
-                <p>Найдите кадр, где наклейка на лобовом стекле видна лучше всего.</p>
+                <p>Найди момент, где наклейка на лобовом стекле видна лучше всего.</p>
             </header>
 
             <main class="frame-analysis-body">
@@ -41,18 +43,29 @@ export function renderFrameAnalysis({ onDone } = {}) {
                     <video id="analysis-video" class="frame-analysis-video" playsinline preload="metadata" poster="${POSTER_SRC}">
                         <source src="${VIDEO_SRC}" type="video/mp4">
                     </video>
+                    <div class="frame-video-reticle" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+                    <span class="frame-video-label">RECOVERED / 00:03</span>
                 </section>
 
                 <div class="frame-time-row">
                     <span id="frame-current">00:00</span>
-                    <span>/</span>
+                    <i></i>
                     <span>00:03</span>
                 </div>
 
-                <button class="frame-primary-btn" id="frame-play" type="button">▶ Воспроизвести</button>
-                <input class="frame-timeline" id="frame-slider" type="range" min="0" max="3" step="0.01" value="0" aria-label="Таймлайн видео">
-                <button class="frame-secondary-btn" id="frame-save" type="button">Сохранить кадр</button>
-                <div class="frame-feedback ${message ? 'visible' : ''}" id="frame-feedback">${message}</div>
+                <button class="frame-primary-btn" id="frame-play" type="button">${lucideIcon('play')}<span>Воспроизвести</span></button>
+                <div class="frame-timeline-shell">
+                    <span class="frame-target-zone" aria-hidden="true"></span>
+                    <input class="frame-timeline" id="frame-slider" type="range" min="0" max="3" step="0.01" value="0" aria-label="Таймлайн видео" aria-valuetext="00:00">
+                </div>
+                <div class="frame-scrub-controls" aria-label="Точная покадровая настройка">
+                    <button type="button" data-frame-nudge="-0.05" aria-label="На пять сотых секунды назад">− 0,05</button>
+                    <span>точная настройка</span>
+                    <button type="button" data-frame-nudge="0.05" aria-label="На пять сотых секунды вперёд">+ 0,05</button>
+                </div>
+                <button class="frame-secondary-btn" id="frame-save" type="button">${lucideIcon('image')}<span>Сохранить этот кадр</span></button>
+                <div class="frame-hint">${lucideIcon('search')}<span>Смотри на лобовое стекло, когда седан оказывается ближе к камере.</span></div>
+                <div class="frame-feedback ${message ? 'visible error' : ''}" id="frame-feedback" role="status" aria-live="polite">${message ? `${lucideIcon('circle-alert')}<span>${message}</span>` : ''}</div>
             </main>
         `;
 
@@ -61,6 +74,13 @@ export function renderFrameAnalysis({ onDone } = {}) {
         const current = wrapper.querySelector('#frame-current');
         const play = wrapper.querySelector('#frame-play');
         let selectedTime = 0;
+
+        const setPlayState = playing => {
+            play.classList.toggle('is-playing', playing);
+            play.innerHTML = playing
+                ? `${lucideIcon('pause')}<span>Пауза</span>`
+                : `${lucideIcon('play')}<span>Воспроизвести</span>`;
+        };
 
         wrapper.querySelector('#frame-back')?.addEventListener('click', () => {
             if (onDone) onDone();
@@ -74,19 +94,21 @@ export function renderFrameAnalysis({ onDone } = {}) {
             selectedTime = time;
             slider.value = String(Math.min(3, time));
             current.textContent = formatTime(time);
+            slider.setAttribute('aria-valuetext', formatPreciseTime(time));
+            slider.style.setProperty('--frame-progress', `${Math.min(100, (time / 3) * 100)}%`);
         };
 
         video.addEventListener('loadedmetadata', syncTime);
         video.addEventListener('timeupdate', syncTime);
         video.addEventListener('pause', () => {
-            play.textContent = '▶ Воспроизвести';
+            setPlayState(false);
         });
         video.addEventListener('play', () => {
-            play.textContent = '⏸ Остановить';
+            setPlayState(true);
             stateManager.setFlag('videoFragmentViewed', true);
         });
         video.addEventListener('ended', () => {
-            play.textContent = '▶ Воспроизвести';
+            setPlayState(false);
             video.currentTime = Math.min(video.currentTime, 3);
             syncTime();
         });
@@ -94,7 +116,11 @@ export function renderFrameAnalysis({ onDone } = {}) {
         play.addEventListener('click', async () => {
             if (video.paused) {
                 if (video.currentTime >= 2.98) video.currentTime = 0;
-                await video.play();
+                try {
+                    await video.play();
+                } catch {
+                    showFrameFeedback(wrapper.querySelector('#frame-feedback'), 'Не удалось запустить видео. Коснись таймлайна и попробуй ещё раз.');
+                }
             } else {
                 video.pause();
             }
@@ -106,6 +132,17 @@ export function renderFrameAnalysis({ onDone } = {}) {
             video.pause();
             video.currentTime = selectedTime;
             current.textContent = formatTime(selectedTime);
+            slider.setAttribute('aria-valuetext', formatPreciseTime(selectedTime));
+            slider.style.setProperty('--frame-progress', `${Math.min(100, (selectedTime / 3) * 100)}%`);
+        });
+
+        wrapper.querySelectorAll('[data-frame-nudge]').forEach(button => {
+            button.addEventListener('click', () => {
+                selectedTime = Math.max(0, Math.min(3, selectedTime + Number(button.dataset.frameNudge || 0)));
+                slider.value = String(selectedTime);
+                slider.dispatchEvent(new Event('input'));
+                if (navigator.vibrate) navigator.vibrate(5);
+            });
         });
 
         wrapper.querySelector('#frame-save').addEventListener('click', () => {
@@ -117,7 +154,8 @@ export function renderFrameAnalysis({ onDone } = {}) {
 
             stateManager.setFlag('bestFrameCaptured', true);
             capturedFrame = captureVideoFrame(video) || STILL_SRC;
-            renderCropStep();
+            wrapper.classList.add('frame-capture-flash');
+            setTimeout(() => renderCropStep(), 180);
         });
     }
 
@@ -126,19 +164,23 @@ export function renderFrameAnalysis({ onDone } = {}) {
 
         wrapper.innerHTML = `
             <header class="frame-analysis-header compact">
-                <button class="frame-back-btn" id="frame-back" type="button" aria-label="Назад">‹</button>
-                <span>Выделите нужную деталь</span>
+                <button class="frame-back-btn" id="frame-back" type="button" aria-label="Назад">${lucideIcon('chevron-left')}</button>
+                <div class="frame-step"><span>01</span><i></i><b>02</b><i></i><span>03</span></div>
+                <span class="frame-analysis-kicker">${lucideIcon('image')} Выдели нужную деталь</span>
                 <h1>Стоп-кадр</h1>
-                <p>Растяните рамку вокруг наклейки на лобовом стекле седана.</p>
+                <p>Перетащи рамку на наклейку. Потяни за круг в углу, чтобы изменить размер.</p>
             </header>
 
             <main class="frame-analysis-body crop">
-                <section class="frame-crop-workspace" id="crop-workspace">
+                <section class="frame-crop-workspace" id="crop-workspace" aria-label="Стоп-кадр. Выдели наклейку на лобовом стекле">
                     <img src="${capturedFrame}" alt="Сохранённый кадр">
-                    <div class="frame-selection" id="frame-selection"><i></i></div>
+                    <div class="frame-crop-grid" aria-hidden="true"></div>
+                    <div class="frame-selection" id="frame-selection" role="img" aria-label="Область выделения"><span></span><i></i></div>
+                    <span class="frame-crop-label" aria-hidden="true">AREA 01</span>
                 </section>
-                <div class="frame-feedback ${feedback ? 'visible' : ''}" id="crop-feedback">${feedback}</div>
-                <button class="frame-secondary-btn" id="save-crop" type="button">Сохранить фрагмент</button>
+                <div class="frame-crop-instruction">${lucideIcon('search')}<span>Нужна только наклейка — без всей машины и фона.</span></div>
+                <div class="frame-feedback ${feedback ? 'visible error' : ''}" id="crop-feedback" role="status" aria-live="polite">${feedback ? `${lucideIcon('circle-alert')}<span>${feedback}</span>` : ''}</div>
+                <button class="frame-secondary-btn" id="save-crop" type="button">${lucideIcon('image')}<span>Сохранить фрагмент</span></button>
             </main>
         `;
 
@@ -162,6 +204,7 @@ export function renderFrameAnalysis({ onDone } = {}) {
                 selection = { x: point.x, y: point.y, w: 0.001, h: 0.001 };
                 dragStart = { point, selection: { ...selection } };
             }
+            workspace.classList.add('is-adjusting');
             workspace.setPointerCapture(event.pointerId);
             updateSelectionEl(selectionEl, selection);
         });
@@ -195,6 +238,7 @@ export function renderFrameAnalysis({ onDone } = {}) {
             if (!dragMode) return;
             dragMode = null;
             dragStart = null;
+            workspace.classList.remove('is-adjusting');
             try {
                 workspace.releasePointerCapture(event.pointerId);
             } catch {}
@@ -217,18 +261,23 @@ export function renderFrameAnalysis({ onDone } = {}) {
     function renderResultStep() {
         wrapper.innerHTML = `
             <header class="frame-analysis-header result">
-                <span>Стоп-кадр сохранён</span>
+                <div class="frame-step"><span>01</span><i></i><span>02</span><i></i><b>03</b></div>
+                <span class="frame-analysis-kicker">${lucideIcon('file-text')} Стоп-кадр сохранён</span>
                 <h1>Стоп-кадр с наклейкой</h1>
             </header>
 
             <main class="frame-analysis-body result">
                 <article class="sticker-result-card">
-                    <img src="${STICKER_SRC}" alt="Вырезанный фрагмент наклейки">
-                    <p>На стекле седана видна наклейка.</p>
-                    <p>Текст разобрать нельзя.</p>
-                    <p>Похоже на пропуск или разрешение на въезд.</p>
+                    <div class="sticker-result-image">
+                        <img src="${STICKER_SRC}" alt="Вырезанный фрагмент наклейки">
+                        <span>ENHANCED FRAME</span>
+                    </div>
+                    <div class="sticker-result-status">${lucideIcon('check-check')}<span>Деталь выделена</span></div>
+                    <strong>Выцветшая наклейка</strong>
+                    <p>На лобовом стекле седана видна прямоугольная наклейка. Текст не читается.</p>
+                    <p class="sticker-result-version">Версия: пропуск или разрешение на въезд.</p>
                 </article>
-                <button class="frame-primary-btn" id="add-sticker-case" type="button">Добавить в дело</button>
+                <button class="frame-primary-btn" id="add-sticker-case" type="button">${lucideIcon('file-text')}<span>Добавить в дело</span></button>
             </main>
         `;
 
@@ -331,4 +380,21 @@ function intersectionArea(a, b) {
 function formatTime(value) {
     const seconds = Math.max(0, Math.min(3, value || 0));
     return `00:0${Math.floor(seconds)}`;
+}
+
+function formatPreciseTime(value) {
+    const seconds = Math.max(0, Math.min(3, Number(value) || 0));
+    return `00:${seconds.toFixed(2).padStart(5, '0')}`;
+}
+
+function showFrameFeedback(element, message) {
+    if (!element) return;
+    element.innerHTML = `${lucideIcon('circle-alert')}<span></span>`;
+    element.querySelector('span').textContent = message;
+    element.classList.add('visible', 'error');
+}
+
+function lucideIcon(name) {
+    const safeName = /^[a-z0-9-]+$/.test(name) ? name : 'file-text';
+    return `<img class="frame-lucide-icon" src="${ICON_ROOT}/${safeName}.svg" alt="" aria-hidden="true">`;
 }

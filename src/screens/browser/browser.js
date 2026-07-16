@@ -22,12 +22,12 @@ export function renderBrowser({ onBack }) {
 
     wrapper.innerHTML = `
         <div class="invest-header">
-            <button class="messenger-back-btn" id="browser-back">←</button>
+            <button class="messenger-back-btn" id="browser-back" type="button" aria-label="Назад"><img class="ui-lucide is-light" src="src/assets/icons/lucide/chevron-left.svg" alt="" /></button>
             <span>Браузер</span>
             <div style="width:36px;"></div>
         </div>
         <div class="browser-addressbar">
-            <div class="browser-lock">⌕</div>
+            <div class="browser-lock" aria-hidden="true"><img class="ui-lucide is-light" src="src/assets/icons/lucide/search.svg" alt="" /></div>
             <input id="browser-query" type="text" placeholder="поиск или адрес" autocomplete="off" spellcheck="false">
             <button id="browser-submit">go</button>
         </div>

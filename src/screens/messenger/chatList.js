@@ -79,7 +79,7 @@ export function renderChatList({ onChatOpen, onBack }) {
         <header class="native-messages-header">
             <div class="native-header-line">
                 <button id="messenger-back" class="native-back-ghost" type="button" aria-label="Назад">
-                    <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" d="m15 5-7 7 7 7"/></svg>
+                    <img class="ui-lucide is-light" src="src/assets/icons/lucide/chevron-left.svg" alt="" />
                 </button>
                 <div class="native-coin-pill">5 <span></span></div>
             </div>
@@ -205,11 +205,7 @@ function formatChatCount(count) {
 }
 
 function messageIcon() {
-    return `
-        <svg class="native-chat-row-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.15" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z" />
-        </svg>
-    `;
+    return `<img class="native-chat-row-icon ui-lucide is-light" src="src/assets/icons/lucide/message-circle.svg" alt="" aria-hidden="true" />`;
 }
 
 function truncate(str, max) {

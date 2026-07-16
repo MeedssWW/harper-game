@@ -39,7 +39,7 @@ export function renderContactList({ onContactOpen, onBack }) {
 
     wrapper.innerHTML = `
         <div class="contacts-header">
-            <button class="messenger-back-btn" id="contacts-back">←</button>
+            <button class="messenger-back-btn" id="contacts-back" type="button" aria-label="Назад"><img class="ui-lucide is-light" src="src/assets/icons/lucide/chevron-left.svg" alt="" /></button>
             <span class="contacts-title">Контакты</span>
             <div style="width:36px;"></div>
         </div>
@@ -79,7 +79,7 @@ export function renderContactProfile({ characterId, onBack }) {
 
     wrapper.innerHTML = `
         <div class="profile-header-section" style="--profile-cover:url('${char.socialPhoto || char.avatarImage || ''}')">
-            <button class="profile-back-btn" id="profile-back">←</button>
+            <button class="profile-back-btn" id="profile-back" type="button" aria-label="Назад"><img class="ui-lucide is-light" src="src/assets/icons/lucide/chevron-left.svg" alt="" /></button>
             <div class="profile-avatar-xl" style="background:${avatarBg}">
                 ${char.avatarImage ? `<img src="${char.avatarImage}" alt="${char.name}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" />` : char.name.charAt(0)}
             </div>

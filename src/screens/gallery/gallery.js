@@ -22,14 +22,14 @@ export function renderGallery({ onBack }) {
 
         gridHTML += `
             <div class="gallery-item ${unlocked ? '' : 'locked'}" data-id="${item.id}" data-unlocked="${unlocked}">
-                ${unlocked ? contentHtml : `<span style="font-size:36px;filter:blur(4px);">${item.emoji || '❔'}</span><span class="lock-icon" style="filter:none;">🔒</span>`}
+                ${unlocked ? contentHtml : `<span class="gallery-locked-placeholder"><img class="ui-lucide is-light" src="src/assets/icons/lucide/image.svg" alt="" /></span><span class="lock-icon"><img class="ui-lucide is-light" src="src/assets/icons/lucide/lock-keyhole.svg" alt="" /></span>`}
             </div>
         `;
     }
 
     wrapper.innerHTML = `
         <div class="gallery-header">
-            <button class="messenger-back-btn" id="gallery-back">←</button>
+            <button class="messenger-back-btn" id="gallery-back" type="button" aria-label="Назад"><img class="ui-lucide is-light" src="src/assets/icons/lucide/chevron-left.svg" alt="" /></button>
             <span class="gallery-title">Галерея</span>
             <div style="width:36px;"></div>
         </div>

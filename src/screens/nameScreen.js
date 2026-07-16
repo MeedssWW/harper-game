@@ -8,7 +8,9 @@ export function renderNameScreen(onSubmit) {
     wrapper.className = 'name-screen-content';
 
     wrapper.innerHTML = `
-        <div class="name-screen-icon">👤</div>
+        <div class="name-screen-icon" aria-hidden="true">
+            <img class="ui-lucide is-light" src="src/assets/icons/lucide/user-round.svg" alt="" />
+        </div>
         <div class="name-screen-title">Кто ты?</div>
         <div class="name-screen-subtitle">
             Телефон требует имя перед тем,<br>

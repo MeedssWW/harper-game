@@ -60,7 +60,7 @@ function renderViewer(wrapper, onBack) {
     const viewerPlaces = getViewerPlaces();
     wrapper.innerHTML = `
         <header class="ravenwood-map-header viewer">
-            <button class="messenger-back-btn" id="map-back" type="button" aria-label="Назад">←</button>
+            <button class="messenger-back-btn" id="map-back" type="button" aria-label="Назад"><img class="ui-lucide is-light" src="src/assets/icons/lucide/chevron-left.svg" alt="" /></button>
             <div>
                 <span class="map-kicker">Рейвенвуд</span>
                 <h1>Карта города</h1>
@@ -124,7 +124,7 @@ function renderTask(wrapper, onBack, onDone) {
 
     wrapper.innerHTML = `
         <header class="ravenwood-map-header">
-            <button class="messenger-back-btn" id="map-back" type="button" aria-label="Назад">←</button>
+            <button class="messenger-back-btn" id="map-back" type="button" aria-label="Назад"><img class="ui-lucide is-light" src="src/assets/icons/lucide/chevron-left.svg" alt="" /></button>
             <div>
                 <span class="map-kicker">Дело Харпер Вэнс</span>
                 <h1>Карта Рейвенвуда</h1>

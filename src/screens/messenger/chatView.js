@@ -134,7 +134,7 @@ export class ChatView {
 
         overlay.innerHTML = `
             <div class="social-profile-top">
-                <button id="close-profile" aria-label="Закрыть">×</button>
+                <button id="close-profile" type="button" aria-label="Закрыть"><img class="ui-lucide is-light" src="src/assets/icons/lucide/x.svg" alt="" /></button>
                 <span>${this._escapeHtml(char.handle || char.phone || '')}</span>
             </div>
             <div class="social-profile-scroll">
@@ -178,7 +178,7 @@ export class ChatView {
                 viewer.type = 'button';
                 viewer.className = 'social-profile-photo-viewer';
                 viewer.setAttribute('aria-label', 'Закрыть фотографию');
-                viewer.innerHTML = `<img src="${photo}" alt="" /><span>×</span>`;
+                viewer.innerHTML = `<img src="${photo}" alt="" /><span><img class="ui-lucide is-light" src="src/assets/icons/lucide/x.svg" alt="" /></span>`;
                 viewer.addEventListener('click', () => viewer.remove());
                 overlay.appendChild(viewer);
             });
@@ -430,7 +430,9 @@ export class ChatView {
         const isOutgoing = message.from === 'player' || message.from === 'gg';
         const char = isOutgoing ? null : getCharacter(message.from);
         const avatarBg = isOutgoing ? '#2a3f6f' : (getCharacterColor(message.from) || '#1f2937');
-        const avatarText = isOutgoing ? '👤' : (char ? char.name.charAt(0) : '?');
+        const avatarText = isOutgoing
+            ? '<img class="message-avatar-lucide ui-lucide is-light" src="src/assets/icons/lucide/user-round.svg" alt="" />'
+            : (char ? char.name.charAt(0) : '?');
         const senderColor = isOutgoing ? '' : this._getSenderColor(message.from);
 
         let avatarHtml = `<div class="message-avatar-small" style="background:${avatarBg}" ${!isOutgoing && char ? `data-profile-character="${message.from}"` : ''}>${avatarText}</div>`;
@@ -456,7 +458,7 @@ export class ChatView {
             <div class="message-bubble">
                 ${showSender ? `<span class="message-sender" style="color:${senderColor}">${this._escapeHtml(senderLabel)}</span>` : ''}
                 ${this._renderMessageContent(message)}
-                <div class="message-time-inline">${message.timestamp || ''}${isOutgoing ? '<span class="message-checks" aria-label="Доставлено">✓✓</span>' : ''}</div>
+                <div class="message-time-inline">${message.timestamp || ''}${isOutgoing ? '<span class="message-checks" aria-label="Доставлено"><img class="ui-lucide is-light" src="src/assets/icons/lucide/check-check.svg" alt="" /></span>' : ''}</div>
             </div>
         `;
 
@@ -510,7 +512,7 @@ export class ChatView {
         const overlay = document.createElement('div');
         overlay.className = 'image-viewer-overlay';
         overlay.innerHTML = `
-            <button class="image-viewer-close" type="button" aria-label="Закрыть">×</button>
+            <button class="image-viewer-close" type="button" aria-label="Закрыть"><img class="ui-lucide is-light" src="src/assets/icons/lucide/x.svg" alt="" /></button>
             <div class="image-viewer-frame">
                 <img src="${this._escapeHtml(src)}" alt="" />
                 ${caption ? `<div class="image-viewer-caption">${this._escapeHtml(caption)}</div>` : ''}
@@ -551,7 +553,7 @@ export class ChatView {
             const bars = Array.from({ length: 18 }, (_, i) => `<span style="height:${8 + (i % 5) * 4}px"></span>`).join('');
             return `
                 <div class="message-voice">
-                    <div class="voice-play">▶</div>
+                    <div class="voice-play" aria-hidden="true"><img class="ui-lucide is-light" src="src/assets/icons/lucide/play.svg" alt="" /></div>
                     <div class="voice-wave">${bars}</div>
                     <div class="voice-duration">${this._escapeHtml(message.duration || '0:00')}</div>
                 </div>
@@ -562,7 +564,7 @@ export class ChatView {
         if (message.type === 'call') {
             return `
                 <div class="message-call">
-                    <div class="call-icon">☎</div>
+                    <div class="call-icon" aria-hidden="true"><img class="ui-lucide is-light" src="src/assets/icons/lucide/phone.svg" alt="" /></div>
                     <div>
                         <div class="call-title">${this._escapeHtml(message.title || 'Звонок')}</div>
                         <div class="call-subtitle">${this._escapeHtml(message.text || 'Пропущено')}</div>
@@ -596,7 +598,7 @@ export class ChatView {
             return `
                 <button class="message-app-card" type="button">
                     <div class="app-card-icon">
-                        <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" d="M8 7h8M8 12h8M8 17h5"/><rect x="5" y="3" width="14" height="18" rx="3" fill="none" stroke="currentColor" stroke-width="2.2"/></svg>
+                        <img class="ui-lucide is-light" src="src/assets/icons/lucide/smartphone.svg" alt="" />
                     </div>
                     <div>
                         <div class="document-title">${this._escapeHtml(message.title || 'Приложение')}</div>
@@ -611,7 +613,7 @@ export class ChatView {
             return `
                 <button class="message-document" type="button">
                     <div class="document-icon">
-                        <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zm-1 1.5L18.5 9H14a1 1 0 0 1-1-1zM8 13h8v1.7H8zm0 4h8v1.7H8zm0-8h3v1.7H8z"/></svg>
+                        <img class="ui-lucide is-light" src="src/assets/icons/lucide/file-text.svg" alt="" />
                     </div>
                     <div>
                         <div class="document-title">${this._escapeHtml(message.title || 'Документ')}</div>

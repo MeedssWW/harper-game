@@ -21,9 +21,9 @@ export const backupFoundRewriteBeats = [
       { from: "mia", text: "Не знаю 😭", delay: 550 },
       { from: "mia", text: "На каком-то этапе я просто перестала мыслить.", delay: 750 },
       { type: "choice", options: [
-        choice("Главное, что нашла.", "backup_larks_found_ok"),
-        choice("Ты его уже включила?", "backup_larks_power"),
-        choice("Скажи хотя бы, что он не развалился в коробке.", "backup_larks_condition")
+        choice("Фух. Уже хорошо.", "backup_larks_found_ok"),
+        choice("Только скажи, что не включала.", "backup_larks_power"),
+        choice("Он хотя бы целый?", "backup_larks_condition")
       ] }
     ]
   },
@@ -58,9 +58,9 @@ export const backupFoundRewriteBeats = [
       { from: "mia", text: "Следующий вечер после моста.", delay: 950 },
       { from: "mia", text: "То есть Харпер к тому моменту уже брала телефон.", delay: 850 },
       { type: "choice", options: [
-        choice("Ты сообщила полиции и про копию?", "backup_larks_police_copy"),
-        choice("Если повезёт, в копии осталось то, что Харпер удалила.", "backup_larks_deleted_data"),
-        choice("Только не открывай пока ничего внутри.", "backup_larks_dont_change")
+        choice("И про копию тоже написала?", "backup_larks_police_copy"),
+        choice("Там мог остаться удалённый чат.", "backup_larks_deleted_data"),
+        choice("Подожди. Только не открывай ничего внутри.", "backup_larks_dont_change")
       ] }
     ]
   },
@@ -69,7 +69,7 @@ export const backupFoundRewriteBeats = [
   ] },
   { id: "backup_larks_deleted_data", chat: "group_larks", trigger: "choice:backup_larks_report:1", messages: [
     { from: "olivia", text: "Может быть.", delay: 600 }, { from: "olivia", text: "А может, там уже пусто.", delay: 700 },
-    { from: "mia", text: "Но теперь я не смогу просто не проверить.", delay: 750 }
+    { from: "mia", text: "Знаю. Но я всё равно проверю.", delay: 750 }
   ] },
   { id: "backup_larks_dont_change", chat: "group_larks", trigger: "choice:backup_larks_report:2", messages: [
     { from: "mia", text: "Да.", delay: 550 }, { from: "mia", text: "Я только открыла папку и глянула дату.", delay: 750 },
@@ -127,9 +127,9 @@ export const backupFoundRewriteBeats = [
       { from: "mia", text: "Ну... настолько, насколько сейчас вообще умею.", delay: 750 },
       { from: "mia", text: "Там могут быть мои переписки. Пожалуйста, не лезь в них, если они не про Харпер.", delay: 1050 },
       { type: "choice", options: [
-        choice("Хорошо. Только Харпер — больше ничего не открою.", "backup_access_accept_direct", { setFlag: "miaBackupAccessGranted" }),
-        choice("Миа, мы знакомы пару дней. Ты точно хочешь дать доступ мне?", "backup_access_unsure"),
-        choice("Нет. Лучше закрой папку и дождись ответа следователя.", "backup_access_decline", { setFlag: "playerDeclinedBackupAccess" })
+        choice("Ладно. Только чат Харпер.", "backup_access_accept_direct", { setFlag: "miaBackupAccessGranted" }),
+        choice("Ты правда хочешь дать это мне?", "backup_access_unsure"),
+        choice("Нет. Дождись ответа следователя.", "backup_access_decline", { setFlag: "playerDeclinedBackupAccess" })
       ] }
     ]
   },
@@ -144,9 +144,9 @@ export const backupFoundRewriteBeats = [
       { from: "mia", text: "Просто ты уже в это влез. Может, заметишь то, что я пропущу.", delay: 1000 },
       { from: "mia", text: "Личное не открывай. Я потом увижу историю.", delay: 900 },
       { type: "choice", options: [
-        choice("Хорошо. Открою только то, что связано с Харпер.", "backup_access_accept_direct_low", { setFlag: "miaBackupAccessGranted" }),
-        choice("Ты сама себе сейчас веришь? Почему доступ именно мне?", "backup_access_unsure_low"),
-        choice("Нет. Закрой папку и дождись ответа полиции.", "backup_access_decline", { setFlag: "playerDeclinedBackupAccess" })
+        choice("Ладно. Только то, что связано с Харпер.", "backup_access_accept_direct_low", { setFlag: "miaBackupAccessGranted" }),
+        choice("Почему ты вообще даёшь это мне?", "backup_access_unsure_low"),
+        choice("Нет. Дождись ответа полиции.", "backup_access_decline", { setFlag: "playerDeclinedBackupAccess" })
       ] }
     ]
   },
@@ -190,7 +190,7 @@ export const backupFoundRewriteBeats = [
     setFlags: { miaBackupAccessGranted: true },
     messages: [
       { from: "mia", text: "Спасибо.", delay: 600 },
-      { from: "mia", text: "Ссылка проживёт двадцать минут.", delay: 750 },
+      { from: "mia", text: "Ссылка на двадцать минут.", delay: 750 },
       { type: "system", text: "Миа отправила временный доступ к резервной копии.", delay: 650 },
       { from: "mia", type: "app", title: "Резервная копия", subtitle: "MIA-OLD · только просмотр", text: "Открыть резервную копию", documentId: "mia_remote_access", delay: 800 }
     ]
@@ -201,7 +201,7 @@ export const backupFoundRewriteBeats = [
     setFlags: { miaBackupAccessGranted: true },
     messages: [
       { from: "mia", text: "Хорошо.", delay: 600 },
-      { from: "mia", text: "Ссылка проживёт двадцать минут.", delay: 750 },
+      { from: "mia", text: "Ссылка на двадцать минут.", delay: 750 },
       { type: "system", text: "Миа отправила временный доступ к резервной копии.", delay: 650 },
       { from: "mia", type: "app", title: "Резервная копия", subtitle: "MIA-OLD · только просмотр", text: "Открыть резервную копию", documentId: "mia_remote_access", delay: 800 }
     ]
@@ -217,8 +217,8 @@ export const backupFoundRewriteBeats = [
       { from: "mia", type: "app", title: "VID_1842.mp4", subtitle: "Неизвестный чат · 18:46", text: "Локальная копия отсутствует", documentId: "mia_remote_access", delay: 800 },
       { from: "mia", text: "В 18:46 телефон был у Харпер." , delay: 900 },
       { type: "choice", options: [
-        choice("Если решим открывать — присылай. Я попробую у себя.", "backup_declined_link_sent", { setFlag: "videoLinkSent" }),
-        choice("Сначала пришли только данные файла. Потом решу, открывать ссылку или нет.", "backup_declined_metadata"),
+        choice("Если всё-таки решишь открыть — скинь. Проверю у себя.", "backup_declined_link_sent", { setFlag: "videoLinkSent" }),
+        choice("Стоп. Сначала просто скинь, что там написано про файл.", "backup_declined_metadata"),
         choice("Нет. Лучше больше ничего не открывать.", "backup_declined_video_refused", { setFlag: "playerRefusedVideo" })
       ] }
     ]
@@ -227,8 +227,8 @@ export const backupFoundRewriteBeats = [
     { from: "mia", text: "Там почти пусто. Имя файла, время, адрес сервера.", delay: 800 },
     { from: "mia", text: "Само видео всё равно только по ссылке.", delay: 750 },
     { type: "choice", options: [
-      choice("Понял. Тогда присылай ссылку — попробую открыть.", "backup_declined_link_sent_after_meta", { setFlag: "videoLinkSent" }),
-      choice("Нет, этих данных хватит. Дождёмся полиции.", "backup_declined_video_refused", { setFlag: "playerRefusedVideo" })
+      choice("Ладно, присылай. Попробую.", "backup_declined_link_sent_after_meta", { setFlag: "videoLinkSent" }),
+      choice("Нет. Этих данных хватит. Подождём полицию.", "backup_declined_video_refused", { setFlag: "playerRefusedVideo" })
     ] }
   ] },
   { id: "backup_declined_link_sent", chat: "private_mia", trigger: "choice:backup_access_decline:0", setFlags: { videoLinkSent: true }, messages: [

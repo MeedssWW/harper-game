@@ -9,11 +9,11 @@ const B = (id, chat, trigger, messages, extra = {}) => ({ id, chat, trigger, mes
 export const chapter1FinaleRewriteBeats = [
   B("finale_derek_confusion", "private_derek", "flag:derekConversationUnlocked", [
     { type: "pause", delay: 1800 }, { type: "system", text: "Дерек в сети.", delay: 450, characterStatus: { id: "derek", online: true } },
-    D("Мне написали."), D("Про нашу с Харпер ссору. И про вашу версию со станцией."), D("Сразу говорю: не суйтесь туда."),
+    D("Мне написали."), D("Про ссору. И про станцию."), D("Сразу говорю: не суйтесь туда."),
     choice([
-      option("Никто не собирается туда ехать.", "finale_derek_nobody"),
-      option("Почему тебя так волнует именно станция?", "finale_derek_station"),
-      option("Ты сейчас слишком уверенно говоришь для человека, который там не был.", "finale_derek_knows")
+      option("Никто туда не едет.", "finale_derek_nobody"),
+      option("С чего тебя так дёрнула именно станция?", "finale_derek_station"),
+      option("Ты говоришь так, будто сам там был.", "finale_derek_knows")
     ])
   ], { identify: ["derek"] }),
   B("finale_derek_nobody", "private_derek", "choice:finale_derek_confusion:0", [D("Хорошо."), D("Просто не ездите. Серьёзно.")]),
@@ -21,9 +21,9 @@ export const chapter1FinaleRewriteBeats = [
   B("finale_derek_knows", "private_derek", "choice:finale_derek_confusion:2", [D("Да."), D("Потому что я там был.")]),
   B("finale_derek_entrance", "private_derek", "after:finale_derek_nobody|finale_derek_station|finale_derek_knows", [
     choice([
-      option("Вот теперь честно: почему тебя так трясёт из-за этой станции?", "finale_derek_not_told"),
+      option("Ладно. Что там было?", "finale_derek_not_told"),
       option("Что ты там видел?", "finale_derek_how"),
-      option("Дерек, ты явно что-то недоговариваешь.", "finale_derek_what_seen")
+      option("Дерек, хватит. Говори.", "finale_derek_what_seen")
     ])
   ]),
   B("finale_derek_not_told", "private_derek", "choice:finale_derek_entrance:0", [D("..."), D("Ладно. Я был рядом.")]),
@@ -41,14 +41,14 @@ export const chapter1FinaleRewriteBeats = [
   B("finale_derek_bridge", "private_derek", "choice:finale_derek_followed:1", [D("Не у самого моста. Я держался дальше.")]),
   B("finale_derek_knew_way", "private_derek", "choice:finale_derek_followed:2", [D("Я не знал, куда она пошла. Видел только часть дороги.")]),
   B("finale_derek_story", "private_derek", "after:finale_derek_follow_yes|finale_derek_bridge|finale_derek_knew_way", [
-    D("Мы утром поссорились. Она ушла и перестала отвечать."), D("Я накрутил себя, что у неё кто-то есть."), D("И поехал следом."), D("Можешь не говорить. Я знаю, как это звучит."),
+    D("Мы утром поссорились. Она ушла и перестала отвечать."), D("Я накрутил себя, что у неё кто-то есть."), D("И поехал следом."), D("Да, звучит отвратительно. Я знаю."),
     choice([
-      option("Звучит так, будто ты ей не доверял.", "finale_derek_distrust"),
-      option("Звучит плохо. Но продолжай.", "finale_derek_continue"),
-      option("Она знала, что ты за ней едешь?", "finale_derek_did_know")
+      option("То есть ты решил за ней проследить.", "finale_derek_distrust"),
+      option("Плохо. Но продолжай.", "finale_derek_continue"),
+      option("Она тебя заметила?", "finale_derek_did_know")
     ])
   ]),
-  B("finale_derek_distrust", "private_derek", "choice:finale_derek_story:0", [D("Не доверял."), D("Тогда мне казалось, что я имею право знать. Не имел.")]),
+  B("finale_derek_distrust", "private_derek", "choice:finale_derek_story:0", [D("Не доверял."), D("Тогда ещё убеждал себя, что имею право знать. Бред.")]),
   B("finale_derek_continue", "private_derek", "choice:finale_derek_story:1", [D("После встречи с Мией Харпер пошла вдоль Риверуока.")]),
   B("finale_derek_did_know", "private_derek", "choice:finale_derek_story:2", [D("Нет. Я держался далеко. Не хотел, чтобы она меня увидела.")]),
   B("finale_derek_sedan", "private_derek", "after:finale_derek_distrust|finale_derek_continue|finale_derek_did_know", [
@@ -56,28 +56,28 @@ export const chapter1FinaleRewriteBeats = [
     choice([
       option("Харпер заметила машину?", "finale_derek_harper_saw"),
       option("Ты видел водителя?", "finale_derek_driver"),
-      option("Ты видел машину, следил за Харпер — и промолчал полиции?", "finale_derek_silent")
+      option("И ты промолчал полиции?", "finale_derek_silent")
     ])
   ]),
   B("finale_derek_harper_saw", "private_derek", "choice:finale_derek_sedan:0", [D("Да. Замерла на пару секунд."), D("Потом всё равно пошла дальше.")]),
   B("finale_derek_driver", "private_derek", "choice:finale_derek_sedan:1", [D("Нет. Стёкла были тёмные. Номер тоже не запомнил.")]),
-  B("finale_derek_silent", "private_derek", "choice:finale_derek_sedan:2", [D("Не сказал."), D("Трус, да. Можешь написать.")]),
+  B("finale_derek_silent", "private_derek", "choice:finale_derek_sedan:2", [D("Не сказал."), D("Да, струсил.")]),
   B("finale_derek_returned", "private_derek", "after:finale_derek_harper_saw|finale_derek_driver|finale_derek_silent", [
     D("В машину она не садилась. Просто пошла дальше."), D("А я уехал."), D("В тот вечер она вернулась домой. Через три дня пропала."),
     choice([
-      option("Ты видел, что её что-то пугает, и всё равно промолчал.", "finale_derek_blame", { trust: { derekTrust: -1 } }),
-      option("Ты больше боялся выглядеть виноватым, чем хотел помочь.", "finale_derek_afraid"),
-      option("Я понимаю, почему тебе было стыдно. Но полиции это нужно знать.", "finale_derek_understand", { trust: { derekTrust: 1 } })
+      option("Ты видел, что она испугалась. И всё равно молчал.", "finale_derek_blame", { trust: { derekTrust: -1 } }),
+      option("Ты испугался, что подозревать будут тебя.", "finale_derek_afraid"),
+      option("Ладно. Теперь расскажи это полиции. Всё.", "finale_derek_understand", { trust: { derekTrust: 1 } })
     ])
   ]),
-  B("finale_derek_blame", "private_derek", "choice:finale_derek_returned:0", [D("Тогда я видел не её страх. Я видел только то, что она мне не отвечает."), D("Мерзко. Знаю.")]),
+  B("finale_derek_blame", "private_derek", "choice:finale_derek_returned:0", [D("Тогда я вообще не смотрел на неё. Только бесился, что она молчит."), D("Мерзко. Знаю.")]),
   B("finale_derek_afraid", "private_derek", "choice:finale_derek_returned:1", [D("Да."), D("Я знал, что первым проверять будут меня. И заткнулся.")]),
   B("finale_derek_understand", "private_derek", "choice:finale_derek_returned:2", [D("Я знаю. Сейчас уже знаю.")]),
   B("finale_derek_report", "private_derek", "after:finale_derek_blame|finale_derek_afraid|finale_derek_understand", [
     D("Полиции я рассказал про ссору."), D("Про слежку и машину — нет."),
     choice([
       option("Позвони им сам. Сейчас.", "finale_derek_reports_self", { trust: { derekTrust: 1 }, setFlag: "derekReportsHimself" }),
-      option("Я сохраню этот разговор и передам Оливии. Тебе я уже не доверяю.", "finale_derek_player_reports", { trust: { derekTrust: -1 }, setFlag: "playerReportedDerekStatement" }),
+      option("Я скину разговор Оливии. Тебе уже не верю.", "finale_derek_player_reports", { trust: { derekTrust: -1 }, setFlag: "playerReportedDerekStatement" }),
       option("Расскажи всё при Мейсоне. Чтобы потом никто ничего не переврал.", "finale_derek_witness", { setFlag: "derekStatementWitnessed" })
     ])
   ]),
@@ -87,8 +87,8 @@ export const chapter1FinaleRewriteBeats = [
   B("finale_derek_end", "private_derek", "after:finale_derek_reports_self|finale_derek_player_reports|finale_derek_witness", [
     D("Я должен был сказать сразу."), D("И да — я думаю об этом каждую грёбаную минуту."),
     choice([
-      option("Я не думаю, что ты хотел, чтобы с ней что-то случилось.", "finale_derek_end_death"),
-      option("Сейчас уже важнее, что полиция знает.", "finale_derek_end_police"),
+      option("Не думаю, что ты хотел, чтобы всё так кончилось.", "finale_derek_end_death"),
+      option("Главное, что теперь полиция знает.", "finale_derek_end_police"),
       option("Я не знаю, что о тебе думать.", "finale_derek_end_unsure")
     ])
   ]),
@@ -126,7 +126,7 @@ export const chapter1FinaleRewriteBeats = [
     { type: "pause", delay: 6500 }, { type: "system", text: "Оливия в сети.", delay: 450, characterStatus: { id: "olivia", online: true } }, O("Ты здесь?"),
     choice([
       option("Да. Что случилось?", "finale_found_sep_what"),
-      option("Я здесь. По твоему сообщению уже понятно, что случилось плохое.", "finale_found_sep_bad"),
+      option("Я здесь. Что-то плохое?", "finale_found_sep_bad"),
       option("Я здесь.", "finale_found_sep_here")
     ])
   ], { setFlags: { harperFoundDead: true, harperFoundAtOldStation: true } }),
@@ -164,7 +164,7 @@ export const chapter1FinaleRewriteBeats = [
     { type: "pause", delay: 9000 }, { type: "case_entry", id: "harper_found_station", entryType: "fact", title: "СТАРАЯ СТАНЦИЯ — ХАРПЕР НАЙДЕНА", text: "Другие подробности недоступны.", delay: 300 },
     { type: "system", text: "Неизвестный в сети.", delay: 450, characterStatus: { id: "unknown", online: true } }, U("RavenFeed."), U("Открой. Сейчас."),
     choice([
-      option("Что там?", "finale_ravenfeed_what"),
+      option("Что ещё?", "finale_ravenfeed_what"),
       option("После сегодняшнего я не хочу открывать ещё что-то.", "finale_ravenfeed_wary"),
       option("Это связано с Харпер?", "finale_ravenfeed_harper")
     ])
@@ -185,27 +185,27 @@ export const chapter1FinaleRewriteBeats = [
   ]),
   B("finale_ravenfeed_photo", "private_unknown", "choice:finale_ravenfeed_reaction:0", [U("Значит, фото всё-таки ушло."), U("Я оборвал передачу слишком поздно.")]),
   B("finale_ravenfeed_number", "private_unknown", "choice:finale_ravenfeed_reaction:1", [U("Номер сменишь потом."), U("Сейчас — скрин поста и комментариев.")]),
-  B("finale_ravenfeed_frame", "private_unknown", "choice:finale_ravenfeed_reaction:2", [U("Именно."), U("Они не обвиняют. Они оставляют толпе додумать.")]),
+  B("finale_ravenfeed_frame", "private_unknown", "choice:finale_ravenfeed_reaction:2", [U("Прямого обвинения нет."), U("В комментариях всё сделают за них.")]),
   B("finale_ravenfeed_threats", "private_unknown", "after:finale_ravenfeed_photo|finale_ravenfeed_number|finale_ravenfeed_frame", [
     { type: "system", text: "Новые сообщения: «Это ты убил её?» · «Зачем она отправила твой номер?» · «Мы знаем, как ты выглядишь»", delay: 700 },
     choice([
-      option("Кто стоит за этой страницей?", "finale_ravenfeed_who"),
-      option("Можно удалить публикацию?", "finale_ravenfeed_delete"),
-      option("Они ждали, пока Харпер найдут.", "finale_ravenfeed_waited")
+      option("Ты знаешь, кто это выложил?", "finale_ravenfeed_who"),
+      option("Это можно удалить?", "finale_ravenfeed_delete"),
+      option("Они специально ждали, пока её найдут.", "finale_ravenfeed_waited")
     ])
   ]),
   B("finale_ravenfeed_who", "private_unknown", "choice:finale_ravenfeed_threats:0", [U("Не знаю."), U("Аккаунт старый. Следы публикации подчистили.")]),
   B("finale_ravenfeed_delete", "private_unknown", "choice:finale_ravenfeed_threats:1", [U("Можно отправить жалобу. Но копии уже расходятся.")]),
   B("finale_ravenfeed_waited", "private_unknown", "choice:finale_ravenfeed_threats:2", [U("Похоже на то. До этого пост не дал бы нужной реакции.")]),
   B("finale_ravenfeed_end", "private_unknown", "after:finale_ravenfeed_who|finale_ravenfeed_delete|finale_ravenfeed_waited", [
-    U("Никому не отвечай. Ссылки не открывай."), U("Сохрани пост, сообщения, историю звонков. Всё."), U("Раньше у них был номер."), U("Теперь есть твоё лицо."),
+    U("Никому не отвечай. Ссылки не открывай."), U("Сохрани пост, сообщения, историю звонков. Всё."), U("Они уже слили номер."), U("И фотографию."),
     choice([
       option("Ты поможешь?", "finale_ravenfeed_help"),
       option("После всего этого ты всё ещё не скажешь, кто ты?", "finale_ravenfeed_identity"),
-      option("Я не позволю им сделать меня виноватым.", "finale_ravenfeed_fight")
+      option("Я не дам им повесить это на меня.", "finale_ravenfeed_fight")
     ])
   ]),
   B("finale_ravenfeed_help", "private_unknown", "choice:finale_ravenfeed_end:0", [U("Пока могу."), { type: "system", text: "Неизвестный не в сети.", delay: 500, characterStatus: { id: "unknown", online: false } }, { type: "navigate", screen: "chapterEnd", delay: 1000 }]),
   B("finale_ravenfeed_identity", "private_unknown", "choice:finale_ravenfeed_end:1", [U("Нет. Но я не публиковал фотографию."), { type: "system", text: "Неизвестный не в сети.", delay: 500, characterStatus: { id: "unknown", online: false } }, { type: "navigate", screen: "chapterEnd", delay: 1000 }]),
-  B("finale_ravenfeed_fight", "private_unknown", "choice:finale_ravenfeed_end:2", [U("Тогда не подари им ошибку."), U("Сначала сохрани всё."), { type: "system", text: "Неизвестный не в сети.", delay: 500, characterStatus: { id: "unknown", online: false } }, { type: "navigate", screen: "chapterEnd", delay: 1000 }])
+  B("finale_ravenfeed_fight", "private_unknown", "choice:finale_ravenfeed_end:2", [U("Тогда не отвечай на эмоциях."), U("Сначала сохрани всё."), { type: "system", text: "Неизвестный не в сети.", delay: 500, characterStatus: { id: "unknown", online: false } }, { type: "navigate", screen: "chapterEnd", delay: 1000 }])
 ];

@@ -301,7 +301,7 @@ export const miaLateSceneBeats = [
         options: [
           { text: "Она сказала, из-за чего они поссорились?", loyalty: {}, next: "mia_late_why_argued" },
           { text: "Если ты первая назвала Дерека, она могла иметь в виду кого-то ещё.", loyalty: {}, next: "mia_late_sure_derek" },
-          { text: "По твоему описанию она звучит скорее уставшей, чем злой.", loyalty: {}, next: "mia_late_how_said" }
+          { text: "Она сказала это со злостью? Или просто устала?", loyalty: {}, next: "mia_late_how_said" }
         ]
       }
     ]
@@ -320,7 +320,7 @@ export const miaLateSceneBeats = [
     trigger: "choice:mia_late_derek_argument:1",
     messages: [
       { from: "mia", text: "Я первая назвала Дерека, и она не поправила меня." , delay: 950 },
-      { from: "mia", text: "Не железное доказательство, я знаю. Но я почти уверена.", delay: 900 }
+      { from: "mia", text: "Я знаю, это всё равно не сто процентов. Но я почти уверена.", delay: 900 }
     ]
   },
   {
@@ -342,7 +342,7 @@ export const miaLateSceneBeats = [
       {
         type: "choice",
         options: [
-          { text: "Я не буду делать из этого выводы.", loyalty: {}, trust: { miaTrust: 1 }, next: "mia_late_no_conclusions" },
+          { text: "Я не собираюсь сразу винить Дерека.", loyalty: {}, trust: { miaTrust: 1 }, next: "mia_late_no_conclusions" },
           { text: "Я попробую спросить его спокойно.", loyalty: {}, next: "mia_late_ask_calmly" },
           { text: "Спасибо, что вернулась и сказала.", loyalty: {}, trust: { miaTrust: 1 }, next: "mia_late_thanks_memory" }
         ]

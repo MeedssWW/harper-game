@@ -5,6 +5,8 @@
 import { stateManager } from '../../engine/stateManager.js';
 
 const CASE_MAP_IMAGE = 'src/assets/maps/ravenwood_map.png?v=73';
+const ICON_ROOT = 'src/assets/icons/lucide';
+const CARD_ORDER_FLAG = 'caseIntroCardOrder';
 
 const CARDS = [
     {
@@ -119,46 +121,51 @@ export function renderCaseIntroTask({ onDone, onFrameAnalysis } = {}) {
     }
 
     const assignments = new Map();
+    const orderedCards = getStableCardOrder();
 
     wrapper.innerHTML = `
         <header class="case-task-header">
-            <div class="case-kicker">новая страница</div>
+            <div class="case-kicker">${lucideIcon('file-text')} новая страница</div>
             <h1>ДЕЛО: ХАРПЕР ВЭНС</h1>
             <p>Раздели то, что уже известно, и то, что персонажи пока только предполагают.</p>
             <p class="case-task-rule">Даже уверенно сказанная фраза не становится фактом без подтверждения.</p>
         </header>
 
         <main class="case-task-body">
-            <section class="case-sort-columns" aria-label="Категории">
-                <div class="case-column confirmed">
-                    <span>ПОДТВЕРЖДЕНО</span>
-                    <strong id="confirmed-count">0</strong>
+            <section class="case-sort-columns" aria-label="Категории. Карточки можно распределять кнопками или перетаскиванием.">
+                <div class="case-column confirmed" data-value="confirmed" role="region" aria-label="Подтверждено">
+                    <div class="case-column-label">${lucideIcon('search')}<span>ПОДТВЕРЖДЕНО</span></div>
+                    <strong id="confirmed-count">${formatCardCount(0)}</strong>
                 </div>
-                <div class="case-column unknown">
-                    <span>ПОКА ТОЛЬКО ВЕРСИЯ</span>
-                    <strong id="unknown-count">0</strong>
+                <div class="case-column unknown" data-value="unknown" role="region" aria-label="Пока только версия">
+                    <div class="case-column-label">${lucideIcon('message-circle')}<span>ПОКА ТОЛЬКО ВЕРСИЯ</span></div>
+                    <strong id="unknown-count">${formatCardCount(0)}</strong>
                 </div>
             </section>
 
-            <div class="case-task-feedback" id="case-feedback" aria-live="polite"></div>
+            <div class="case-sort-progress" aria-hidden="true"><i id="case-sort-progress-fill"></i></div>
+
+            <div class="case-task-feedback" id="case-feedback" role="status" aria-live="polite"></div>
 
             <section class="case-card-list" aria-label="Утверждения">
-                ${CARDS.map((card, index) => renderCard(card, index)).join('')}
+                ${orderedCards.map((card, index) => renderCard(card, index)).join('')}
             </section>
 
             <button class="case-check-btn" id="case-check" type="button" disabled>Завершить разбор</button>
         </main>
     `;
 
+    const assignCard = (cardId, value) => {
+        assignments.set(cardId, value);
+        updateCardState(wrapper, assignments);
+        showPlacementFeedback(wrapper, cardId, value);
+    };
+
     wrapper.querySelectorAll('.case-card-action').forEach(button => {
-        button.addEventListener('click', () => {
-            const cardId = button.dataset.card;
-            const value = button.dataset.value;
-            assignments.set(cardId, value);
-            updateCardState(wrapper, assignments);
-            showPlacementFeedback(wrapper, cardId, value);
-        });
+        button.addEventListener('click', () => assignCard(button.dataset.card, button.dataset.value));
     });
+
+    attachCardDragControls(wrapper, assignCard);
 
     wrapper.querySelector('#case-check').addEventListener('click', () => {
         const allCorrect = CARDS.every(card => assignments.get(card.id) === card.answer);
@@ -166,8 +173,10 @@ export function renderCaseIntroTask({ onDone, onFrameAnalysis } = {}) {
 
         if (!allCorrect) {
             const firstWrong = CARDS.find(card => assignments.get(card.id) !== card.answer);
-            feedback.textContent = firstWrong?.wrongConfirmed || 'Это уже подтверждено несколькими прямыми сведениями.';
-            feedback.classList.add('visible', 'error');
+            setCaseFeedback(feedback, firstWrong?.wrongConfirmed || 'Проверь отмеченные карточки: одна из них лежит не в своей категории.', 'error');
+            const wrongCard = firstWrong && wrapper.querySelector(`.case-sort-card[data-card="${firstWrong.id}"]`);
+            wrongCard?.classList.add('is-error');
+            wrongCard?.scrollIntoView({ behavior: 'smooth', block: 'center' });
             return;
         }
 
@@ -179,15 +188,147 @@ export function renderCaseIntroTask({ onDone, onFrameAnalysis } = {}) {
 
 function renderCard(card, index) {
     return `
-        <article class="case-sort-card" data-card="${card.id}">
+        <article class="case-sort-card" data-card="${card.id}" draggable="true" tabindex="0" aria-label="Карточка ${index + 1} из ${CARDS.length}">
             <span class="case-card-number">${String(index + 1).padStart(2, '0')}</span>
             <p>${card.text}</p>
             <div class="case-card-actions">
-                <button class="case-card-action" data-card="${card.id}" data-value="confirmed" type="button">Подтверждено</button>
-                <button class="case-card-action" data-card="${card.id}" data-value="unknown" type="button">Только версия</button>
+                <button class="case-card-action" data-card="${card.id}" data-value="confirmed" type="button" aria-pressed="false">Подтверждено</button>
+                <button class="case-card-action" data-card="${card.id}" data-value="unknown" type="button" aria-pressed="false">Только версия</button>
             </div>
+            <span class="case-card-drag-hint" aria-hidden="true">удерживай и перетащи</span>
         </article>
     `;
+}
+
+function getStableCardOrder() {
+    const stored = stateManager.get('flags')?.[CARD_ORDER_FLAG];
+    const knownIds = new Set(CARDS.map(card => card.id));
+    const isValid = Array.isArray(stored) &&
+        stored.length === CARDS.length &&
+        new Set(stored).size === CARDS.length &&
+        stored.every(id => knownIds.has(id));
+
+    if (isValid) {
+        const byId = new Map(CARDS.map(card => [card.id, card]));
+        return stored.map(id => byId.get(id));
+    }
+
+    const order = buildBalancedCardOrder();
+    stateManager.setFlag(CARD_ORDER_FLAG, order.map(card => card.id));
+    return order;
+}
+
+function buildBalancedCardOrder() {
+    const cards = [...CARDS];
+
+    // A regular shuffle can put all five facts next to each other. Retry until
+    // no category forms a run longer than two, then shuffle inside each type.
+    for (let attempt = 0; attempt < 120; attempt += 1) {
+        const candidate = shuffled(cards);
+        if (longestAnswerRun(candidate) <= 2) return candidate;
+    }
+
+    const confirmed = shuffled(cards.filter(card => card.answer === 'confirmed'));
+    const unknown = shuffled(cards.filter(card => card.answer === 'unknown'));
+    const fallback = [];
+    while (confirmed.length || unknown.length) {
+        const lastTwo = fallback.slice(-2);
+        const blockedAnswer = lastTwo.length === 2 && lastTwo[0].answer === lastTwo[1].answer
+            ? lastTwo[0].answer
+            : '';
+        const options = [confirmed, unknown].filter(group => group.length && group[0].answer !== blockedAnswer);
+        const preferred = options.sort((a, b) => b.length - a.length)[0] || [confirmed, unknown].find(group => group.length);
+        if (preferred?.length) fallback.push(preferred.shift());
+    }
+    return fallback;
+}
+
+function shuffled(items) {
+    const output = [...items];
+    for (let index = output.length - 1; index > 0; index -= 1) {
+        const swapIndex = Math.floor(Math.random() * (index + 1));
+        [output[index], output[swapIndex]] = [output[swapIndex], output[index]];
+    }
+    return output;
+}
+
+function longestAnswerRun(cards) {
+    let longest = 0;
+    let run = 0;
+    let previous = '';
+    for (const card of cards) {
+        run = card.answer === previous ? run + 1 : 1;
+        previous = card.answer;
+        longest = Math.max(longest, run);
+    }
+    return longest;
+}
+
+function attachCardDragControls(wrapper, assignCard) {
+    let draggedCardId = '';
+
+    wrapper.querySelectorAll('.case-sort-card').forEach(card => {
+        card.addEventListener('dragstart', event => {
+            draggedCardId = card.dataset.card || '';
+            card.classList.add('is-dragging');
+            wrapper.classList.add('is-sorting');
+            event.dataTransfer?.setData('text/plain', draggedCardId);
+            if (event.dataTransfer) event.dataTransfer.effectAllowed = 'move';
+        });
+        card.addEventListener('dragend', () => {
+            draggedCardId = '';
+            card.classList.remove('is-dragging');
+            wrapper.classList.remove('is-sorting');
+            wrapper.querySelectorAll('.case-column.is-drop-target').forEach(column => column.classList.remove('is-drop-target'));
+        });
+    });
+
+    wrapper.querySelectorAll('.case-column[data-value]').forEach(column => {
+        column.addEventListener('dragover', event => {
+            event.preventDefault();
+            if (event.dataTransfer) event.dataTransfer.dropEffect = 'move';
+            column.classList.add('is-drop-target');
+        });
+        column.addEventListener('dragleave', event => {
+            if (!column.contains(event.relatedTarget)) column.classList.remove('is-drop-target');
+        });
+        column.addEventListener('drop', event => {
+            event.preventDefault();
+            const cardId = event.dataTransfer?.getData('text/plain') || draggedCardId;
+            column.classList.remove('is-drop-target');
+            if (cardId) assignCard(cardId, column.dataset.value);
+        });
+    });
+}
+
+function setCaseFeedback(feedback, message, state) {
+    if (!feedback) return;
+    feedback.replaceChildren();
+    const icon = document.createElement('img');
+    icon.src = `${ICON_ROOT}/${state === 'error' ? 'circle-alert' : 'check-check'}.svg`;
+    icon.alt = '';
+    icon.setAttribute('aria-hidden', 'true');
+    const text = document.createElement('span');
+    text.textContent = message;
+    feedback.append(icon, text);
+    feedback.classList.remove('error', 'success', 'feedback-pop');
+    feedback.classList.add('visible', state);
+    requestAnimationFrame(() => feedback.classList.add('feedback-pop'));
+}
+
+function pulseCard(wrapper, cardId, className) {
+    const card = wrapper.querySelector(`.case-sort-card[data-card="${cardId}"]`);
+    if (!card) return;
+    card.classList.remove('is-error', 'is-correct');
+    // Restart the short confirmation animation when a choice is changed.
+    void card.offsetWidth;
+    card.classList.add(className);
+    setTimeout(() => card.classList.remove(className), 560);
+}
+
+function lucideIcon(name, className = 'case-lucide-icon') {
+    const safeName = /^[a-z0-9-]+$/.test(name) ? name : 'file-text';
+    return `<img class="${className}" src="${ICON_ROOT}/${safeName}.svg" alt="" aria-hidden="true">`;
 }
 
 function showPlacementFeedback(wrapper, cardId, value) {
@@ -196,14 +337,13 @@ function showPlacementFeedback(wrapper, cardId, value) {
     if (!card || !feedback) return;
 
     if (value !== card.answer) {
-        feedback.textContent = card.wrongConfirmed || 'Это уже подтверждено тем, что известно из разговоров.';
-        feedback.classList.add('visible', 'error');
+        setCaseFeedback(feedback, card.wrongConfirmed || 'Это уже подтверждено тем, что известно из разговоров.', 'error');
+        pulseCard(wrapper, cardId, 'is-error');
         return;
     }
 
-    feedback.textContent = card.detail || (value === 'unknown' ? 'Пока это нельзя считать доказанным фактом.' : 'Подтверждено.');
-    feedback.classList.add('visible');
-    feedback.classList.remove('error');
+    setCaseFeedback(feedback, card.detail || (value === 'unknown' ? 'Пока это нельзя считать доказанным фактом.' : 'Подтверждено.'), 'success');
+    pulseCard(wrapper, cardId, 'is-correct');
 }
 
 function updateCardState(wrapper, assignments) {
@@ -218,14 +358,17 @@ function updateCardState(wrapper, assignments) {
         cardEl.dataset.assigned = value || '';
         cardEl.querySelectorAll('.case-card-action').forEach(button => {
             button.classList.toggle('active', button.dataset.value === value);
+            button.setAttribute('aria-pressed', String(button.dataset.value === value));
         });
 
         if (value === 'confirmed') confirmed += 1;
         if (value === 'unknown') unknown += 1;
     }
 
-    wrapper.querySelector('#confirmed-count').textContent = String(confirmed);
-    wrapper.querySelector('#unknown-count').textContent = String(unknown);
+    wrapper.querySelector('#confirmed-count').innerHTML = formatCardCount(confirmed);
+    wrapper.querySelector('#unknown-count').innerHTML = formatCardCount(unknown);
+    const progress = wrapper.querySelector('#case-sort-progress-fill');
+    if (progress) progress.style.width = `${(assignments.size / CARDS.length) * 100}%`;
     wrapper.querySelector('#case-check').disabled = assignments.size !== CARDS.length;
 
 }
@@ -258,7 +401,7 @@ function completeCaseIntro(wrapper, onDone) {
 function renderCompleted(animate = false) {
     return `
         <header class="case-task-header completed">
-            <div class="case-kicker">заметка сохранена</div>
+            <div class="case-kicker">${lucideIcon('file-text')} заметка сохранена</div>
             <h1>ДЕЛО: ХАРПЕР ВЭНС</h1>
             <p>Факты отделены от предположений.</p>
         </header>
@@ -315,8 +458,8 @@ function renderCaseFile() {
 
     return `
         <header class="case-task-header case-file-header">
-            <button class="case-file-back" id="case-file-back" type="button" aria-label="Назад">‹</button>
-            <div class="case-kicker">расследование</div>
+            <button class="case-file-back" id="case-file-back" type="button" aria-label="Назад">${lucideIcon('chevron-left')}</button>
+            <div class="case-kicker">${lucideIcon('search')} расследование</div>
             <h1>ДЕЛО ХАРПЕР ВЭНС</h1>
             <p>${countText}. Здесь остаются только факты, вопросы и детали, которые ещё нужно проверить.</p>
         </header>
@@ -336,12 +479,10 @@ function shouldShowCaseMap() {
 function renderCaseMapPanel() {
     return `
         <section class="case-map-panel" aria-label="Карта маршрута">
-            <div class="case-file-section-title">Карта маршрута</div>
+            <div class="case-file-section-title">${lucideIcon('map')}<span>Карта маршрута</span></div>
             <div class="case-map-frame">
                 <img src="${CASE_MAP_IMAGE}" alt="Карта Рейвенвуда с отмеченным маршрутом" />
-                <svg class="case-map-overlay" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-                    <path d="M31 41 C44 42 58 48 70 53 S80 57 84 57" />
-                </svg>
+                <div class="case-map-route" aria-hidden="true"><i></i><i></i><i></i></div>
                 <span class="case-map-marker larks"><b>Larks</b></span>
                 <span class="case-map-marker riverwalk"><b>Riverwalk</b></span>
                 <span class="case-map-marker bridge"><b>Old Bridge</b></span>
@@ -367,12 +508,12 @@ function shouldShowFrameAnalysisPanel() {
 function renderFrameAnalysisPanel() {
     return `
         <section class="case-video-analysis-panel">
-            <div class="case-file-section-title">Видео для анализа</div>
+            <div class="case-file-section-title">${lucideIcon('image')}<span>Видео для анализа</span></div>
             <article>
-                <span>VID_1842_fragment.mp4</span>
+                <span>${lucideIcon('image')} VID_1842_fragment.mp4</span>
                 <strong>Нужно выбрать стоп-кадр</strong>
                 <p>В очищенном фрагменте виден тёмно-зелёный седан. Нужно найти момент, где наклейка на лобовом стекле различима лучше всего.</p>
-                <button id="case-open-frame-analysis" type="button">Изучить видео</button>
+                <button id="case-open-frame-analysis" type="button">${lucideIcon('search')}<span>Изучить видео</span></button>
             </article>
         </section>
     `;
@@ -471,7 +612,7 @@ function renderCaseGroup(group, entries) {
 
     return `
         <section class="case-file-section">
-            <div class="case-file-section-title">${group.label}</div>
+            <div class="case-file-section-title">${lucideIcon(getCaseTypeIcon(group.type))}<span>${group.label}</span><small>${groupEntries.length}</small></div>
             <div class="case-file-entry-list">
                 ${groupEntries.map(entry => renderCaseEntry(entry)).join('')}
             </div>
@@ -483,7 +624,7 @@ function renderCaseEntry(entry) {
     const typeLabel = getCaseTypeLabel(entry.type);
     return `
         <article class="case-file-entry ${entry.type || 'note'}">
-            <span>${typeLabel}</span>
+            <span class="case-file-entry-type">${lucideIcon(getCaseTypeIcon(entry.type))}${typeLabel}</span>
             <strong>${escapeHtml(entry.title || 'Запись')}</strong>
             ${entry.imageSrc ? `<img class="case-file-entry-image" src="${escapeHtml(entry.imageSrc)}" alt="${escapeHtml(entry.title || '')}">` : ''}
             <p>${escapeHtml(entry.text || '')}</p>
@@ -495,6 +636,7 @@ function renderCaseEntry(entry) {
 function renderCaseEmpty() {
     return `
         <section class="case-file-empty">
+            ${lucideIcon('file-text', 'case-file-empty-icon')}
             <strong>Пока пусто.</strong>
             <p>Когда появятся проверенные сведения, они будут собираться здесь.</p>
         </section>
@@ -509,12 +651,31 @@ function getCaseTypeLabel(type) {
     return 'Запись';
 }
 
+function getCaseTypeIcon(type) {
+    if (type === 'question') return 'circle-question-mark';
+    if (type === 'fact') return 'search';
+    if (type === 'clue') return 'image';
+    if (type === 'thread') return 'map';
+    return 'file-text';
+}
+
 function formatEntryCount(count) {
     const last = count % 10;
     const lastTwo = count % 100;
     if (last === 1 && lastTwo !== 11) return 'запись';
     if (last >= 2 && last <= 4 && (lastTwo < 12 || lastTwo > 14)) return 'записи';
     return 'записей';
+}
+
+function formatCardCount(count) {
+    const last = count % 10;
+    const lastTwo = count % 100;
+    const word = last === 1 && lastTwo !== 11
+        ? 'карточка'
+        : last >= 2 && last <= 4 && (lastTwo < 12 || lastTwo > 14)
+            ? 'карточки'
+            : 'карточек';
+    return `${count} <small>${word}</small>`;
 }
 
 function escapeHtml(value) {

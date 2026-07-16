@@ -5,7 +5,7 @@ export function renderLizaPhone({ onBack }) {
 
     wrapper.innerHTML = `
         <div class="invest-header">
-            <button class="messenger-back-btn" id="liza-phone-back">←</button>
+            <button class="messenger-back-btn" id="liza-phone-back" type="button" aria-label="Назад"><img class="ui-lucide is-light" src="src/assets/icons/lucide/chevron-left.svg" alt="" /></button>
             <span>Второй телефон</span>
             <div style="width:36px;"></div>
         </div>

@@ -21,12 +21,12 @@ export const oliviaMorningRewriteBeats = [
       { type: "pause", delay: 4200 },
       { type: "system", text: "Оливия в сети.", delay: 500, characterStatus: { id: "olivia", online: true } },
       O("Привет."),
-      O("Я обещала писать только если вспомню что-то конкретное."),
-      O("В общем... кажется, вспомнила."),
+      O("Я обещала не писать из-за каждой догадки."),
+      O("Кажется, на этот раз есть что-то конкретное."),
       C([
-        option("Только не пугай. Что ты нашла?", "morning_olivia_what_happened"),
+        option("Ладно, только без пауз. Что нашла?", "morning_olivia_what_happened"),
         option("Это про Харпер?", "morning_olivia_about_harper"),
-        option("Ты сейчас специально нагнетаешь или правда что-то нашла?", "morning_olivia_bad_start")
+        option("Ты сейчас нагнетаешь или правда что-то нашла?", "morning_olivia_bad_start")
       ])
     ]
   },
@@ -98,13 +98,13 @@ export const oliviaMorningRewriteBeats = [
     id: "morning_olivia_is_clue",
     chat: "private_olivia",
     trigger: "choice:morning_olivia_sent_police:1",
-    messages: [O("Не знаю."), O("Сейчас любая тень кажется мне уликой. Именно поэтому я и отправила её не только тебе.")]
+    messages: [O("Не знаю."), O("Я сейчас на всё смотрю как ненормальная. Поэтому и отправила следователю.")]
   },
   {
     id: "morning_olivia_didnt_wait",
     chat: "private_olivia",
     trigger: "choice:morning_olivia_sent_police:2",
-    messages: [O("Я уже один раз слишком долго решала, важно это или нет."), O("Хватит.")]
+    messages: [O("Я уже один раз промолчала, потому что «вдруг неважно»."), O("Второй раз не хочу.")]
   },
   {
     id: "morning_olivia_send_photo",
@@ -127,7 +127,7 @@ export const oliviaMorningRewriteBeats = [
     id: "morning_olivia_green_car",
     chat: "private_olivia",
     trigger: "choice:morning_olivia_send_photo:0",
-    messages: [O("Я тоже сначала уцепилась за неё."), O("Но по одному фото не поймёшь, смотрит Харпер на машину или вообще мимо.")]
+    messages: [O("Я тоже сначала только её и увидела."), O("Но по фото не поймёшь, смотрит Харпер на машину или вообще мимо.")]
   },
   {
     id: "morning_olivia_person_by_car",
@@ -146,7 +146,7 @@ export const oliviaMorningRewriteBeats = [
     chat: "private_olivia",
     trigger: "after:morning_olivia_green_car|morning_olivia_person_by_car|morning_olivia_looks_tense",
     messages: [
-      O("Только давай без «это точно та машина». Пока мы этого не знаем."),
+      O("Только давай пока без «это точно та машина»."),
       O("Но... есть ещё одна вещь."),
       O("Вчера я о ней промолчала."),
       C([
@@ -172,7 +172,7 @@ export const oliviaMorningRewriteBeats = [
     id: "morning_olivia_deliberately_silent",
     chat: "private_olivia",
     trigger: "choice:morning_olivia_held_back:2",
-    messages: [O("Да, специально."), O("Ты был незнакомым человеком, которого Дерек только что притащил в нашу ссору."), O("Полиции я сказала. От тебя скрыла."), O("Если хочешь злиться — понимаю.")]
+    messages: [O("Да, специально."), O("Ты был незнакомым человеком, которого Дерек только что притащил в нашу ссору."), O("Полиции сказала. Тебе — нет."), O("Если злишься — понимаю.")]
   },
   {
     id: "morning_olivia_followed",
@@ -181,7 +181,7 @@ export const oliviaMorningRewriteBeats = [
     messages: [
       O("Харпер сказала, что ей кажется, будто за ней ходят."),
       O("Не всё время. Несколько раз она замечала кого-то сзади... или одну и ту же машину рядом."),
-      O("Потом сама же отшутилась. Мол, не спит нормально и уже видит слежку в каждом зеркале."),
+      O("Потом сама же сказала, что просто не высыпается и накручивает себя."),
       C([
         option("Она говорила именно про зелёную машину?", "morning_olivia_specific_green_car"),
         option("И ты рассказала это полиции?", "morning_olivia_told_police"),
@@ -199,13 +199,13 @@ export const oliviaMorningRewriteBeats = [
     id: "morning_olivia_told_police",
     chat: "private_olivia",
     trigger: "choice:morning_olivia_followed:1",
-    messages: [O("Сразу, на первом опросе."), O("Но описывать было нечего. Харпер сама не знала, видит реальную слежку или просто пугается.")]
+    messages: [O("Сразу, на первом опросе."), O("Но описания не было. Харпер и сама не была уверена, что это не паранойя.")]
   },
   {
     id: "morning_olivia_hard_to_look",
     chat: "private_olivia",
     trigger: "choice:morning_olivia_followed:2",
-    messages: [O("Да."), O("Я сидела в метре от неё и думала только о том, что она опять пьёт мой кофе."), O("Очень хочется вернуться и хотя бы один раз посмотреть туда, куда смотрела она.")]
+    messages: [O("Да."), O("Я сидела в метре от неё и думала только о том, что она опять пьёт мой кофе."), O("Теперь смотрю и думаю: почему я даже не обернулась?")]
   },
   {
     id: "morning_olivia_photo_meaning",
@@ -216,9 +216,9 @@ export const oliviaMorningRewriteBeats = [
       O("Я это понимаю. Правда."),
       O("Но теперь тот разговор не выходит из головы."),
       C([
-        option("Может, Харпер специально сфотографировалась так, чтобы в кадр попала улица.", "morning_olivia_intentional_frame"),
-        option("Пока это просто фото машины возле кафе.", "morning_olivia_just_photo", 1),
-        option("Она часто говорила, что за ней кто-то следит?", "morning_olivia_often_followed")
+        option("Она знала, что ты её снимаешь?", "morning_olivia_intentional_frame"),
+        option("Пока это просто машина на фоне.", "morning_olivia_just_photo", 1),
+        option("Она раньше тебе такое говорила?", "morning_olivia_often_followed")
       ])
     ]
   },
@@ -226,7 +226,7 @@ export const oliviaMorningRewriteBeats = [
     id: "morning_olivia_intentional_frame",
     chat: "private_olivia",
     trigger: "choice:morning_olivia_photo_meaning:0",
-    messages: [O("Нет. Фотографировала я, она даже не сразу заметила камеру."), O("Если Харпер и хотела что-то оставить в кадре, то выбрала очень странный способ.")]
+    messages: [O("Не сразу. Я достала телефон раньше, чем она заметила."), O("Так что улицу в кадр Харпер точно не подстраивала.")]
   },
   {
     id: "morning_olivia_just_photo",
@@ -246,8 +246,8 @@ export const oliviaMorningRewriteBeats = [
     trigger: "after:morning_olivia_intentional_frame|morning_olivia_just_photo|morning_olivia_often_followed",
     messages: [
       O("На следующий день Харпер виделась с Мией."),
-      O("Хочу показать фото ей — вдруг Харпер и тогда оглядывалась или сказала что-то про машину."),
-      O("Могу спросить лично. Но ты снимок уже видел, и пересказывать потом всё по третьему кругу..."),
+      O("Надо показать фото ей. Вдруг Харпер и тогда оглядывалась."),
+      O("Могу спросить лично. Но ты уже в курсе, и потом опять всё пересказывать..."),
       O("Короче. Маленький чат: ты, я и Миа. Ты не против?"),
       C([
         option("Да. Создавай.", "morning_olivia_group_yes"),

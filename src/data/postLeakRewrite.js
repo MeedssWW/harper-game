@@ -13,14 +13,14 @@ export const postLeakRewriteBeats = [
     { type: "pause", delay: 2500 }, { type: "system", text: "Дерек в сети.", delay: 450, characterStatus: { id: "derek", online: true } },
     D("Что за Larks?"), D("Брук скинула мне скрин."), D("Там ты, Оливия и Миа."), D("Вы создали отдельный чат про Харпер?"),
     choice([
-      option("Это не тайный штаб, если ты об этом.", "postleak_derek_larks_not_secret"),
-      option("Оливия хотя бы спросила меня, прежде чем добавить.", "postleak_derek_larks_asked"),
-      option("Дерек, у Брук скрин с моего телефона. Тебя это не пугает?", "postleak_derek_larks_source")
+      option("Нет, это не «тайный штаб».", "postleak_derek_larks_not_secret"),
+      option("В отличие от тебя, Оливия сначала спросила.", "postleak_derek_larks_asked"),
+      option("Тебе прислали скрин с моего телефона. Это сейчас не главнее?", "postleak_derek_larks_source")
     ])
   ], { identify: ["derek"] }),
   B("postleak_derek_larks_not_secret", "private_derek", "choice:postleak_derek_larks:0", [D("Тогда что?"), D("Потому что со стороны именно так и выглядит.")]),
   B("postleak_derek_larks_asked", "private_derek", "choice:postleak_derek_larks:1", [D("И это всё меняет?"), D("Почему вообще отдельно?")]),
-  B("postleak_derek_larks_source", "private_derek", "choice:postleak_derek_larks:2", [D("Пугает."), D("Брук получила его с неизвестного номера."), D("Но я всё равно хочу знать, что за чат.")]),
+  B("postleak_derek_larks_source", "private_derek", "choice:postleak_derek_larks:2", [D("Пугает."), D("Ей его прислали с незнакомого номера."), D("Но я всё равно хочу знать, что за чат.")]),
 
   B("postleak_derek_separate", "private_derek", "flagsValueAfter:brooke_after_call_end:larksCreated:false:brookeReceivedLeak:true", [
     { type: "pause", delay: 2500 }, { type: "system", text: "Дерек в сети.", delay: 450, characterStatus: { id: "derek", online: true } },
@@ -28,7 +28,7 @@ export const postLeakRewriteBeats = [
     choice([
       option("Они сами мне написали.", "postleak_derek_sep_wrote"),
       option("Они писали мне отдельно. Никакого заговора нет.", "postleak_derek_sep_talks"),
-      option("Кто-то залез в мой телефон, Дерек. Вот что меня волнует.", "postleak_derek_sep_source")
+      option("Кто-то залез в мой телефон. Вот что меня волнует.", "postleak_derek_sep_source")
     ])
   ], { identify: ["derek"] }),
   B("postleak_derek_sep_wrote", "private_derek", "choice:postleak_derek_separate:0", [D("И обе — про Харпер?"), D("Тебе? Человеку, которого мы вообще не знаем?")]),
@@ -39,7 +39,7 @@ export const postLeakRewriteBeats = [
     D("Ладно. Что вы нашли?"), choice([
       option("Оливия нашла старую фотографию Харпер.", "postleak_derek_photo"),
       option("Оливия и Миа сравнили, что Харпер говорила им в разные дни.", "postleak_derek_meetings"),
-      option("Расскажу. Только перестань допрашивать меня так, будто я тебя предал.", "postleak_derek_stop_accusing")
+      option("Сначала перестань говорить со мной как с предателем.", "postleak_derek_stop_accusing")
     ])
   ]),
   B("postleak_derek_photo", "private_derek", "choice:postleak_derek_what_found:0", [D("Какую фотографию?")]),
@@ -57,9 +57,9 @@ export const postLeakRewriteBeats = [
   B("postleak_derek_sedan_days", "private_derek", "choice:postleak_derek_sedan:2", [D("Какого цвета?"), D("Чёрт.")]),
   B("postleak_derek_reaction", "private_derek", "after:postleak_derek_sedan_photo|postleak_derek_sedan_mia|postleak_derek_sedan_days", [
     D("Где она стояла?"), choice([
-      option("Возле Larks. Но почему тебя так зацепил именно цвет?", "postleak_derek_colour"),
-      option("Ты сейчас отвечаешь так, будто уже видел эту машину.", "postleak_derek_seen"),
-      option("Я тебя не обвиняю. Просто скажи, что ты сейчас вспомнил.", "postleak_derek_remembered")
+      option("Возле Larks. Почему тебя так зацепил цвет?", "postleak_derek_colour"),
+      option("Ты говоришь так, будто уже видел её.", "postleak_derek_seen"),
+      option("Я не обвиняю. Просто скажи, что вспомнил.", "postleak_derek_remembered")
     ])
   ]),
   B("postleak_derek_colour", "private_derek", "choice:postleak_derek_reaction:0", [D("Потому что это хоть что-то конкретное."), D("Не начинай.")]),
@@ -78,9 +78,9 @@ export const postLeakRewriteBeats = [
   B("postleak_derek_boundaries", "private_derek", "after:postleak_derek_police_yes|postleak_derek_police_hint|postleak_derek_police_sharp", [
     D("Оливия могла написать мне сама."), D("И Миа."), D("Почему я узнаю об этом от Брук со скрином?"),
     choice([
-      option("Потому что они не обязаны сначала отчитываться перед тобой.", "postleak_derek_report"),
-      option("Они сами решают, кому и когда рассказывать.", "postleak_derek_choice"),
-      option("Они боялись ровно вот этого — что всё снова превратится в ссору.", "postleak_derek_fight")
+      option("Они тебе ничего не должны.", "postleak_derek_report"),
+      option("Может, потому что с тобой сейчас невозможно говорить?", "postleak_derek_choice"),
+      option("Вот поэтому. Снова начинается ссора.", "postleak_derek_fight")
     ])
   ]),
   B("postleak_derek_report", "private_derek", "choice:postleak_derek_boundaries:0", [D("Это моя девушка."), D("Я не прошу отчёт. Я прошу не оставлять меня последним.")]),
@@ -91,7 +91,7 @@ export const postLeakRewriteBeats = [
     choice([
       option("Если это не будет чужим секретом — скажу.", "postleak_derek_end_secret"),
       option("Скажу. Но перестань допрашивать каждого, кто тебе пишет.", "postleak_derek_end_suspects"),
-      option("Хорошо. Только ты тоже ничего не придерживай.", "postleak_derek_end_truth")
+      option("Если что-то знаешь — сейчас не время молчать.", "postleak_derek_end_truth")
     ])
   ]),
   B("postleak_derek_end_secret", "private_derek", "choice:postleak_derek_end:0", [D("Ладно."), { type: "system", text: "Дерек не в сети.", delay: 550, characterStatus: { id: "derek", online: false } }]),
@@ -122,7 +122,7 @@ export const postLeakRewriteBeats = [
   B("postleak_olivia_derek_react", "private_olivia", "choice:postleak_olivia_derek:1", [O("Дёрнулся как?"), O("Ладно. Спрошу сама — спокойно.")]),
   B("postleak_olivia_divide", "private_olivia", "choice:postleak_olivia_derek:2", [O("Возможно."), O("Скрин отправили именно Брук — человеку, который точно разозлится.")]),
   B("postleak_olivia_end", "private_olivia", "after:postleak_olivia_thanks|postleak_olivia_derek_react|postleak_olivia_divide", [
-    O("Всех снова собирать я не буду."), O("Появится что-то конкретное — скажем тем, кто реально может помочь."), O("И сразу следователю."), O("Я на связи.")
+    O("Всех снова собирать не буду."), O("Будет что-то настоящее — скажем тем, кто может помочь."), O("И следователю сразу."), O("Я на связи.")
   ]),
 
   B("postleak_unknown_video", "private_unknown", "after:postleak_olivia_end", [
@@ -136,13 +136,13 @@ export const postLeakRewriteBeats = [
   ]),
   B("postleak_unknown_send", "private_unknown", "choice:postleak_unknown_video:0", [U("Сейчас.")]),
   B("postleak_unknown_safe", "private_unknown", "choice:postleak_unknown_video:1", [U("Точно. Локальная копия, не ссылка.")]),
-  B("postleak_unknown_wary", "private_unknown", "choice:postleak_unknown_video:2", [U("Правильная реакция."), U("Я вырезал фрагмент. Внешнего кода в нём нет."), U("К серверу он не полезет.")]),
+  B("postleak_unknown_wary", "private_unknown", "choice:postleak_unknown_video:2", [U("И правильно."), U("Я вырезал фрагмент. Внешнего кода в нём нет."), U("К серверу он не полезет.")]),
   B("postleak_video_fragment", "private_unknown", "after:postleak_unknown_send|postleak_unknown_safe|postleak_unknown_wary", [
     { from: "unknown", type: "video", title: "VID_1842_PART.mp4", duration: "00:03", src: "src/assets/videos/vid_1842_fragment.mp4?v=120", poster: "src/assets/videos/vid_1842_fragment_poster.jpg?v=120", caption: "Восстановленный безопасный фрагмент · 00:03", orientation: "vertical", analysisAction: "frame_analysis", delay: 900 },
     U("Тёмно-зелёный седан. Мокрая дорога. Металлическое ограждение."), U("На заднем стекле — светлая прямоугольная наклейка."),
     choice([
       option("Опять зелёный седан...", "postleak_video_green"),
-      option("Если это та же машина, Харпер ничего не мерещилось.", "postleak_video_same"),
+      option("Если машина та же, Харпер правда её замечала.", "postleak_video_same"),
       option("Всего три секунды. А мне уже хуже, чем было.", "postleak_video_worse")
     ])
   ], { setFlags: { cleanVideoFragmentReceived: true, videoPartialRestored: true } }),
@@ -194,7 +194,7 @@ export const postLeakRewriteBeats = [
     ])
   ]),
   B("postleak_tyler_crop", "private_olivia", "choice:postleak_tyler_offer:0", [O("Хорошо. Машину целиком показывать не буду.")]),
-  B("postleak_tyler_full", "private_olivia", "choice:postleak_tyler_offer:1", [O("Конечно. Скажу только, что это связано с Харпер.")]),
+  B("postleak_tyler_full", "private_olivia", "choice:postleak_tyler_offer:1", [O("Конечно. Только скажу, что снимок про Харпер.")]),
   B("postleak_tyler_ask", "private_olivia", "choice:postleak_tyler_offer:2", [O("Да, так лучше. Сначала объясню, что вообще прошу.")]),
   B("postleak_tyler_ready", "private_olivia", "after:postleak_tyler_crop|postleak_tyler_full|postleak_tyler_ask", [
     O("Написала."), { type: "pause", delay: 1500 }, O("Согласился."), O("Сказал, что лучше сам тебе напишет."),
@@ -243,13 +243,13 @@ export const postLeakRewriteBeats = [
     ])
   ]),
   B("postleak_tyler_city", "private_tyler", "choice:postleak_tyler_warning:0", [T("Я знаю. Я говорю про остальных.")]),
-  B("postleak_tyler_nobody", "private_tyler", "choice:postleak_tyler_warning:1", [T("Хорошо. Я просто сразу обозначил.")]),
+  B("postleak_tyler_nobody", "private_tyler", "choice:postleak_tyler_warning:1", [T("Вот и хорошо.")]),
   B("postleak_tyler_mia", "private_tyler", "choice:postleak_tyler_warning:2", [T("В основном. Она может сначала поехать, а потом решить, хорошая ли это была идея.")]),
   B("postleak_tyler_end", "private_tyler", "after:postleak_tyler_city|postleak_tyler_nobody|postleak_tyler_mia", [
-    T("И кадр — полиции."), T("Напишите, что наклейка может быть от North Yard."), T("Именно «может быть»."), T("С таким качеством точнее я не скажу."),
+    T("Кадр отправьте полиции."), T("Напишите: наклейка может быть от North Yard."), T("Именно «может»."), T("С таким качеством точнее не скажу."),
     choice([
       option("Хорошо. Так и напишем: «может быть».", "postleak_tyler_end_ok"),
-      option("Спасибо, что не делаешь вид, будто уверен на сто процентов.", "postleak_tyler_end_fact"),
+      option("Спасибо, что не говоришь «точно», когда не уверен.", "postleak_tyler_end_fact"),
       option("Оливии сам напишешь? Или мне пересказать?", "postleak_tyler_end_olivia")
     ])
   ]),
@@ -307,14 +307,14 @@ export const postLeakRewriteBeats = [
   B("postleak_mason_nobody", "private_mason", "choice:postleak_mason:1", [S("Отлично. Вот и не начинайте.")]),
   B("postleak_mason_first", "private_mason", "choice:postleak_mason:2", [S("Да. Потому что это закрытая территория.")]),
   B("postleak_mason_end", "private_mason", "after:postleak_mason_city|postleak_mason_nobody|postleak_mason_first", [
-    S("Кадр — полиции."), S("Исходное время и переписку с Тайлером сохраните."), S("Машину сами не ищите."), S("В North Yard не звоните."), S("И никого из работников не предупреждайте."),
+    S("Кадр уже у полиции?"), S("И ничего не удаляйте. Ни время, ни переписку с Тайлером."), S("Машину сами не ищите."), S("В North Yard не звоните."), S("Вообще не трогайте людей оттуда, ясно?"),
     choice([
       option("Кадр уже у полиции.", "postleak_mason_police"),
       option("Ты правда думаешь, что кто-то из нас туда полезет?", "postleak_mason_climb"),
       option("Ты вообще никому из нас не доверяешь, да?", "postleak_mason_trust")
     ])
   ]),
-  B("postleak_mason_police", "private_mason", "choice:postleak_mason_end:0", [S("Хорошо. Тогда ждите."), { type: "system", text: "Мейсон не в сети.", delay: 550, characterStatus: { id: "mason", online: false } }], { setFlags: { postLeakMasonComplete: true } }),
-  B("postleak_mason_climb", "private_mason", "choice:postleak_mason_end:1", [S("Да. Поэтому и пишу."), { type: "system", text: "Мейсон не в сети.", delay: 550, characterStatus: { id: "mason", online: false } }], { setFlags: { postLeakMasonComplete: true } }),
-  B("postleak_mason_trust", "private_mason", "choice:postleak_mason_end:2", [S("Рядом с заброшенными путями? Нет."), { type: "system", text: "Мейсон не в сети.", delay: 550, characterStatus: { id: "mason", online: false } }], { setFlags: { postLeakMasonComplete: true } })
+  B("postleak_mason_police", "private_mason", "choice:postleak_mason_end:0", [S("Хорошо. Тогда ждите. И да, я серьёзно."), { type: "system", text: "Мейсон не в сети.", delay: 550, characterStatus: { id: "mason", online: false } }], { setFlags: { postLeakMasonComplete: true } }),
+  B("postleak_mason_climb", "private_mason", "choice:postleak_mason_end:1", [S("После всего с файлом? Да, думаю."), { type: "system", text: "Мейсон не в сети.", delay: 550, characterStatus: { id: "mason", online: false } }], { setFlags: { postLeakMasonComplete: true } }),
+  B("postleak_mason_trust", "private_mason", "choice:postleak_mason_end:2", [S("Возле заброшенных путей? Вообще никому."), { type: "system", text: "Мейсон не в сети.", delay: 550, characterStatus: { id: "mason", online: false } }], { setFlags: { postLeakMasonComplete: true } })
 ];

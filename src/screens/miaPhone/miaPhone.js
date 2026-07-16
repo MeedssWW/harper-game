@@ -91,7 +91,7 @@ function renderDeviceList(wrapper, onDone) {
             <section class="mia-recovered-block">
                 <span>Восстановленные данные</span>
                 <button class="mia-recovered-row" id="recovered-row" type="button">
-                    <div class="mia-damaged-icon">!</div>
+                    <div class="mia-damaged-icon" aria-hidden="true"><img class="ui-lucide is-light" src="src/assets/icons/lucide/triangle-alert.svg" alt="" /></div>
                     <div>
                         <strong>Неизвестный чат</strong>
                         <p>1 удалённый чат · 1 удалённое вложение</p>
@@ -138,7 +138,7 @@ function openDeviceChat(wrapper, chat, onDone) {
 
     wrapper.innerHTML = `
         <header class="mia-device-chat-header">
-            <button class="mia-device-back" type="button">‹</button>
+            <button class="mia-device-back" type="button" aria-label="Назад"><img class="ui-lucide is-light" src="src/assets/icons/lucide/chevron-left.svg" alt="" /></button>
             <div>
                 <h1>${escapeHtml(chat.title)}</h1>
                 <span>${escapeHtml(chat.meta)}</span>
@@ -175,7 +175,7 @@ function openRecoveredChat(wrapper, onDone, restricted = false) {
     stateManager.setFlag('vid1842Found', true);
     wrapper.innerHTML = `
         <header class="mia-device-chat-header">
-            ${restricted ? '' : '<button class="mia-device-back" type="button">‹</button>'}
+            ${restricted ? '' : '<button class="mia-device-back" type="button" aria-label="Назад"><img class="ui-lucide is-light" src="src/assets/icons/lucide/chevron-left.svg" alt="" /></button>'}
             <div>
                 <h1>Неизвестный чат</h1>
                 <span>Контакт не сохранён · номер повреждён</span>
