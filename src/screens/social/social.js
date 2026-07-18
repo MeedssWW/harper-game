@@ -77,6 +77,7 @@ export function renderSocial({ onBack }) {
     let tab = stateManager.hasFlag('openRavenFeedRequests')
         ? 'requests'
         : stateManager.hasFlag('openRavenFeedCityGuide') ? 'city' : 'feed';
+    let viralPostReadTimer = null;
     stateManager.setFlag('openRavenFeedRequests', false);
     stateManager.setFlag('openRavenFeedCityGuide', false);
     const draw = () => {
@@ -84,6 +85,27 @@ export function renderSocial({ onBack }) {
         const requestCount = getUnreadRequestCount();
         wrapper.innerHTML = `<header class="rf-header"><button class="rf-round" id="social-back" type="button" aria-label="Назад"><img class="ui-lucide is-light" src="src/assets/icons/lucide/chevron-left.svg" alt="" /></button><div class="rf-brand"><strong>RavenFeed</strong><span>Рейвенвуд рядом</span></div><div class="rf-header-actions">${stateManager.hasFlag('ravenFeedRequestsLive') ? `<button class="rf-round rf-inbox-button ${requestCount ? 'has-unread' : ''}" id="rf-inbox" type="button" aria-label="Запросы"><img class="ui-lucide is-light" src="src/assets/icons/lucide/message-circle-more.svg" alt="" />${requestCount ? `<b>${requestCount}</b>` : ''}</button>` : ''}<button class="rf-round" id="rf-search" type="button" aria-label="Поиск"><img class="ui-lucide is-light" src="src/assets/icons/lucide/search.svg" alt="" /></button></div></header><nav class="rf-tabs" aria-label="Разделы"><button data-tab="feed" class="${tab === 'feed' ? 'active' : ''}">Для вас</button><button data-tab="city" class="${tab === 'city' ? 'active' : ''}">Город</button><button data-tab="people" class="${tab === 'people' ? 'active' : ''}">Люди</button>${stateManager.hasFlag('ravenFeedRequestsLive') ? `<button data-tab="requests" class="${tab === 'requests' ? 'active' : ''}">Запросы</button>` : ''}</nav><main class="social-feed rf-feed">${tab === 'people' ? renderPeople() : tab === 'requests' ? renderRequestInbox() : posts.filter(post => tab !== 'city' || !post.profile).map(renderPost).join('')}</main>`;
         bind();
+        markViralPostAsReadWhenVisible();
+    };
+    const markViralPostAsReadWhenVisible = () => {
+        if (
+            tab !== 'feed' ||
+            !stateManager.hasFlag('act1ViralPost') ||
+            stateManager.hasFlag('viralPostOpened') ||
+            viralPostReadTimer
+        ) return;
+
+        viralPostReadTimer = setTimeout(() => {
+            viralPostReadTimer = null;
+            if (
+                wrapper.isConnected &&
+                tab === 'feed' &&
+                stateManager.hasFlag('act1ViralPost') &&
+                wrapper.querySelector('[data-open-post="player-framed"]')
+            ) {
+                stateManager.setFlag('viralPostOpened', true);
+            }
+        }, 650);
     };
     const bind = () => {
         wrapper.querySelector('#social-back')?.addEventListener('click', onBack);
