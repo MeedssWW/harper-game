@@ -40,3 +40,4 @@ The opening is about consequences, not a sudden new search for Harper. Ravenwood
 - Nate Holloway uses a unique generated portrait in a small home podcast setup.
 - The North Lot accusation and June's correction use the same generated full-frame sports photograph. Ravenwood Truth shows a misleading crop; June shows the contextual full image.
 - June and the other residents retain their existing distinct generated faces.
+- Page avatars are separate generated identity images. They must never reuse the photograph attached to a publication.
