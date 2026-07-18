@@ -570,13 +570,13 @@ function backfillCaseEntries() {
         id: 'thread_player_phone_compromised',
         type: 'thread',
         title: 'Телефон игрока',
-        text: 'Во время загрузки файла кто-то получил доступ к телефону игрока. Файл не открылся.'
+        text: 'Внешний просмотрщик передал серверу временный ключ RavenLink. Через него были прочитаны чаты, заметки и запрошена камера.'
     });
     stateManager.addCaseEntry({
         id: 'question_trap_attachment_owner',
         type: 'question',
         title: 'ВОПРОС',
-        text: 'Кто оставил вложение в старом телефоне Мии и почему оно сработало именно при открытии?'
+        text: 'Кто подменил внешний адрес VID_1842.mp4 и кому принадлежит сервер?'
     });
 
     if (stateManager.hasFlag('stickerStillAddedToCase')) {

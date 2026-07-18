@@ -308,8 +308,8 @@ export const episode1LivingRewriteBeats = [
     messages: [
       { type: 'navigate', screen: 'chat', params: { chatId: 'private_unknown' }, delay: 350 },
       { type: 'system', text: 'Неизвестный в сети.', delay: 450, characterStatus: { id: 'unknown', online: true } },
-      say('unknown', 'Не открывай файл снова.'),
-      say('unknown', 'Я оборвал подключение.'),
+      say('unknown', 'Не открывай ссылку снова.'),
+      say('unknown', 'Я отозвал временный ключ.'),
       { type: 'choice', options: [
         choice('Кто ты?', 'ep1_unknown_who'),
         choice('Что сейчас произошло с моим телефоном?', 'ep1_unknown_what'),
@@ -318,15 +318,15 @@ export const episode1LivingRewriteBeats = [
       ] }
     ]
   },
-  { id: 'ep1_unknown_who', chat: 'private_unknown', trigger: 'choice:ep1_unknown_first:0', messages: [say('unknown', 'Потом.'), say('unknown', 'Сначала пойми: до меня к твоему телефону уже кто-то подключился.') ] },
-  { id: 'ep1_unknown_what', chat: 'private_unknown', trigger: 'choice:ep1_unknown_first:1', messages: [say('unknown', 'В копии лежал не видеофайл, а ссылка на внешний сервер.'), say('unknown', 'Судя по журналу, переход по ней открыл внешнее соединение.') ] },
-  { id: 'ep1_unknown_camera', chat: 'private_unknown', trigger: 'choice:ep1_unknown_first:2', messages: [say('unknown', 'Нет.'), say('unknown', 'Я закрыл чужое соединение. Камеру успели включить до меня.') ] },
-  { id: 'ep1_unknown_silence', chat: 'private_unknown', trigger: 'choice:ep1_unknown_first:3', messages: [say('unknown', 'Можешь не отвечать.'), say('unknown', 'Но файл второй раз не открывай.') ] },
+  { id: 'ep1_unknown_who', chat: 'private_unknown', trigger: 'choice:ep1_unknown_first:0', messages: [say('unknown', 'Сейчас это неважно.'), say('unknown', 'Важно, что внешний просмотрщик передал серверу служебный ключ твоего телефона.') ] },
+  { id: 'ep1_unknown_what', chat: 'private_unknown', trigger: 'choice:ep1_unknown_first:1', messages: [say('unknown', 'Ты открыл не видео, а страницу во встроенном просмотрщике.'), say('unknown', 'Вместе с адресом она получила временный ключ RavenLink и запросила через него доступ к приложениям.') ] },
+  { id: 'ep1_unknown_camera', chat: 'private_unknown', trigger: 'choice:ep1_unknown_first:2', messages: [say('unknown', 'Нет.'), say('unknown', 'Камеру запросил тот же внешний сеанс.'), say('unknown', 'Я появился позже и отозвал его ключ.') ] },
+  { id: 'ep1_unknown_silence', chat: 'private_unknown', trigger: 'choice:ep1_unknown_first:3', messages: [say('unknown', 'Можешь не отвечать.'), say('unknown', 'Но ссылку второй раз не открывай.') ] },
   {
     id: 'ep1_unknown_explains', chat: 'private_unknown', trigger: 'after:ep1_unknown_who|ep1_unknown_what|ep1_unknown_camera|ep1_unknown_silence',
     messages: [
-      say('unknown', 'В журнале остались обращения к списку чатов, заметкам и фронтальной камере.'),
-      say('unknown', 'Соединение длилось меньше минуты, но этого хватило.'),
+      say('unknown', 'В журнале видно три запроса: список чатов, заметки и камера.'),
+      say('unknown', 'Ключ жил меньше минуты, но сервер успел начать передачу фотографии.'),
       { type: 'choice', options: [
         choice('Они сделали мою фотографию.', 'ep1_unknown_photo'),
         choice('Что они успели скопировать?', 'ep1_unknown_stolen'),
@@ -334,14 +334,14 @@ export const episode1LivingRewriteBeats = [
       ] }
     ]
   },
-  { id: 'ep1_unknown_photo', chat: 'private_unknown', trigger: 'choice:ep1_unknown_explains:0', messages: [say('unknown', 'Видел.'), say('unknown', 'Передачу я остановил, но не знаю, успел ли снимок уйти раньше.') ] },
-  { id: 'ep1_unknown_stolen', chat: 'private_unknown', trigger: 'choice:ep1_unknown_explains:1', messages: [say('unknown', 'Точно не скажу.'), say('unknown', 'Список чатов они увидели. Заметки тоже. Потом включили камеру.') ] },
-  { id: 'ep1_unknown_server', chat: 'private_unknown', trigger: 'choice:ep1_unknown_explains:2', messages: [say('unknown', 'Потому что этот адрес уже появлялся раньше.'), say('unknown', 'Больше пока не скажу.') ] },
+  { id: 'ep1_unknown_photo', chat: 'private_unknown', trigger: 'choice:ep1_unknown_explains:0', messages: [say('unknown', 'Да.'), say('unknown', 'Я отозвал ключ на шестидесяти четырёх процентах.'), say('unknown', 'Это не значит, что сервер ничего не сохранил.') ] },
+  { id: 'ep1_unknown_stolen', chat: 'private_unknown', trigger: 'choice:ep1_unknown_explains:1', messages: [say('unknown', 'Точно не скажу.'), say('unknown', 'Они прочитали названия чатов и последние сообщения.'), say('unknown', 'Заметку открыли целиком. Потом запросили камеру.') ] },
+  { id: 'ep1_unknown_server', chat: 'private_unknown', trigger: 'choice:ep1_unknown_explains:2', messages: [say('unknown', 'Я следил за адресом из удалённого чата.'), say('unknown', 'Когда появился новый ключ, я увидел его в журнале и отозвал.'), say('unknown', 'Почему у меня есть доступ к журналу, пока не спрашивай.') ] },
   {
     id: 'ep1_unknown_warning', chat: 'private_unknown', trigger: 'after:ep1_unknown_photo|ep1_unknown_stolen|ep1_unknown_server',
     messages: [
-      say('unknown', 'Смени пароль и не пересылай ссылку.'),
-      say('unknown', 'И пока не отвечай тем, кто ссылается на данные с твоего телефона.'),
+      say('unknown', 'Заверши остальные сеансы мессенджера, а потом смени пароль.'),
+      say('unknown', 'Ссылку никому не пересылай, даже если попросят показать файл.'),
       { type: 'choice', options: [
         choice('Почему я должен тебе верить?', 'ep1_unknown_trust'),
         choice('Миа должна знать, что произошло.', 'ep1_unknown_mia'),
@@ -350,11 +350,11 @@ export const episode1LivingRewriteBeats = [
       ] }
     ]
   },
-  { id: 'ep1_unknown_trust', chat: 'private_unknown', trigger: 'choice:ep1_unknown_warning:0', messages: [say('unknown', 'Не должен.'), say('unknown', 'Проверь журнал: моё соединение открылось после чужого и сразу закрылось.') ] },
-  { id: 'ep1_unknown_mia', chat: 'private_unknown', trigger: 'choice:ep1_unknown_warning:1', messages: [say('unknown', 'Про взлом скажи, но про меня пока лучше промолчи.'), say('unknown', 'Если обо мне узнают, сервер сразу сменят.') ] },
-  { id: 'ep1_unknown_side', chat: 'private_unknown', trigger: 'choice:ep1_unknown_warning:2', messages: [say('unknown', 'И правильно, после такого никому не верь.'), say('unknown', 'Просто учти, что к твоему телефону уже есть чужой доступ.') ] },
+  { id: 'ep1_unknown_trust', chat: 'private_unknown', trigger: 'choice:ep1_unknown_warning:0', messages: [say('unknown', 'Не должен.'), say('unknown', 'Но журнал ты видел сам: ключ отозвали уже после запросов к приложениям.') ] },
+  { id: 'ep1_unknown_mia', chat: 'private_unknown', trigger: 'choice:ep1_unknown_warning:1', messages: [say('unknown', 'Про внешний сеанс скажи.'), say('unknown', 'Про меня пока лучше промолчи. Если владелец сервера поймёт, что журнал читают, он его закроет.') ] },
+  { id: 'ep1_unknown_side', chat: 'private_unknown', trigger: 'choice:ep1_unknown_warning:2', messages: [say('unknown', 'И правильно. После такого никому не верь сразу.'), say('unknown', 'Просто не путай два подключения: сначала был внешний просмотрщик, потом я отозвал его ключ.') ] },
   { id: 'ep1_unknown_blocked', chat: 'private_unknown', trigger: 'choice:ep1_unknown_warning:3', messages: [{ type: 'system', text: 'Контакт заблокирован.', delay: 650 }, { type: 'system', text: 'Неизвестный не в сети.', delay: 500, characterStatus: { id: 'unknown', online: false } }] },
-  { id: 'ep1_unknown_offline', chat: 'private_unknown', trigger: 'after:ep1_unknown_trust|ep1_unknown_mia|ep1_unknown_side', messages: [say('unknown', 'Я напишу, если пойму, кто принял подключение.'), { type: 'system', text: 'Неизвестный не в сети.', delay: 650, characterStatus: { id: 'unknown', online: false } }] },
+  { id: 'ep1_unknown_offline', chat: 'private_unknown', trigger: 'after:ep1_unknown_trust|ep1_unknown_mia|ep1_unknown_side', messages: [say('unknown', 'Я напишу, если пойму, кому принадлежит внешний узел.'), { type: 'system', text: 'Неизвестный не в сети.', delay: 650, characterStatus: { id: 'unknown', online: false } }] },
 
   {
     id: 'ep1_mia_after_hack', chat: 'private_mia', trigger: 'after:ep1_unknown_offline|ep1_unknown_blocked',
@@ -363,16 +363,16 @@ export const episode1LivingRewriteBeats = [
       { type: 'system', text: 'Миа в сети.', delay: 450, characterStatus: { id: 'mia', online: true } },
       say('mia', 'Что случилось?'),
       say('mia', 'Доступ оборвался, а программа закрылась.'),
-      say('mia', 'Ты успел открыть файл?'),
+      say('mia', 'Ты успел открыть ссылку?'),
       { type: 'choice', options: [
-        choice('Да. Файл взломал мой телефон, и потом мне написал какой-то человек.', 'ep1_mia_tell_all', { setFlag: 'unknownRevealedToMia' }),
-        choice('Да. Кто-то получил доступ к телефону.', 'ep1_mia_tell_hack'),
-        choice('Нет. Всё просто зависло и закрылось.', 'ep1_mia_hide_hack', { setFlag: 'playerHidHackFromMia' })
+        choice('Да. Ссылка открыла чужой сеанс, а потом мне написал какой-то человек.', 'ep1_mia_tell_all', { setFlag: 'unknownRevealedToMia' }),
+        choice('Да. Внешний просмотрщик получил доступ к приложениям.', 'ep1_mia_tell_hack'),
+        choice('Нет. Просмотрщик просто завис и закрылся.', 'ep1_mia_hide_hack', { setFlag: 'playerHidHackFromMia' })
       ] }
     ]
   },
   { id: 'ep1_mia_tell_all', chat: 'private_mia', trigger: 'choice:ep1_mia_after_hack:0', setFlags: { miaKnowsAboutHack: true, unknownRevealedToMia: true }, messages: [say('mia', 'Какой ещё человек?'), say('mia', 'Ладно. Потом. Сначала закрой всё и смени пароль.'), say('mia', 'Господи, прости. Это всё из-за моей ссылки.') ] },
-  { id: 'ep1_mia_tell_hack', chat: 'private_mia', trigger: 'choice:ep1_mia_after_hack:1', setFlags: { miaKnowsAboutHack: true }, messages: [say('mia', 'Что значит «получил доступ»?'), say('mia', 'Чёрт. Я закрываю копию и пишу следователю прямо сейчас.'), say('mia', 'Прости. Я не должна была просить тебя это открывать.') ] },
+  { id: 'ep1_mia_tell_hack', chat: 'private_mia', trigger: 'choice:ep1_mia_after_hack:1', setFlags: { miaKnowsAboutHack: true }, messages: [say('mia', 'Подожди, к каким приложениям?'), say('mia', 'Чёрт. Я закрываю копию и пишу следователю прямо сейчас.'), say('mia', 'Прости. Я не должна была просить тебя открывать эту ссылку.') ] },
   { id: 'ep1_mia_hide_hack', chat: 'private_mia', trigger: 'choice:ep1_mia_after_hack:2', setFlags: { playerHidHackFromMia: true }, messages: [say('mia', 'И всё?'), say('mia', 'Ладно. Я всё равно закрываю доступ.'), say('mia', 'Если заметишь хоть что-то странное, скажи мне. Пожалуйста.') ] },
   {
     id: 'ep1_mia_after_hack_response', chat: 'private_mia', trigger: 'after:ep1_mia_tell_all|ep1_mia_tell_hack|ep1_mia_hide_hack',
@@ -385,7 +385,7 @@ export const episode1LivingRewriteBeats = [
     ]
   },
   { id: 'ep1_mia_not_fault', chat: 'private_mia', trigger: 'choice:ep1_mia_after_hack_response:0', messages: [say('mia', 'Всё равно ссылку дала я.'), say('mia', 'Но... спасибо.') ] },
-  { id: 'ep1_mia_close_access', chat: 'private_mia', trigger: 'choice:ep1_mia_after_hack_response:1', messages: [say('mia', 'Уже закрыла.'), say('mia', 'И отправила следователю только имя файла, без самой ссылки.') ] },
+  { id: 'ep1_mia_close_access', chat: 'private_mia', trigger: 'choice:ep1_mia_after_hack_response:1', messages: [say('mia', 'Уже закрыла.'), say('mia', 'Следователю отправила имя файла и скрин журнала, но не сам адрес.') ] },
   { id: 'ep1_mia_shared_blame', chat: 'private_mia', trigger: 'choice:ep1_mia_after_hack_response:2', messages: [say('mia', 'Да.'), say('mia', 'Пожалуй, это самый честный вариант.') ] },
   {
     id: 'ep1_mia_privacy_respected',
@@ -450,7 +450,7 @@ export const episode1LivingRewriteBeats = [
       say('olivia', 'Я не думаю, что ты сам отдал им это фото.'),
       say('olivia', 'Но откуда оно взялось?'),
       { type: 'choice', options: [
-        choice('Мой телефон взломали после открытия файла.', 'ep1_olivia_final_high_explain', { setFlag: 'oliviaKnowsAboutHack' }),
+        choice('После открытия ссылки появился чужой сеанс.', 'ep1_olivia_final_high_explain', { setFlag: 'oliviaKnowsAboutHack' }),
         choice('Я сам пока понимаю не больше твоего.', 'ep1_olivia_final_high_uncertain')
       ] }
     ]

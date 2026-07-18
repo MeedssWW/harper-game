@@ -24,6 +24,9 @@ All four QA routes must reach the same final publication without reactivating «
 
 ## Hack disclosure
 
+- The recovered entry contains an external address, not a locally recovered playable video.
+- The embedded viewer exposes a temporary RavenLink key; the visible log records app-index reads, a camera request and an interrupted photo transfer.
+- The device does not perform a cinematic full reboot. The embedded viewer closes after the key is revoked and returns the player to Messenger.
 - `miaKnowsAboutHack` is set only if the player tells Mia about the compromise, including a later finale disclosure.
 - `unknownRevealedToMia` records whether Unknown was mentioned.
 - `playerHidHackFromMia` records the lie that the program merely closed.

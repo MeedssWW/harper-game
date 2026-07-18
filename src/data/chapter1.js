@@ -1,7 +1,7 @@
 import { introRewriteBeats } from './introRewrite.js?v=129';
 import { naturalizeDialogueBeats } from './dialogueNaturalization.js?v=1';
 import { authorDialogueBeats } from './dialogueAuthorPass.js?v=5';
-import { episode1LivingRewriteBeats } from './episode1LivingRewrite.js?v=4';
+import { episode1LivingRewriteBeats } from './episode1LivingRewrite.js?v=5';
 
 const legacyChapter1 = {
   id: "act1",

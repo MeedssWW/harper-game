@@ -66,6 +66,12 @@ const miaPhoneSource = fs.readFileSync(new URL('../src/screens/miaPhone/miaPhone
 for (const stale of ['закончил с картой', 'всего две точки', 'north yard', 'тёмно-зелён']) {
   assert(!miaPhoneSource.includes(stale), `В интерфейсе взлома остался старый сюжет: ${stale}.`);
 }
+for (const required of ['временный ключ ravenlink', 'messages.index', 'notes.index', 'camera.capture', 'передача 64%']) {
+  assert(miaPhoneSource.includes(required), `В новой сцене взлома отсутствует обязательный след: ${required}.`);
+}
+for (const cinematic of ['access breach', 'session killed', 'перезагрузка устройства']) {
+  assert(!miaPhoneSource.includes(cinematic), `В сцене взлома остался неправдоподобный эффект: ${cinematic}.`);
+}
 
 const scenarios = [
   {

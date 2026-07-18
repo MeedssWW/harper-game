@@ -16,20 +16,20 @@ import { renderContactList, renderContactProfile } from './src/screens/contacts/
 import { renderGallery } from './src/screens/gallery/gallery.js?v=126';
 import { renderNotes } from './src/screens/notes/notes.js?v=126';
 import { renderMap } from './src/screens/map/map.js?v=126';
-import { renderMiaPhone } from './src/screens/miaPhone/miaPhone.js?v=142';
+import { renderMiaPhone } from './src/screens/miaPhone/miaPhone.js?v=143';
 import { renderBrowser } from './src/screens/browser/browser.js?v=126';
 import { renderSocial } from './src/screens/social/social.js?v=141';
 import { renderClues } from './src/screens/clues/clues.js?v=126';
-import { renderCaseIntroTask } from './src/screens/caseFile/caseIntroTask.js?v=126';
+import { renderCaseIntroTask } from './src/screens/caseFile/caseIntroTask.js?v=127';
 import { renderFrameAnalysis } from './src/screens/frameAnalysis/frameAnalysis.js?v=126';
 import { renderLizaPhone } from './src/screens/lizaPhone/lizaPhone.js?v=126';
-import { renderSettings } from './src/screens/settings/settings.js?v=141';
+import { renderSettings } from './src/screens/settings/settings.js?v=142';
 import { renderUnknownCall } from './src/screens/call/unknownCall.js?v=126';
 import { renderPoliceDecision } from './src/screens/policeDecision/policeDecision.js?v=70';
 import { renderChapterEnd } from './src/screens/chapterEnd/chapterEnd.js?v=140';
 import { audioEngine } from './src/engine/audioEngine.js?v=124';
 import { characters } from './src/data/characters.js?v=123';
-import { chapter1 } from './src/data/chapter1.js?v=145';
+import { chapter1 } from './src/data/chapter1.js?v=146';
 
 // ---- App State ----
 let activeChatView = null;

@@ -4,10 +4,10 @@
 
 import { audioEngine } from '../../engine/audioEngine.js?v=123';
 import { stateManager } from '../../engine/stateManager.js';
-import { chapter1 } from '../../data/chapter1.js?v=129';
+import { chapter1 } from '../../data/chapter1.js?v=146';
 
 const STATE_KEY = 'harper_act1_v4';
-const STORY_VERSION = 'harper_episode1_living_ravenfeed_2026_07_16_v14';
+const STORY_VERSION = 'harper_episode1_realistic_session_2026_07_18_v16';
 
 const CHECKPOINTS = [
     {
@@ -424,8 +424,8 @@ function defaultCaseEntries(flags = {}) {
     if (flags.miaHackUpdateWritten) {
         entries.push(
             { id: 'clue_vid_1842_recovered', type: 'clue', title: 'VID_1842.mp4', text: 'На старом телефоне Мии найден восстановленный чат с неизвестным номером. Внутри было вложение VID_1842.mp4.' },
-            { id: 'thread_player_phone_compromised', type: 'thread', title: 'Телефон игрока', text: 'Во время загрузки файла кто-то получил доступ к телефону игрока. Файл не открылся.' },
-            { id: 'question_trap_attachment_owner', type: 'question', title: 'ВОПРОС', text: 'Кто оставил вложение в старом телефоне Мии и почему оно сработало именно при открытии?' }
+            { id: 'thread_player_phone_compromised', type: 'thread', title: 'Телефон игрока', text: 'Внешний просмотрщик передал серверу временный ключ RavenLink. Через него были прочитаны чаты, заметки и запрошена камера.' },
+            { id: 'question_trap_attachment_owner', type: 'question', title: 'ВОПРОС', text: 'Кто подменил внешний адрес VID_1842.mp4 и кому принадлежит сервер?' }
         );
     }
 

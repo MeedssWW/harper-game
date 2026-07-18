@@ -8967,6 +8967,465 @@ body,
     animation: mapSpin 0.9s linear infinite;
 }
 
+/* Realistic external-session sequence */
+.mia-remote-screen.is-hacked {
+    animation: none;
+}
+
+.mia-external-address {
+    display: grid;
+    gap: 5px;
+    margin: 12px 0 4px;
+    padding: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    background: #171d28;
+    text-align: left;
+}
+
+.mia-external-address span,
+.mia-external-address small {
+    color: #a5afc0;
+    font-size: 10px;
+    font-weight: 800;
+}
+
+.mia-external-address code {
+    overflow: hidden;
+    color: #f4f7fc;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.mia-download-screen {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: stretch;
+    gap: 18px;
+    padding: 44px 24px 28px;
+    text-align: left;
+    background:
+        radial-gradient(circle at 80% 4%, rgba(61, 109, 173, 0.18), transparent 32%),
+        linear-gradient(180deg, #0e131c 0%, #090c12 100%);
+}
+
+.mia-viewer-brand,
+.mia-viewer-file,
+.session-badge,
+.session-readout {
+    position: relative;
+    z-index: 2;
+}
+
+.mia-viewer-brand {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 14px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.09);
+}
+
+.mia-viewer-brand span {
+    color: #f4f7fc;
+    font-size: 14px;
+    font-weight: 900;
+}
+
+.mia-viewer-brand strong {
+    padding: 5px 8px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 99px;
+    color: #8793a7;
+    font-size: 9px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.mia-viewer-file {
+    display: grid;
+    gap: 7px;
+    padding: 18px;
+    border: 1px solid rgba(139, 173, 223, 0.14);
+    border-radius: 18px;
+    background: rgba(22, 30, 43, 0.72);
+    box-shadow: 0 18px 45px rgba(0, 0, 0, 0.2);
+}
+
+.mia-viewer-file span {
+    color: #fff;
+    font-size: 20px;
+    font-weight: 900;
+}
+
+.mia-viewer-file code {
+    overflow: hidden;
+    color: #7f8ca1;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.mia-network-log,
+.session-permission-list,
+.session-log {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    border-radius: 16px;
+    background: rgba(8, 12, 19, 0.74);
+}
+
+.audit-step {
+    display: grid;
+    grid-template-columns: 9px minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 10px;
+    min-height: 46px;
+    padding: 0 13px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.065);
+    color: #8c96a8;
+    font-size: 11px;
+    font-weight: 750;
+}
+
+.audit-step:last-child {
+    border-bottom: 0;
+}
+
+.audit-step i,
+.session-badge i {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #536076;
+    box-shadow: 0 0 0 3px rgba(83, 96, 118, 0.13);
+}
+
+.audit-step b {
+    color: #667186;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 9px;
+    font-weight: 700;
+}
+
+.audit-step.is-active {
+    color: #eaf1ff;
+}
+
+.audit-step.is-active i {
+    background: #79aaff;
+    box-shadow: 0 0 0 3px rgba(121, 170, 255, 0.15), 0 0 16px rgba(121, 170, 255, 0.55);
+    animation: sessionPulse 1s ease infinite;
+}
+
+.audit-step.is-complete i {
+    background: #59c98b;
+}
+
+.audit-step.is-complete b {
+    color: #70c99a;
+}
+
+.audit-step.is-warning {
+    color: #fff1e8;
+    background: rgba(190, 87, 60, 0.08);
+}
+
+.audit-step.is-warning i {
+    background: #ff805f;
+    box-shadow: 0 0 12px rgba(255, 92, 70, 0.55);
+}
+
+.audit-step.is-warning b {
+    color: #ff9b82;
+}
+
+.mia-download-screen > p {
+    margin: auto 0 0;
+    color: #9ba6b8;
+    font-size: 11px;
+    font-weight: 750;
+    line-height: 1.45;
+    text-align: center;
+}
+
+.mia-session-scope,
+.mia-session-revoked {
+    position: relative;
+    min-height: 100%;
+    padding: 54px 24px 28px;
+    background:
+        linear-gradient(rgba(255,255,255,0.022) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.022) 1px, transparent 1px),
+        radial-gradient(circle at 78% 2%, rgba(194, 74, 58, 0.18), transparent 34%),
+        #090c12;
+    background-size: 24px 24px, 24px 24px, auto, auto;
+    color: #eef3fa;
+}
+
+.mia-session-scope header,
+.mia-session-revoked header {
+    margin: 58px 0 22px;
+}
+
+.mia-session-scope header span,
+.mia-session-revoked header span {
+    color: #7f8ca0;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+.mia-session-scope header h1,
+.mia-session-revoked header h1 {
+    margin: 8px 0;
+    font-size: 28px;
+    letter-spacing: -0.04em;
+}
+
+.mia-session-scope header p,
+.mia-session-revoked > p {
+    margin: 0;
+    color: #9aa5b7;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1.5;
+}
+
+.session-badge {
+    display: grid;
+    grid-template-columns: 8px minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 9px;
+    padding: 9px 11px;
+    border: 1px solid rgba(255, 133, 104, 0.18);
+    border-radius: 11px;
+    background: rgba(128, 45, 36, 0.12);
+    color: #d9e0ec;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 9px;
+}
+
+.session-badge i {
+    background: #ff795b;
+    box-shadow: 0 0 13px rgba(255, 92, 70, 0.45);
+    animation: sessionPulse 1.2s ease infinite;
+}
+
+.session-badge b {
+    color: #ff9f87;
+    font-size: 8px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.session-permission-list div {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 12px;
+    padding: 14px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+}
+
+.session-permission-list div:last-child {
+    border-bottom: 0;
+}
+
+.session-permission-list span {
+    color: #c8d0df;
+}
+
+.session-permission-list b {
+    color: #ff9f87;
+    font-size: 9px;
+}
+
+.mia-session-scope > small {
+    display: block;
+    margin-top: 12px;
+    color: #6f7a8e;
+    font-size: 10px;
+    font-weight: 700;
+    text-align: center;
+}
+
+.phone-hijack-view {
+    display: block;
+    padding: 54px 24px 28px;
+    text-align: left;
+    background:
+        radial-gradient(circle at 76% 0%, rgba(65, 107, 169, 0.16), transparent 35%),
+        #0b0f16;
+    color: #e9eff8;
+}
+
+.phone-hijack-view header {
+    margin: 34px 0 18px;
+}
+
+.phone-hijack-view header h1 {
+    margin-bottom: 0;
+    color: #f6f8fc;
+}
+
+.hijack-chat-list,
+.hijack-notes {
+    width: 100%;
+    max-height: none;
+}
+
+.hijack-chat-list {
+    animation: none;
+}
+
+.hijack-chat-list div,
+.hijack-notes article {
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    background: rgba(24, 31, 44, 0.86);
+    box-shadow: none;
+    color: #eef3fa;
+}
+
+.hijack-chat-list div {
+    animation: sessionRowRead 0.3s calc(var(--i, 0) * 0.08s) ease both;
+}
+
+.session-readout {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 16px;
+    padding-top: 13px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    color: #7f8b9e;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 8px;
+}
+
+.session-readout b {
+    color: #ff9278;
+    font-weight: 700;
+}
+
+.mia-camera-view {
+    background:
+        linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+        radial-gradient(circle at 50% 42%, #273149, #05060a 62%);
+    background-size: 100% 4px, auto;
+}
+
+.mia-camera-view .session-badge {
+    position: absolute;
+    z-index: 7;
+    top: 24px;
+    left: 20px;
+    right: 20px;
+}
+
+.mia-camera-view .camera-noise {
+    opacity: 0.16;
+    mix-blend-mode: soft-light;
+    animation: none;
+}
+
+.camera-save-toast {
+    display: grid;
+    gap: 3px;
+    width: max-content;
+    max-width: 82%;
+    text-align: left;
+}
+
+.camera-save-toast strong,
+.camera-save-toast span {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.camera-save-toast strong {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+}
+
+.camera-save-toast span {
+    color: #ffb19d;
+    font-size: 9px;
+}
+
+.session-log > div {
+    display: grid;
+    grid-template-columns: 62px minmax(0, 1fr) auto;
+    gap: 9px;
+    padding: 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.065);
+    font-family: "JetBrains Mono", monospace;
+    font-size: 9px;
+}
+
+.session-log > div:last-child {
+    border-bottom: 0;
+}
+
+.session-log time {
+    color: #6e7a8e;
+}
+
+.session-log span {
+    overflow: hidden;
+    color: #c4ccda;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.session-log b {
+    color: #8e9aad;
+    font-size: 8px;
+    text-align: right;
+}
+
+.session-log .is-danger b {
+    color: #ff9177;
+}
+
+.session-log .is-safe b {
+    color: #6ed39f;
+}
+
+.mia-session-revoked > p {
+    margin-top: 14px;
+    text-align: center;
+}
+
+.mia-reboot-screen.session-closed {
+    background: #080b10;
+}
+
+.mia-reboot-screen.session-closed span {
+    color: #7f8a9d;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+@keyframes sessionPulse {
+    50% { opacity: 0.45; transform: scale(0.82); }
+}
+
+@keyframes sessionRowRead {
+    from { opacity: 0; transform: translateY(7px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
 /* Frame analysis mini-game */
 .frame-analysis-screen {
     height: 100%;

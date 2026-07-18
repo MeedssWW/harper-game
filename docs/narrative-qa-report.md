@@ -13,6 +13,7 @@
 - Mia publicly claimed a hack even when the player hid it. Her RavenFeed comment now depends on `miaKnowsAboutHack`.
 - The finale jumped from Ravenwood Truth back to Unknown. It now gives Olivia and Mia trust-sensitive reactions and ends on Brooke's public demand.
 - Mason and Tyler have no messages after the final publication.
+- The former glitch-heavy "virus" sequence could not explain how an MP4 read private apps. It now exposes an external page through RavenLink's embedded viewer, records explicit service-key scopes and ends when that short-lived key is revoked.
 
 ## Active implementation
 

@@ -18,9 +18,9 @@ The player lives in another city, has never visited Ravenwood and has never met 
 10. Derek sends four ordinary photos of Harper. A short, awkward everyday exchange about Ravenwood or football can follow; the player may decline it.
 11. A conversation about Mia's jacket naturally prompts Mia to search old photos. She finds the folder copied from her old phone and remembers that Harper briefly used the device.
 12. Mia reports the phone to the investigator and offers restricted access to the existing backup. The player's privacy choices are recorded.
-13. The backup contains a deleted chat and a link to `VID_1842.mp4`. The contact and message text are damaged; Mia's testimony is not presented as technical proof.
-14. Opening the external attachment compromises the player's device. The visible effects are chat/note access, camera access and loss of control.
-15. Unknown appears only after the connection is interrupted. Their claims remain claims unless supported by the visible connection log.
+13. The backup contains a deleted chat and an external address labelled `VID_1842.mp4`; no local video data survived. The contact and message text are damaged, and Mia's testimony is not technical proof.
+14. The address opens inside RavenLink's embedded viewer. The external page receives a short-lived service key, requests `messages.index`, `notes.index` and `camera.capture`, and begins transferring a camera frame. The incident is shown through a restrained activity log rather than a magical virus or full device reboot.
+15. Unknown appears only after the temporary key is revoked. Unknown claims to have seen the key in the external node's log and revoked it at 64% of the photo transfer. That access is suspicious and remains unverified beyond the activity log visible to the player.
 16. Ravenwood Truth publishes the same camera image captured during the compromise and frames public facts without proving guilt.
 17. Olivia and Mia react privately according to trust. Brooke demands an explanation publicly in RavenFeed. Mason and Tyler remain silent.
 18. Episode one ends immediately after that demand.

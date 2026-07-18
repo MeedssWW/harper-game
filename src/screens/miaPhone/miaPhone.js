@@ -186,11 +186,16 @@ function openRecoveredChat(wrapper, onDone, restricted = false) {
             <div class="mia-recovered-message">
                 <p>Исходящие сообщения: текст не восстановлен.</p>
                 <div class="mia-video-file">
-                    <span>Вложение</span>
+                    <span>Внешнее вложение</span>
                     <strong>VID_1842.mp4</strong>
-                    <em>Локальная копия отсутствует · источник: внешний сервер</em>
+                    <em>Локальной копии нет · сохранился только адрес</em>
                 </div>
-                <button class="mia-open-file" id="open-video-file" type="button">Открыть VID_1842.mp4</button>
+                <div class="mia-external-address">
+                    <span>Источник</span>
+                    <code>media.rvn-archive.invalid/v/1842</code>
+                    <small>Подпись файла не сохранилась</small>
+                </div>
+                <button class="mia-open-file" id="open-video-file" type="button">Открыть во внешнем просмотрщике</button>
             </div>
         </main>
         <footer class="mia-view-only">Режим просмотра. Ответить нельзя.</footer>
@@ -200,80 +205,59 @@ function openRecoveredChat(wrapper, onDone, restricted = false) {
     wrapper.querySelector('#open-video-file')?.addEventListener('click', () => startDownload(wrapper, onDone));
 }
 
-function startDownload(wrapper, onDone) {
+async function startDownload(wrapper, onDone) {
     stateManager.setFlag('suspiciousFileOpened', true);
     stateManager.setFlag('deletedChatFound', true);
     stateManager.setFlag('vid1842Found', true);
+    stateManager.setFlag('externalViewerOpened', true);
 
     wrapper.innerHTML = `
         <section class="mia-download-screen">
-            <span>Загрузка вложения...</span>
-            <h1>VID_1842.mp4</h1>
-            <div class="mia-progress">
-                <div id="mia-progress-bar"></div>
+            <div class="mia-viewer-brand">
+                <span>RavenLink Viewer</span>
+                <strong>внешний адрес</strong>
             </div>
-            <strong id="mia-progress-number">0%</strong>
-            <p id="mia-connection-label">Подключение: активно</p>
+            <div class="mia-viewer-file">
+                <span>VID_1842.mp4</span>
+                <code>media.rvn-archive.invalid/v/1842</code>
+            </div>
+            <div class="mia-network-log" aria-live="polite">
+                <div class="audit-step is-active" data-audit="address"><i></i><span>Проверка адреса</span><b>...</b></div>
+                <div class="audit-step" data-audit="redirect"><i></i><span>Ответ внешнего узла</span><b>ожидание</b></div>
+                <div class="audit-step" data-audit="viewer"><i></i><span>Веб-просмотрщик</span><b>ожидание</b></div>
+                <div class="audit-step" data-audit="session"><i></i><span>Временный ключ RavenLink</span><b>ожидание</b></div>
+            </div>
+            <p id="mia-connection-label">Устанавливается защищённое соединение...</p>
         </section>
     `;
 
-    updateProgress(wrapper, 0);
-    setTimeout(() => updateProgress(wrapper, 7), 700);
-    setTimeout(() => updateProgress(wrapper, 18), 1250);
-    setTimeout(() => updateProgress(wrapper, 31), 1800);
-    setTimeout(() => runTakeover(wrapper, onDone), 2600);
-}
-
-function updateProgress(wrapper, value) {
-    wrapper.querySelector('#mia-progress-number').textContent = `${value}%`;
-    wrapper.querySelector('#mia-progress-bar').style.width = `${value}%`;
+    await wait(650);
+    completeAuditStep(wrapper, 'address', 'адрес найден');
+    activateAuditStep(wrapper, 'redirect');
+    await wait(720);
+    completeAuditStep(wrapper, 'redirect', '302 · перенаправление');
+    activateAuditStep(wrapper, 'viewer');
+    wrapper.querySelector('#mia-connection-label').textContent = 'Видеофайл не найден. Открывается страница просмотра.';
+    await wait(900);
+    completeAuditStep(wrapper, 'viewer', 'страница загружена');
+    activateAuditStep(wrapper, 'session');
+    await wait(750);
+    completeAuditStep(wrapper, 'session', 'ключ передан', true);
+    wrapper.querySelector('#mia-connection-label').textContent = 'Внешний узел запросил дополнительные разрешения.';
+    await wait(620);
+    await runTakeover(wrapper, onDone);
 }
 
 async function runTakeover(wrapper, onDone) {
-    stateManager.setFlag('fileDownloadProgress', 31);
-    const label = wrapper.querySelector('#mia-connection-label');
-    const number = wrapper.querySelector('#mia-progress-number');
-    const downloadScreen = wrapper.querySelector('.mia-download-screen');
+    stateManager.setFlag('fileDownloadProgress', 0);
+    stateManager.setFlag('temporarySessionKeyExposed', true);
     wrapper.classList.add('is-hacked');
-    downloadScreen?.classList.add('is-corrupted');
-    downloadScreen?.insertAdjacentHTML('beforeend', renderHijackLayers('ACCESS BREACH'));
-    number.textContent = '31%';
 
-    await wait(360);
-    number.textContent = '0%';
-    await wait(160);
-    number.textContent = '31%';
-    if (label) label.textContent = 'Подключение нестабильно';
-    await wait(700);
-    if (label) label.textContent = 'Соединение потеряно';
-    await wait(650);
-
-    wrapper.innerHTML = `<section class="mia-blackout is-violent">${renderHijackLayers('SESSION KILLED')}<span>Сеанс удалённого доступа завершён.</span></section>`;
-    await wait(700);
-
+    await showPermissionEscalation(wrapper);
     await showHijackHome(wrapper);
-    await showHijackChat(wrapper, 'RavenFeed', [
-        ['Оливия', 'Пончик известнее мэра.'],
-        ['Миа', 'и это правильно'],
-        ['Дерек', 'Тот фильм был нормальный.'],
-        ['Брук', 'Нет.']
-    ]);
-    await showHijackHome(wrapper, true);
-    await showHijackChat(wrapper, 'Оливия Грант', [
-        ['Оливия', 'Я скинула приглашение.'],
-        ['Оливия', 'Посмотри, если хочешь.'],
-        ['Оливия', 'Брук только что выложила объявление о поисках.'],
-        ['Оливия', 'Не принимай каждую версию в комментариях за факт.']
-    ]);
-    await showHijackHome(wrapper, true);
-    await showHijackChat(wrapper, 'Дерек Миллер', [
-        ['Дерек', 'Я нашёл ещё несколько фотографий Харпер.'],
-        ['Дерек', 'Посмотри, пожалуйста.'],
-        ['Дерек', 'Допрашивать тебя заново не буду.']
-    ]);
-    await showHijackHome(wrapper, true);
     await showHijackCase(wrapper);
     await showCameraCapture(wrapper);
+    await showSessionRevoked(wrapper);
 
     stateManager.setFlag('playerPhoneCompromised', true);
     stateManager.setFlag('cameraCaptureTriggered', true);
@@ -286,70 +270,64 @@ async function runTakeover(wrapper, onDone) {
     stateManager.unlock('chats', 'private_unknown');
 
     wrapper.innerHTML = `
-        <section class="mia-reboot-screen">
+        <section class="mia-reboot-screen session-closed">
             <div class="mia-reboot-spinner"></div>
-            <strong>Перезагрузка устройства...</strong>
+            <strong>Встроенный просмотрщик закрыт</strong>
+            <span>Возврат к сообщениям...</span>
         </section>
     `;
-    await wait(2300);
+    await wait(1500);
     stateManager.setFlag('remoteSessionInterrupted', true);
     if (onDone) onDone();
 }
 
-async function showHijackHome(wrapper, fast = false) {
+async function showPermissionEscalation(wrapper) {
     wrapper.innerHTML = `
-        <section class="phone-hijack-view hijack-home is-violent">
-            ${renderHijackLayers('MESSAGES INDEX')}
+        <section class="mia-session-scope">
+            ${renderSessionBadge('Внешний сеанс', 'ключ принят')}
             <header>
-                <span>Телефон игрока</span>
+                <span>RavenLink · временный ключ</span>
+                <h1>Запрос разрешений</h1>
+                <p>Страница просмотра запросила доступ, которого нет у обычного видео.</p>
+            </header>
+            <div class="session-permission-list">
+                <div class="is-granted"><span>messages.index</span><b>чтение</b></div>
+                <div class="is-granted"><span>notes.index</span><b>чтение</b></div>
+                <div><span>camera.capture</span><b>ожидание</b></div>
+            </div>
+            <small>Разрешения выданы служебным ключом просмотрщика</small>
+        </section>
+    `;
+    await wait(1150);
+}
+
+async function showHijackHome(wrapper) {
+    const playerName = escapeHtml(stateManager.getPlayerName() || 'Игрок');
+    wrapper.innerHTML = `
+        <section class="phone-hijack-view hijack-home is-session-read">
+            ${renderSessionBadge('messages.index', 'чтение')}
+            <header>
+                <span>${playerName} · локальный профиль</span>
                 <h1>Сообщения</h1>
             </header>
             <div class="hijack-chat-list">
-                <div><strong>RavenFeed</strong><span>Брук Хейз: Харпер Вэнс не выходит на связь...</span></div>
-                <div><strong>Оливия Грант</strong><span>Не принимай каждую версию за факт.</span></div>
-                <div><strong>Дерек Миллер</strong><span>Допрашивать тебя заново не буду.</span></div>
-                <div><strong>Миа Картер</strong><span>Удалённый доступ</span></div>
+                <div><strong>RavenFeed</strong><span>активный аккаунт · индекс прочитан</span></div>
+                <div><strong>Оливия Грант</strong><span>последнее: «Не принимай каждую версию за факт»</span></div>
+                <div><strong>Дерек Миллер</strong><span>последнее: «Допрашивать тебя заново не буду»</span></div>
+                <div><strong>Миа Картер</strong><span>последнее: «Резервная копия»</span></div>
             </div>
+            <div class="session-readout"><span>4 записи перечислено</span><b>заголовки и превью прочитаны</b></div>
         </section>
     `;
-    await wait(fast ? 620 : 980);
-}
-
-async function showHijackChat(wrapper, title, messages) {
-    wrapper.innerHTML = `
-        <section class="phone-hijack-view hijack-chat is-violent">
-            ${renderHijackLayers('CHAT OPENED')}
-            <header>
-                <span>Открыт чат</span>
-                <h1>${escapeHtml(title)}</h1>
-            </header>
-            <div class="hijack-chat-window" id="hijack-chat-window">
-                ${messages.map(([from, text], index) => `
-                    <div class="hijack-message ${from === 'Игрок' ? 'mine' : ''}" style="--i:${index}">
-                        <span>${escapeHtml(from)}</span>
-                        <p>${escapeHtml(text)}</p>
-                    </div>
-                `).join('')}
-            </div>
-        </section>
-    `;
-
-    const log = wrapper.querySelector('#hijack-chat-window');
-    await wait(180);
-    if (log) log.scrollTo({ top: log.scrollHeight, behavior: 'smooth' });
-    await wait(720);
-    if (log) log.scrollTo({ top: 0, behavior: 'smooth' });
-    await wait(520);
-    if (log) log.scrollTo({ top: log.scrollHeight, behavior: 'smooth' });
-    await wait(620);
+    await wait(1200);
 }
 
 async function showHijackCase(wrapper) {
     wrapper.innerHTML = `
-        <section class="phone-hijack-view hijack-case is-violent">
-            ${renderHijackLayers('CASE FILE')}
+        <section class="phone-hijack-view hijack-case is-session-read">
+            ${renderSessionBadge('notes.index', 'чтение')}
             <header>
-                <span>Самостоятельный доступ</span>
+                <span>Заметки · локальное хранилище</span>
                 <h1>Дело Харпер Вэнс</h1>
             </header>
             <div class="hijack-notes" id="hijack-notes">
@@ -358,30 +336,31 @@ async function showHijackCase(wrapper) {
                 <article><b>НЕИЗВЕСТНО</b><strong>Удалённый чат</strong><p>Контакт и текст сообщения не восстановлены.</p></article>
                 <article><b>ВОПРОС</b><strong>Кому она написала?</strong><p>В копии осталась только ссылка на VID_1842.mp4.</p></article>
             </div>
+            <div class="session-readout"><span>1 заметка открыта</span><b>экспорт начат</b></div>
         </section>
     `;
 
     const log = wrapper.querySelector('#hijack-notes');
     await wait(240);
     if (log) log.scrollTo({ top: log.scrollHeight, behavior: 'smooth' });
-    await wait(980);
+    await wait(1200);
 }
 
 async function showCameraCapture(wrapper) {
     wrapper.innerHTML = `
-        <section class="mia-camera-view is-violent">
-            ${renderHijackLayers('FRONT CAMERA')}
+        <section class="mia-camera-view">
+            ${renderSessionBadge('camera.capture', 'запрос')}
             <div class="camera-noise"></div>
             <video class="camera-video" autoplay muted playsinline></video>
             <canvas class="camera-canvas" width="720" height="960"></canvas>
             <div class="camera-face-shadow"></div>
-            <span class="camera-label">Фронтальная камера</span>
+            <span class="camera-label">Камера открыта встроенным просмотрщиком</span>
             <div class="camera-permission" hidden>
-                <strong>Требуется доступ к фронтальной камере.</strong>
-                <span>Нажми, чтобы сделать реальный снимок. Без кадра сеанс не продолжится.</span>
-                <button type="button" id="camera-permission-btn">Разрешить</button>
-                <em id="camera-permission-hint" hidden>Автоматический доступ не сработал. Можно сделать снимок вручную.</em>
-                <button type="button" id="camera-file-btn" hidden>Сделать фото вручную</button>
+                <strong>Браузер остановил автоматический доступ к камере.</strong>
+                <span>Чтобы сцена использовала реальный кадр, разреши одноразовый снимок. Он сохранится только в локальном прогрессе игры.</span>
+                <button type="button" id="camera-permission-btn">Разрешить для этой сцены</button>
+                <em id="camera-permission-hint" hidden>Камера недоступна. Можно сделать снимок системной камерой.</em>
+                <button type="button" id="camera-file-btn" hidden>Открыть системную камеру</button>
                 <input id="camera-file-input" type="file" accept="image/*" capture="user">
             </div>
         </section>
@@ -411,18 +390,46 @@ async function showCameraCapture(wrapper) {
 
     wrapper.querySelector('.mia-camera-view')?.classList.add('flash');
     await wait(350);
-    wrapper.insertAdjacentHTML('beforeend', `<div class="camera-save-toast">Фото сохранено.</div>`);
+    wrapper.insertAdjacentHTML('beforeend', `
+        <div class="camera-save-toast">
+            <strong>player_${Date.now()}.jpg</strong>
+            <span id="camera-transfer-status">передача · 18%</span>
+        </div>
+    `);
     if (stream) {
         stream.getTracks().forEach(track => track.stop());
     }
-    await wait(850);
+    await wait(420);
+    const transferStatus = wrapper.querySelector('#camera-transfer-status');
+    if (transferStatus) transferStatus.textContent = 'передача · 41%';
+    await wait(420);
+    if (transferStatus) transferStatus.textContent = 'передача · 64%';
+    stateManager.setFlag('photoTransferStarted', true);
+    stateManager.setFlag('photoTransferProgress', 64);
+    await wait(450);
+}
+
+async function showSessionRevoked(wrapper) {
+    const now = Date.now();
     wrapper.innerHTML = `
-        <section class="mia-blocked-screen">
-            <div class="blocked-static"></div>
-            <strong>Внешнее подключение заблокировано.</strong>
+        <section class="mia-session-revoked">
+            ${renderSessionBadge('RavenLink', 'ключ отозван')}
+            <header>
+                <span>Журнал активности</span>
+                <h1>Внешний сеанс завершён</h1>
+            </header>
+            <div class="session-log">
+                <div><time>${formatLogTime(now - 16000)}</time><span>внешний просмотрщик</span><b>сеанс открыт</b></div>
+                <div><time>${formatLogTime(now - 12000)}</time><span>messages.index</span><b>прочитано</b></div>
+                <div><time>${formatLogTime(now - 9000)}</time><span>notes.index</span><b>прочитано</b></div>
+                <div><time>${formatLogTime(now - 4000)}</time><span>camera.capture</span><b>кадр создан</b></div>
+                <div class="is-danger"><time>${formatLogTime(now - 2000)}</time><span>player_photo.jpg</span><b>передача 64%</b></div>
+                <div class="is-safe"><time>${formatLogTime(now)}</time><span>временный ключ</span><b>отозван</b></div>
+            </div>
+            <p>Нельзя определить, успел ли сервер сохранить неполную передачу.</p>
         </section>
     `;
-    await wait(1100);
+    await wait(2100);
 }
 
 async function requestCameraStream(video) {
@@ -542,15 +549,37 @@ function saveCameraFrame(wrapper, video) {
     }
 }
 
-function renderHijackLayers(label = '') {
+function renderSessionBadge(scope, status) {
     return `
-        <div class="hijack-glitch hard"></div>
-        <div class="hijack-corruption"></div>
-        <div class="hijack-slice slice-a"></div>
-        <div class="hijack-slice slice-b"></div>
-        <div class="hijack-slice slice-c"></div>
-        <div class="hijack-frame-label">${escapeHtml(label)}</div>
+        <div class="session-badge">
+            <i></i>
+            <span>${escapeHtml(scope)}</span>
+            <b>${escapeHtml(status)}</b>
+        </div>
     `;
+}
+
+function activateAuditStep(wrapper, id) {
+    const step = wrapper.querySelector(`[data-audit="${id}"]`);
+    step?.classList.add('is-active');
+    const status = step?.querySelector('b');
+    if (status) status.textContent = '...';
+}
+
+function completeAuditStep(wrapper, id, status, warning = false) {
+    const step = wrapper.querySelector(`[data-audit="${id}"]`);
+    step?.classList.remove('is-active');
+    step?.classList.add(warning ? 'is-warning' : 'is-complete');
+    const output = step?.querySelector('b');
+    if (output) output.textContent = status;
+}
+
+function formatLogTime(timestamp) {
+    return new Date(timestamp).toLocaleTimeString('ru-RU', {
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit'
+    });
 }
 
 function waitForVideoFrame(video) {
