@@ -30,7 +30,7 @@ import { renderChapterEnd } from './src/screens/chapterEnd/chapterEnd.js?v=141';
 import { audioEngine } from './src/engine/audioEngine.js?v=124';
 import { characters } from './src/data/characters.js?v=124';
 import { chapter1 } from './src/data/chapter1.js?v=147';
-import { chapter2 } from './src/data/chapter2Opening.js?v=5';
+import { chapter2 } from './src/data/chapter2Opening.js?v=6';
 
 // ---- App State ----
 let activeChatView = null;
