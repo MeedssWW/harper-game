@@ -1,5 +1,5 @@
 import { stateManager } from '../../engine/stateManager.js';
-import { getCharacter } from '../../data/characters.js';
+import { getCharacter } from '../../data/characters.js?v=124';
 
 const A = 'src/assets/ravenfeed/generated';
 
@@ -9,7 +9,8 @@ const PEOPLE = {
     june: { name: 'Джун Пак', handle: '@junep', avatar: `${A}/resident-june.webp`, bio: 'переехала ненадолго. живу здесь третий год' },
     noah: { name: 'Ноа Бриггс', handle: '@noah.north', avatar: `${A}/resident-noah.webp`, bio: 'фото с улиц Рейвенвуда. почти всегда дождь' },
     leya: { name: 'Лея Морган', handle: '@leya.m', avatar: `${A}/resident-leya.webp`, bio: 'если я не отвечаю, я на смене или сплю' },
-    sam: { name: 'Сэм Ортега', handle: '@sam.o', avatar: `${A}/resident-sam.webp`, bio: 'N7, футбол и слишком много острого соуса' }
+    sam: { name: 'Сэм Ортега', handle: '@sam.o', avatar: `${A}/resident-sam.webp`, bio: 'N7, футбол и слишком много острого соуса' },
+    nate: { name: 'Нейт Холлоуэй', handle: '@nate.afterdark', avatar: `${A}/resident-nate.webp`, bio: 'маленький подкаст о маленьком городе. новые выпуски — когда я наконец домонтирую старые' }
 };
 
 const SEARCH_POST = {
@@ -41,14 +42,47 @@ const BASE_POSTS = [
     { id: 'truth-seed', author: 'Ravenwood Truth', handle: '@ravenwood.truth', avatar: `${A}/page-truth.webp`, likes: 22, age: '5 дн', danger: true, text: 'Почему ремонт Orpheum опять оплатили без открытого голосования? Иногда в маленьком городе слишком удобно, когда все друг друга знают.', comments: [['noah', 'источник: вам так показалось?'], ['june', 'они опять удалят пост через час'], ['mason', 'Если у вас есть документы, приложите документы.']] }
 ];
 
+const REQUESTS = {
+    nate: {
+        person: 'nate',
+        preview: 'Здравствуйте. Меня зовут Нейт, я веду небольшой подкаст…',
+        messages: [
+            'Здравствуйте. Меня зовут Нейт Холлоуэй, я веду небольшой подкаст Ravenwood After Dark.',
+            'Увидел публикацию Ravenwood Truth и хотел предложить вам рассказать свою версию. Если не хотите отвечать публично, можем поговорить без настоящего имени.'
+        ]
+    },
+    noah: {
+        person: 'noah',
+        preview: 'Не знаю, что у тебя там было с Харпер…',
+        messages: [
+            'Не знаю, что у тебя там было с Харпер, но в Рейвенвуд лучше не приезжай.',
+            'Здесь тебе никто не рад.'
+        ]
+    },
+    june: {
+        person: 'june',
+        preview: 'Фотография с North Lot старая.',
+        messages: [
+            'Привет. Не знаю, увидишь ли ты это, но фотография с North Lot старая.',
+            'Я была на том матче, и человек на снимке точно не ты.',
+            'Сейчас попробую найти пост, откуда они её взяли.'
+        ]
+    }
+};
+
 export function renderSocial({ onBack }) {
     stateManager.setFlag('ravenFeedOpened', true);
     const wrapper = document.createElement('div');
     wrapper.className = 'invest-app social-app ravenfeed-app';
-    let tab = 'feed';
+    let tab = stateManager.hasFlag('openRavenFeedRequests')
+        ? 'requests'
+        : stateManager.hasFlag('openRavenFeedCityGuide') ? 'city' : 'feed';
+    stateManager.setFlag('openRavenFeedRequests', false);
+    stateManager.setFlag('openRavenFeedCityGuide', false);
     const draw = () => {
         const posts = getVisiblePosts();
-        wrapper.innerHTML = `<header class="rf-header"><button class="rf-round" id="social-back" type="button" aria-label="Назад"><img class="ui-lucide is-light" src="src/assets/icons/lucide/chevron-left.svg" alt="" /></button><div class="rf-brand"><strong>RavenFeed</strong><span>Рейвенвуд рядом</span></div><button class="rf-round" id="rf-search" type="button" aria-label="Поиск"><img class="ui-lucide is-light" src="src/assets/icons/lucide/search.svg" alt="" /></button></header><nav class="rf-tabs" aria-label="Разделы"><button data-tab="feed" class="${tab === 'feed' ? 'active' : ''}">Для вас</button><button data-tab="city" class="${tab === 'city' ? 'active' : ''}">Город</button><button data-tab="people" class="${tab === 'people' ? 'active' : ''}">Люди</button></nav><main class="social-feed rf-feed">${tab === 'people' ? renderPeople() : posts.filter(post => tab !== 'city' || !post.profile).map(renderPost).join('')}</main>`;
+        const requestCount = getUnreadRequestCount();
+        wrapper.innerHTML = `<header class="rf-header"><button class="rf-round" id="social-back" type="button" aria-label="Назад"><img class="ui-lucide is-light" src="src/assets/icons/lucide/chevron-left.svg" alt="" /></button><div class="rf-brand"><strong>RavenFeed</strong><span>Рейвенвуд рядом</span></div><div class="rf-header-actions">${stateManager.hasFlag('ravenFeedRequestsLive') ? `<button class="rf-round rf-inbox-button ${requestCount ? 'has-unread' : ''}" id="rf-inbox" type="button" aria-label="Запросы"><img class="ui-lucide is-light" src="src/assets/icons/lucide/message-circle-more.svg" alt="" />${requestCount ? `<b>${requestCount}</b>` : ''}</button>` : ''}<button class="rf-round" id="rf-search" type="button" aria-label="Поиск"><img class="ui-lucide is-light" src="src/assets/icons/lucide/search.svg" alt="" /></button></div></header><nav class="rf-tabs" aria-label="Разделы"><button data-tab="feed" class="${tab === 'feed' ? 'active' : ''}">Для вас</button><button data-tab="city" class="${tab === 'city' ? 'active' : ''}">Город</button><button data-tab="people" class="${tab === 'people' ? 'active' : ''}">Люди</button>${stateManager.hasFlag('ravenFeedRequestsLive') ? `<button data-tab="requests" class="${tab === 'requests' ? 'active' : ''}">Запросы</button>` : ''}</nav><main class="social-feed rf-feed">${tab === 'people' ? renderPeople() : tab === 'requests' ? renderRequestInbox() : posts.filter(post => tab !== 'city' || !post.profile).map(renderPost).join('')}</main>`;
         bind();
     };
     const bind = () => {
@@ -58,13 +92,16 @@ export function renderSocial({ onBack }) {
         wrapper.querySelectorAll('[data-open-post]').forEach(article => article.addEventListener('click', event => { if (event.target.closest('button')) return; const post = getVisiblePosts().find(item => item.id === article.dataset.openPost); if (post?.flag) stateManager.setFlag(post.flag, true); article.classList.add('opened'); }));
         wrapper.querySelectorAll('.rf-like').forEach(button => button.addEventListener('click', () => { const liked = button.classList.toggle('liked'); const base = Number(button.dataset.likes || 0); button.querySelector('span').textContent = String(base + (liked ? 1 : 0)); }));
         wrapper.querySelector('#rf-search')?.addEventListener('click', () => { tab = 'people'; draw(); setTimeout(() => wrapper.querySelector('.rf-people-grid')?.classList.add('pulse'), 20); });
+        wrapper.querySelector('#rf-inbox')?.addEventListener('click', () => { tab = 'requests'; draw(); });
+        wrapper.querySelectorAll('[data-public-response]').forEach(button => button.addEventListener('click', event => { event.stopPropagation(); submitPublicResponse(button.dataset.publicResponse); draw(); }));
+        wrapper.querySelectorAll('[data-request]').forEach(button => button.addEventListener('click', () => openRequest(wrapper, button.dataset.request, draw)));
     };
     const onStoryFlag = ({ flag }) => {
         if (!wrapper.isConnected) {
             stateManager.off('flag', onStoryFlag);
             return;
         }
-        if (flag === 'brookeSearchPostLive' || flag === 'act1ViralPost') draw();
+        if (['brookeSearchPostLive', 'act1ViralPost', 'episode2AftershockLive', 'northLotClaimLive', 'juneRequestLive', 'ep2CityGuideLive'].includes(flag)) draw();
     };
     stateManager.on('flag', onStoryFlag);
     draw();
@@ -75,6 +112,7 @@ function getVisiblePosts() {
     const posts = [...BASE_POSTS];
     if (stateManager.hasFlag('brookeSearchPostLive')) posts.unshift(SEARCH_POST);
     if (stateManager.hasFlag('act1ViralPost')) posts.unshift(buildFramingPost());
+    if (stateManager.hasFlag('northLotClaimLive')) posts.unshift(buildNorthLotPost());
     return posts;
 }
 
@@ -85,13 +123,178 @@ function buildFramingPost() {
     const miaComment = stateManager.hasFlag('miaKnowsAboutHack')
         ? 'Фото украли с его телефона. Не разносите это дальше.'
         : 'Откуда у вас вообще это фото?';
-    return { id: 'player-framed', author: 'Ravenwood Truth', handle: '@ravenwood.truth', avatar: `${A}/page-truth.webp`, image: playerPhoto, playerFallback: true, likes: 487, age: 'сейчас', danger: true, flag: 'viralPostOpened', text: `${playerName} говорит, что никогда не видел Харпер Вэнс. Тогда почему с её телефона отправили именно его номер? Сегодня нам прислали снимок с его устройства и список недавних контактов. Случайность или Рейвенвуд должен был узнать о нём раньше?`, comments: [['nadia', 'вы серьёзно выложили лицо человека без доказательств?'], ['sam', 'полиция вообще это видела?'], ['olivia', 'Удалите публикацию. Вы не знаете, что произошло.'], ['mia', miaComment], ['june', 'уже разлетелось по всему городу'], ['derek', 'Я не давал вам его номер.'], ['brooke', `${playerName}, ответь. Откуда у них твоё фото и кто рассказал им про номер?`]] };
+    const comments = [['nadia', 'вы серьёзно выложили лицо человека без доказательств?'], ['sam', 'полиция вообще это видела?'], ['olivia', 'Удалите публикацию. Вы не знаете, что произошло.'], ['mia', miaComment], ['june', 'уже разлетелось по всему городу'], ['derek', 'Я не давал вам его номер.'], ['brooke', `${playerName}, ответь. Откуда у них твоё фото и кто рассказал им про номер?`]];
+    const playerComment = getPlayerPublicComment();
+    if (playerComment) comments.push(['player', playerComment]);
+    if (stateManager.hasFlag('episode2AftershockLive')) {
+        comments.push(['noah', 'кто-нибудь вообще знает, был ли он в городе?']);
+        comments.push(['june', '«кто-нибудь знает» — отличный уровень проверки']);
+    }
+    return { id: 'player-framed', author: 'Ravenwood Truth', handle: '@ravenwood.truth', avatar: `${A}/page-truth.webp`, image: playerPhoto, playerFallback: true, likes: stateManager.hasFlag('episode2AftershockLive') ? 714 : 487, age: 'сейчас', danger: true, flag: 'viralPostOpened', text: `${playerName} (@${playerHandle()}) говорит, что никогда не видел Харпер Вэнс. Тогда почему с её телефона отправили именно его номер? Сегодня нам прислали снимок с его устройства и список недавних контактов. Случайность или Рейвенвуд должен был узнать о нём раньше?`, comments, responsePanel: stateManager.hasFlag('episode2AftershockLive') && !stateManager.hasFlag('ep2PublicResponseResolved') };
+}
+
+function buildNorthLotPost() {
+    if (stateManager.hasFlag('northLotDebunked')) {
+        return { id: 'north-lot-claim', removed: true, author: 'Ravenwood Truth', handle: '@ravenwood.truth', avatar: `${A}/page-truth.webp`, danger: true, age: 'публикация удалена', text: 'Автор удалил публикацию о North Lot без объяснения.' };
+    }
+    return {
+        id: 'north-lot-claim', author: 'Ravenwood Truth', handle: '@ravenwood.truth', avatar: `${A}/page-truth.webp`,
+        image: `${A}/post-north-lot-archive.webp`, mediaClass: 'rf-north-lot-crop', likes: 193, age: 'только что', danger: true,
+        flag: 'northLotClaimOpened',
+        text: `Нам прислали фотографию человека, похожего на ${stateManager.getPlayerName()}, возле North Lot. Он действительно никогда не был в Рейвенвуде?`,
+        comments: [['noah', 'фото мыльное, там вообще ничего не видно'], ['sam', 'и когда это снято?'], ['june', 'подождите. я знаю этот матч']]
+    };
 }
 
 function renderPost(post) {
+    if (post.removed) {
+        return `<article class="social-post rf-post rf-removed-post is-danger"><div class="social-post-head rf-post-head">${avatarMarkup(post.avatar, post.author)}<div><strong>${escapeHtml(post.author)}</strong><small>${escapeHtml(post.handle)} · ${escapeHtml(post.age)}</small></div></div><div class="rf-removed-copy"><img class="ui-lucide is-light" src="src/assets/icons/lucide/archive.svg" alt=""><p>${escapeHtml(post.text)}</p></div></article>`;
+    }
     const comments = (post.comments || []).map(([id, text]) => { const person = getSocialPerson(id); return `<div class="rf-comment"><button data-profile="${id}" type="button">${escapeHtml(person.handle || person.name)}</button><span>${escapeHtml(text)}</span></div>`; }).join('');
-    const media = post.image || post.playerFallback ? `<div class="rf-media ${post.playerFallback ? 'rf-player-media' : ''}">${post.image ? `<img src="${post.image}" alt="" onerror="this.hidden=true;this.parentElement.classList.add('missing')">` : ''}<div class="rf-photo-fallback"><img src="src/assets/icons/lucide/user-round.svg" alt=""><span>playerHackPhoto.jpg</span></div></div>` : '';
-    return `<article class="social-post rf-post ${post.danger ? 'is-danger' : ''}" data-open-post="${post.id}"><div class="social-post-head rf-post-head"><button class="social-avatar" data-profile="${post.profile || ''}" type="button">${avatarMarkup(post.avatar, post.author)}</button><div><strong>${escapeHtml(post.author)}</strong><small>${escapeHtml(post.handle)} · ${escapeHtml(post.age)}</small></div><button class="rf-more" type="button" aria-label="Ещё"><img class="ui-lucide is-light" src="src/assets/icons/lucide/ellipsis.svg" alt=""></button></div><p class="rf-copy">${escapeHtml(post.text)}</p>${media}<div class="rf-actions"><button class="rf-like" data-likes="${post.likes}" type="button"><img class="ui-lucide is-light" src="src/assets/icons/lucide/heart.svg" alt=""><span>${post.likes}</span></button><span><img class="ui-lucide is-light" src="src/assets/icons/lucide/message-circle.svg" alt="">${post.comments?.length || 0}</span><span><img class="ui-lucide is-light" src="src/assets/icons/lucide/send-horizontal.svg" alt=""></span></div><div class="social-comments rf-comments">${comments}</div></article>`;
+    const media = post.image || post.playerFallback ? `<div class="rf-media ${post.playerFallback ? 'rf-player-media' : ''} ${post.mediaClass || ''}">${post.image ? `<img src="${post.image}" alt="" onerror="this.hidden=true;this.parentElement.classList.add('missing')">` : ''}<div class="rf-photo-fallback"><img src="src/assets/icons/lucide/user-round.svg" alt=""><span>playerHackPhoto.jpg</span></div></div>` : '';
+    const responsePanel = post.responsePanel ? renderPublicResponsePanel() : '';
+    return `<article class="social-post rf-post ${post.danger ? 'is-danger' : ''}" data-open-post="${post.id}"><div class="social-post-head rf-post-head"><button class="social-avatar" data-profile="${post.profile || ''}" type="button">${avatarMarkup(post.avatar, post.author)}</button><div><strong>${escapeHtml(post.author)}</strong><small>${escapeHtml(post.handle)} · ${escapeHtml(post.age)}</small></div><button class="rf-more" type="button" aria-label="Ещё"><img class="ui-lucide is-light" src="src/assets/icons/lucide/ellipsis.svg" alt=""></button></div><p class="rf-copy">${escapeHtml(post.text)}</p>${media}<div class="rf-actions"><button class="rf-like" data-likes="${post.likes}" type="button"><img class="ui-lucide is-light" src="src/assets/icons/lucide/heart.svg" alt=""><span>${post.likes}</span></button><span><img class="ui-lucide is-light" src="src/assets/icons/lucide/message-circle.svg" alt="">${post.comments?.length || 0}</span><span><img class="ui-lucide is-light" src="src/assets/icons/lucide/send-horizontal.svg" alt=""></span></div><div class="social-comments rf-comments">${comments}</div>${responsePanel}</article>`;
+}
+
+function renderPublicResponsePanel() {
+    return `
+        <section class="rf-public-response" aria-label="Ответить на публикацию">
+            <small>Ваш ответ увидят все</small>
+            <button data-public-response="never" type="button">Я никогда не был в Рейвенвуде.</button>
+            <button data-public-response="stolen" type="button">Фото сделали без моего разрешения. Я ничего им не отправлял.</button>
+            <button data-public-response="remove" type="button">Уберите моё лицо и профиль из публикации.</button>
+            <button data-public-response="silent" class="quiet" type="button">Ничего не писать</button>
+        </section>
+    `;
+}
+
+function submitPublicResponse(response) {
+    const allowed = new Set(['never', 'stolen', 'remove', 'silent']);
+    if (!allowed.has(response) || stateManager.hasFlag('ep2PublicResponseResolved')) return;
+    stateManager.setFlag(`ep2PublicResponse_${response}`, true);
+    stateManager.setFlag('ep2PublicResponseResolved', true);
+}
+
+function getPlayerPublicComment() {
+    if (stateManager.hasFlag('ep2PublicResponse_never')) return 'Я никогда не был в Рейвенвуде.';
+    if (stateManager.hasFlag('ep2PublicResponse_stolen')) return 'Фото сделали без моего разрешения. Я ничего вам не отправлял.';
+    if (stateManager.hasFlag('ep2PublicResponse_remove')) return 'Уберите моё лицо и профиль из публикации.';
+    return '';
+}
+
+function getUnreadRequestCount() {
+    let count = 0;
+    if (!stateManager.hasFlag('rfRequestRead_nate')) count += 1;
+    if (!stateManager.hasFlag('rfRequestRead_noah')) count += 1;
+    if (stateManager.hasFlag('juneRequestLive') && !stateManager.hasFlag('rfRequestRead_june')) count += 1;
+    return count;
+}
+
+function renderRequestInbox() {
+    const ids = ['nate', 'noah'];
+    if (stateManager.hasFlag('juneRequestLive')) ids.unshift('june');
+    return `
+        <section class="rf-request-inbox">
+            <header><span>Запросы на переписку</span><small>Отправители не увидят прочтение, пока вы не ответите</small></header>
+            <div class="rf-request-list">
+                ${ids.map(id => {
+                    const request = REQUESTS[id];
+                    const person = PEOPLE[request.person];
+                    const unread = !stateManager.hasFlag(`rfRequestRead_${id}`);
+                    return `<button class="rf-request-row ${unread ? 'unread' : ''}" data-request="${id}" type="button"><span class="rf-request-avatar">${avatarMarkup(person.avatar, person.name)}</span><span><strong>${escapeHtml(person.name)}</strong><small>${escapeHtml(person.handle)}</small><p>${escapeHtml(request.preview)}</p></span>${unread ? '<i></i>' : ''}</button>`;
+                }).join('')}
+            </div>
+        </section>
+    `;
+}
+
+function openRequest(wrapper, id, onClose) {
+    const request = REQUESTS[id];
+    if (!request) return;
+    const person = PEOPLE[request.person];
+    stateManager.setFlag(`rfRequestRead_${id}`, true);
+
+    const render = () => {
+        wrapper.innerHTML = `
+            <section class="rf-request-thread">
+                <header>
+                    <button id="rf-request-back" class="rf-round" type="button"><img class="ui-lucide is-light" src="src/assets/icons/lucide/chevron-left.svg" alt=""></button>
+                    <span class="rf-request-avatar">${avatarMarkup(person.avatar, person.name)}</span>
+                    <div><strong>${escapeHtml(person.name)}</strong><small>${escapeHtml(person.handle)} · запрос</small></div>
+                </header>
+                <main>
+                    <div class="rf-request-notice">Этот человек не подписан на вас</div>
+                    ${request.messages.map(message => `<div class="rf-direct incoming">${escapeHtml(message)}</div>`).join('')}
+                    ${renderRequestReply(id)}
+                    ${id === 'june' ? renderJuneArchive() : ''}
+                </main>
+                ${renderRequestActions(id)}
+            </section>
+        `;
+        wrapper.querySelector('#rf-request-back')?.addEventListener('click', onClose);
+        wrapper.querySelectorAll('[data-request-action]').forEach(button => button.addEventListener('click', () => {
+            handleRequestAction(id, button.dataset.requestAction);
+            render();
+        }));
+        wrapper.querySelector('#rf-open-june-archive')?.addEventListener('click', () => {
+            stateManager.setFlag('northLotDebunked', true);
+            stateManager.setFlag('truthNorthLotPostRemoved', true);
+            render();
+        });
+    };
+    render();
+}
+
+function renderRequestActions(id) {
+    if (hasRequestResponse(id)) return '<footer><span>Запрос обработан</span></footer>';
+    if (id === 'nate') {
+        return `<footer class="rf-request-actions"><button data-request-action="decline" type="button">Нет, спасибо</button><button data-request-action="text" type="button">Оставьте вопросы здесь</button><button data-request-action="delete" class="quiet" type="button">Удалить запрос</button></footer>`;
+    }
+    if (id === 'noah') {
+        return `<footer class="rf-request-actions"><button data-request-action="not_coming" type="button">Я и не собирался</button><button data-request-action="welcome" type="button">Очень гостеприимный город</button><button data-request-action="leave" type="button">Отвали</button><button data-request-action="block" class="quiet" type="button">Заблокировать</button></footer>`;
+    }
+    return `<footer class="rf-request-actions"><button data-request-action="thanks" type="button">Спасибо. Напиши, если найдёшь</button><button data-request-action="why" type="button">Почему ты решила мне помочь?</button><button data-request-action="okay" type="button">Ладно</button></footer>`;
+}
+
+function handleRequestAction(id, action) {
+    stateManager.setFlag(`rfRequest_${id}_${action}`, true);
+    stateManager.setFlag(`rfRequestResponded_${id}`, true);
+    if (id === 'noah' && action === 'block') stateManager.setFlag('noahBlockedOnRavenFeed', true);
+    if (id === 'nate' && action === 'delete') stateManager.setFlag('nateRequestDeleted', true);
+}
+
+function hasRequestResponse(id) {
+    return stateManager.hasFlag(`rfRequestResponded_${id}`);
+}
+
+function renderRequestReply(id) {
+    if (!hasRequestResponse(id)) return '';
+    if (id === 'nate') {
+        if (stateManager.hasFlag('rfRequest_nate_delete')) return '<div class="rf-direct system">Запрос удалён</div>';
+        if (stateManager.hasFlag('rfRequest_nate_text')) return '<div class="rf-direct outgoing">Оставьте вопросы здесь.</div><div class="rf-direct incoming">Хорошо. Сначала соберу всё в одно сообщение и пришлю без публикации.</div>';
+        return '<div class="rf-direct outgoing">Нет, спасибо.</div><div class="rf-direct incoming">Понимаю. Если передумаете, можете написать сами.</div>';
+    }
+    if (id === 'noah') {
+        if (stateManager.hasFlag('rfRequest_noah_block')) return '<div class="rf-direct system">Пользователь заблокирован</div>';
+        if (stateManager.hasFlag('rfRequest_noah_welcome')) return '<div class="rf-direct outgoing">Очень гостеприимный город.</div><div class="rf-direct incoming">Сейчас не до шуток.</div>';
+        if (stateManager.hasFlag('rfRequest_noah_leave')) return '<div class="rf-direct outgoing">Отвали.</div><div class="rf-direct incoming">как скажешь</div>';
+        return '<div class="rf-direct outgoing">Я и не собирался.</div><div class="rf-direct incoming">и правильно</div>';
+    }
+    if (stateManager.hasFlag('rfRequest_june_why')) return '<div class="rf-direct outgoing">Почему ты решила мне помочь?</div><div class="rf-direct incoming">Потому что я была там и знаю, что на фото не ты. А они уже разнесли это по городу.</div>';
+    if (stateManager.hasFlag('rfRequest_june_thanks')) return '<div class="rf-direct outgoing">Спасибо. Напиши, если найдёшь.</div><div class="rf-direct incoming">нашла. сейчас скину</div>';
+    return '<div class="rf-direct outgoing">Ладно.</div><div class="rf-direct incoming">секунду. кажется, нашла</div>';
+}
+
+function renderJuneArchive() {
+    if (!hasRequestResponse('june')) return '';
+    const opened = stateManager.hasFlag('northLotDebunked');
+    return `
+        <article class="rf-archive-card ${opened ? 'verified' : ''}">
+            <img src="${A}/post-north-lot-archive.webp" alt="Старая фотография после школьного матча на North Lot">
+            <div><small>Ravenwood High Athletics · 2 года назад</small><strong>Матч закончен. Спасибо всем, кто пришёл несмотря на дождь.</strong><p>На полном кадре видны игроки, сезонный баннер и человек у края парковки.</p></div>
+            ${opened ? '<span>Фотография подтверждена как старая</span>' : '<button id="rf-open-june-archive" type="button">Открыть найденный пост</button>'}
+        </article>
+    `;
 }
 
 function renderPeople() {
@@ -106,6 +309,7 @@ function openProfile(wrapper, id, onClose) {
     wrapper.querySelector('#rf-profile-back')?.addEventListener('click', onClose); stateManager.setFlag(`ravenFeedProfile_${id}`, true);
 }
 
-function getSocialPerson(id) { const char = getCharacter(id); if (char) return { name: char.name, handle: char.handle, avatar: char.avatarImage }; if (id === 'harper') return { name: 'Харпер Вэнс', handle: '@harper.v' }; return PEOPLE[id] || { name: id, handle: `@${id}` }; }
+function getSocialPerson(id) { const char = getCharacter(id); if (char) return { name: char.name, handle: char.handle, avatar: char.avatarImage }; if (id === 'harper') return { name: 'Харпер Вэнс', handle: '@harper.v' }; if (id === 'player') return { name: stateManager.getPlayerName(), handle: `@${playerHandle()}` }; return PEOPLE[id] || { name: id, handle: `@${id}` }; }
+function playerHandle() { const base = stateManager.getPlayerName().toLowerCase().replace(/[^a-zа-яё0-9]+/giu, '.').replace(/^\.+|\.+$/g, ''); return base || 'new.user'; }
 function avatarMarkup(src, name) { return src ? `<img src="${src}" alt="" onerror="this.hidden=true;this.parentElement.textContent='${escapeHtml(name.charAt(0))}'">` : escapeHtml(name.charAt(0)); }
 function escapeHtml(value) { const div = document.createElement('div'); div.textContent = String(value || ''); return div.innerHTML; }

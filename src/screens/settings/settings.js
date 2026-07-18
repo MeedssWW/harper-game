@@ -7,7 +7,7 @@ import { stateManager } from '../../engine/stateManager.js';
 import { chapter1 } from '../../data/chapter1.js?v=146';
 
 const STATE_KEY = 'harper_act1_v4';
-const STORY_VERSION = 'harper_episode1_realistic_session_2026_07_18_v16';
+const STORY_VERSION = 'harper_episode2_opening_2026_07_18_v17';
 
 const CHECKPOINTS = [
     {
@@ -166,6 +166,29 @@ const LIVING_CHECKPOINTS = [
         unlockedContacts: ['derek', 'olivia', 'mia', 'mason', 'brooke', 'tyler', 'unknown'],
         knownContacts: ['derek', 'olivia', 'mia', 'mason', 'brooke', 'tyler', 'unknown'],
         flags: { ravenFeedUnlocked: true, ravenFeedOpened: true, remoteSessionInterrupted: true, playerPhoneCompromised: true, playerHackPhotoCreated: true, unknownFirstContact: true }
+    },
+    {
+        id: 'episode2_start',
+        title: 'Начало эпизода 2',
+        subtitle: 'Последствия публикации Ravenwood Truth',
+        throughBeat: 'ep1_chapter_end',
+        unlockedChats: ['private_derek', 'private_olivia', 'private_mia', 'private_unknown'],
+        unlockedContacts: ['derek', 'olivia', 'mia', 'mason', 'brooke', 'tyler', 'unknown'],
+        knownContacts: ['derek', 'olivia', 'mia', 'mason', 'brooke', 'tyler', 'unknown'],
+        flags: {
+            ravenFeedUnlocked: true,
+            ravenFeedOpened: true,
+            act1ViralPost: true,
+            viralPostOpened: true,
+            brookeDemandedExplanation: true,
+            episode1LivingComplete: true,
+            chapter1Completed: true,
+            chapter2Unlocked: true,
+            chapter2Started: true,
+            playerPhoneCompromised: true,
+            playerHackPhotoCreated: true,
+            unknownFirstContact: true
+        }
     }
 ];
 
@@ -315,7 +338,7 @@ function applyCheckpoint(checkpoint) {
     const nextState = {
         storyVersion: STORY_VERSION,
         playerName: previous.playerName || stateManager.getPlayerName?.() || 'Паша',
-        currentAct: 1,
+        currentAct: checkpoint.flags?.chapter2Started ? 2 : 1,
         currentBeatIndex: checkpointState.completedBeats.length,
         completedBeats: checkpointState.completedBeats,
         activeChoices: checkpointState.activeChoices,
@@ -357,7 +380,7 @@ function buildCheckpointState(checkpoint) {
         knownContacts: checkpoint.knownContacts || ['derek'],
         onlineCharacters: checkpoint.onlineCharacters || {},
         flags: checkpoint.flags || {},
-        trust: { oliviaTrust: 1, miaTrust: 1 },
+        trust: { oliviaTrust: 1, miaTrust: 1, derekTrust: 1 },
         caseEntries: checkpoint.flags?.caseIntroCompleted ? defaultCaseEntries(checkpoint.flags) : [],
         notes: {},
         unlockedNotes: [],

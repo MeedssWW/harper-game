@@ -12,7 +12,7 @@ export function renderChapterEnd({ onDone } = {}) {
             <div class="chapter-end-title">ЭПИЗОД 1 ЗАВЕРШЁН</div>
             <div class="chapter-end-divider"></div>
             <p>ЭПИЗОД 2</p>
-            <h1>ЧУЖАЯ ВЕРСИЯ</h1>
+            <h1>ЧУЖОЕ ЛИЦО</h1>
             <button id="chapter-end-continue" type="button">Продолжить</button>
         </section>
     `;

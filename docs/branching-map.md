@@ -39,3 +39,36 @@ All four QA routes must reach the same final publication without reactivating «
 - `act1ViralPost`: Ravenwood Truth publication becomes visible.
 - `viralPostOpened`: opening that post releases the final reactions.
 - `brookeDemandedExplanation`: the final public comment/notification has appeared.
+
+# Episode 2 opening branching map
+
+`RavenFeed public response → Mason threat/block → North Lot false post → June request/full image → verified police contact/call or defer → Derek reaction → Olivia city break`
+
+## Public response
+
+- `ep2PublicResponse_never`: the player publicly states they have never visited Ravenwood.
+- `ep2PublicResponse_stolen`: the player says the photograph was taken without permission.
+- `ep2PublicResponse_remove`: the player demands removal of the face and profile.
+- `ep2PublicResponse_silent`: the player leaves no public comment.
+
+## Mason
+
+- `masonOpenlyHostile`: Mason has directly threatened the player.
+- `masonBlocked`: Mason cannot send more private messages.
+- `derekRespectedMasonBoundary`: Derek was told not to intervene.
+- `derekWillConfrontMason`: Derek was asked to speak to Mason.
+
+## RavenFeed requests
+
+- Nate and Noah are optional pressure/background requests and never block the story.
+- June's request is mandatory because it supplies the full old North Lot post.
+- `northLotDebunked` removes the false post and unlocks the police contact.
+
+## Police
+
+- `policeCallDeferred`: the player postpones or declines the call.
+- `policeStatementConfirmed`: the player formally repeats that they have never visited Ravenwood and did not know Harper.
+- `policeKnowsPhotoWasStolen`: the player explains that the phone created the photo during the external session.
+- `unknownReportedToPolice`: the player tells Reed about Unknown.
+- `unknownHiddenFromPolice`: the player describes only the visible access log.
+- `playerWithheldHackFromPolice`: the player refuses to explain the compromise during the call.

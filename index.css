@@ -13459,3 +13459,713 @@ body.harper-booting #notification-toast {
     height: 21px;
     opacity: .72;
 }
+
+/* Episode 2 — RavenFeed consequences and verified police call */
+.rf-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.rf-inbox-button {
+    position: relative;
+}
+
+.rf-inbox-button.has-unread::after {
+    content: '';
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #ff4d67;
+    box-shadow: 0 0 0 2px #0a1019;
+}
+
+.rf-inbox-button b {
+    position: absolute;
+    right: -3px;
+    top: -5px;
+    min-width: 17px;
+    height: 17px;
+    padding: 0 4px;
+    display: grid;
+    place-items: center;
+    border-radius: 9px;
+    background: #ff4d67;
+    color: #fff;
+    font-size: 10px;
+    line-height: 1;
+}
+
+.rf-public-response {
+    margin: 13px 14px 15px;
+    padding: 12px;
+    display: grid;
+    gap: 8px;
+    border: 1px solid rgba(111, 145, 210, .25);
+    border-radius: 16px;
+    background: rgba(11, 17, 28, .88);
+}
+
+.rf-public-response small {
+    color: #8290a7;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+}
+
+.rf-public-response button {
+    width: 100%;
+    padding: 11px 12px;
+    border: 1px solid rgba(139, 164, 211, .24);
+    border-radius: 12px;
+    background: #182131;
+    color: #f2f5fb;
+    font: inherit;
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 1.35;
+    text-align: left;
+}
+
+.rf-public-response button:active {
+    transform: scale(.985);
+    background: #202c40;
+}
+
+.rf-public-response button.quiet {
+    color: #95a0b2;
+    background: transparent;
+}
+
+.rf-north-lot-crop {
+    height: 238px;
+    overflow: hidden;
+    background: #060a10;
+}
+
+.rf-north-lot-crop > img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: scale(2.35);
+    transform-origin: 91% 54%;
+    filter: saturate(.72) contrast(1.05) blur(.35px);
+}
+
+.rf-removed-post {
+    padding-bottom: 0;
+}
+
+.rf-removed-post .rf-post-head > img,
+.rf-removed-post .rf-post-head > span {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+}
+
+.rf-removed-copy {
+    margin: 4px 14px 14px;
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border: 1px dashed rgba(255, 95, 116, .34);
+    border-radius: 14px;
+    background: rgba(116, 24, 38, .12);
+    color: #b6bfce;
+}
+
+.rf-removed-copy img {
+    width: 22px;
+    height: 22px;
+    opacity: .72;
+}
+
+.rf-removed-copy p {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.45;
+}
+
+.rf-request-inbox {
+    min-height: 100%;
+    padding: 14px 12px 34px;
+}
+
+.rf-request-inbox > header {
+    padding: 8px 5px 15px;
+    display: grid;
+    gap: 4px;
+}
+
+.rf-request-inbox > header span {
+    color: #f4f7fc;
+    font-size: 19px;
+    font-weight: 850;
+}
+
+.rf-request-inbox > header small {
+    color: #778398;
+    font-size: 11px;
+}
+
+.rf-request-list {
+    overflow: hidden;
+    border: 1px solid rgba(134, 157, 198, .18);
+    border-radius: 18px;
+    background: rgba(14, 21, 32, .88);
+}
+
+.rf-request-row {
+    position: relative;
+    width: 100%;
+    min-height: 86px;
+    padding: 13px 16px;
+    display: grid;
+    grid-template-columns: 52px 1fr 8px;
+    align-items: center;
+    gap: 12px;
+    border: 0;
+    border-bottom: 1px solid rgba(130, 150, 185, .12);
+    background: transparent;
+    color: #eef3fb;
+    text-align: left;
+}
+
+.rf-request-row:last-child {
+    border-bottom: 0;
+}
+
+.rf-request-row.unread {
+    background: linear-gradient(90deg, rgba(62, 112, 224, .1), transparent 72%);
+}
+
+.rf-request-row > span:nth-child(2) {
+    min-width: 0;
+    display: grid;
+    gap: 2px;
+}
+
+.rf-request-row strong {
+    font-size: 14px;
+}
+
+.rf-request-row small {
+    color: #77859b;
+    font-size: 11px;
+}
+
+.rf-request-row p {
+    margin: 3px 0 0;
+    overflow: hidden;
+    color: #aeb8c8;
+    font-size: 12px;
+    line-height: 1.3;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.rf-request-row > i {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #5f8fff;
+    box-shadow: 0 0 14px rgba(95, 143, 255, .68);
+}
+
+.rf-request-avatar {
+    width: 48px;
+    height: 48px;
+    overflow: hidden;
+    display: grid;
+    place-items: center;
+    border: 1px solid rgba(142, 167, 210, .28);
+    border-radius: 50%;
+    background: #1d2635;
+    color: white;
+    font-weight: 800;
+}
+
+.rf-request-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.rf-request-thread {
+    height: 100%;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    background: radial-gradient(circle at 50% 0, rgba(43, 72, 125, .14), transparent 38%), #070c14;
+    color: #f2f5fa;
+}
+
+.rf-request-thread > header {
+    min-height: 84px;
+    padding: 16px 14px 12px;
+    display: grid;
+    grid-template-columns: 42px 44px 1fr;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 1px solid rgba(131, 151, 188, .18);
+    background: rgba(8, 13, 22, .94);
+}
+
+.rf-request-thread > header .rf-request-avatar {
+    width: 42px;
+    height: 42px;
+}
+
+.rf-request-thread > header div {
+    display: grid;
+    gap: 2px;
+}
+
+.rf-request-thread > header strong {
+    font-size: 15px;
+}
+
+.rf-request-thread > header small {
+    color: #7f8ba0;
+    font-size: 11px;
+}
+
+.rf-request-thread > main {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    padding: 18px 14px 24px;
+}
+
+.rf-request-notice {
+    max-width: 280px;
+    margin: 0 auto 18px;
+    padding: 7px 11px;
+    border: 1px solid rgba(129, 150, 185, .15);
+    border-radius: 999px;
+    color: #737f91;
+    font-size: 10px;
+    text-align: center;
+}
+
+.rf-direct {
+    width: fit-content;
+    max-width: 88%;
+    margin: 7px 0;
+    padding: 10px 12px;
+    border-radius: 15px 15px 15px 5px;
+    background: #1b2432;
+    color: #eef2f8;
+    font-size: 13px;
+    line-height: 1.42;
+    box-shadow: inset 0 0 0 1px rgba(152, 170, 204, .16);
+}
+
+.rf-direct.outgoing {
+    margin-left: auto;
+    border-radius: 15px 15px 5px 15px;
+    background: linear-gradient(140deg, #5176dc, #3f60bd);
+    box-shadow: none;
+}
+
+.rf-direct.system {
+    margin: 14px auto;
+    padding: 6px 10px;
+    border-radius: 999px;
+    background: transparent;
+    color: #778398;
+    font-size: 11px;
+    box-shadow: none;
+}
+
+.rf-request-thread > footer {
+    padding: 12px 14px max(15px, env(safe-area-inset-bottom));
+    border-top: 1px solid rgba(131, 151, 188, .15);
+    background: rgba(8, 13, 22, .96);
+}
+
+.rf-request-thread > footer:not(.rf-request-actions) {
+    color: #758197;
+    font-size: 11px;
+    text-align: center;
+}
+
+.rf-request-actions {
+    display: grid;
+    gap: 8px;
+}
+
+.rf-request-actions button,
+.rf-archive-card button {
+    padding: 11px 12px;
+    border: 1px solid rgba(126, 155, 216, .25);
+    border-radius: 12px;
+    background: #172131;
+    color: #eef3fb;
+    font: inherit;
+    font-size: 12px;
+    font-weight: 750;
+}
+
+.rf-request-actions button.quiet {
+    color: #8994a6;
+    background: transparent;
+}
+
+.rf-archive-card {
+    margin-top: 18px;
+    overflow: hidden;
+    border: 1px solid rgba(112, 149, 215, .25);
+    border-radius: 16px;
+    background: #111927;
+}
+
+.rf-archive-card > img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 3 / 2;
+    object-fit: cover;
+}
+
+.rf-archive-card > div {
+    padding: 12px;
+    display: grid;
+    gap: 5px;
+}
+
+.rf-archive-card small {
+    color: #7c8aa0;
+    font-size: 10px;
+}
+
+.rf-archive-card strong {
+    font-size: 13px;
+    line-height: 1.35;
+}
+
+.rf-archive-card p {
+    margin: 0;
+    color: #aeb8c8;
+    font-size: 11px;
+    line-height: 1.4;
+}
+
+.rf-archive-card button,
+.rf-archive-card > span {
+    margin: 0 12px 12px;
+    display: block;
+}
+
+.rf-archive-card > span {
+    padding: 9px 10px;
+    border-radius: 10px;
+    background: rgba(44, 160, 105, .13);
+    color: #71d8a3;
+    font-size: 11px;
+    text-align: center;
+}
+
+.police-call-screen {
+    position: relative;
+    height: 100%;
+    overflow: hidden;
+    background: radial-gradient(circle at 50% 18%, rgba(37, 99, 235, .2), transparent 34%), linear-gradient(180deg, #08101d, #05080e 72%);
+    color: #f7f9fc;
+}
+
+.police-incoming {
+    height: 100%;
+    padding: 68px 30px 44px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.police-call-status {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    color: #9eb3d2;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+}
+
+.police-call-status img,
+.police-call-secure img {
+    width: 16px;
+    height: 16px;
+}
+
+.police-call-badge {
+    width: 108px;
+    height: 108px;
+    margin: 55px 0 22px;
+    display: grid;
+    place-items: center;
+    border: 1px solid rgba(111, 155, 235, .42);
+    border-radius: 28px;
+    background: linear-gradient(145deg, #183261, #0d1c35);
+    box-shadow: 0 22px 60px rgba(0, 0, 0, .45), inset 0 0 28px rgba(90, 139, 232, .14);
+}
+
+.police-call-badge img {
+    width: 54px;
+    height: 54px;
+}
+
+.police-incoming h1 {
+    margin: 0;
+    font-size: 29px;
+}
+
+.police-incoming p {
+    margin: 8px 0 0;
+    color: #8fa0b9;
+    font-size: 13px;
+}
+
+.police-call-actions {
+    width: 100%;
+    margin-top: auto;
+    display: flex;
+    justify-content: space-between;
+}
+
+.police-call-actions button {
+    width: 92px;
+    display: grid;
+    justify-items: center;
+    gap: 9px;
+    border: 0;
+    background: transparent;
+    color: #f4f7fb;
+}
+
+.police-call-actions button span {
+    width: 62px;
+    height: 62px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+}
+
+.police-call-actions button span img {
+    width: 27px;
+    height: 27px;
+}
+
+.police-call-actions .decline span { background: #dc3d50; }
+.police-call-actions .accept span { background: #2faa69; }
+.police-call-actions b { font-size: 12px; }
+
+.police-active-call {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.police-active-call > header {
+    min-height: 102px;
+    padding: 34px 18px 15px;
+    display: grid;
+    grid-template-columns: 48px 1fr auto;
+    align-items: center;
+    gap: 11px;
+    border-bottom: 1px solid rgba(123, 149, 194, .2);
+    background: rgba(6, 11, 19, .72);
+}
+
+.police-mini-badge {
+    width: 46px;
+    height: 46px;
+    display: grid;
+    place-items: center;
+    border-radius: 14px;
+    background: #183263;
+}
+
+.police-mini-badge img {
+    width: 25px;
+    height: 25px;
+}
+
+.police-active-call header h1 {
+    margin: 0;
+    font-size: 16px;
+}
+
+.police-active-call header p {
+    margin: 3px 0 0;
+    color: #8290a7;
+    font-size: 11px;
+}
+
+.police-active-call header > strong {
+    color: #8cb0f2;
+    font: 700 13px ui-monospace, SFMono-Regular, Consolas, monospace;
+}
+
+.police-active-call > main {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    padding: 30px 18px 22px;
+}
+
+.police-call-wave {
+    height: 42px;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+}
+
+.police-call-wave i {
+    width: 3px;
+    height: var(--h);
+    border-radius: 3px;
+    background: linear-gradient(#75a5ff, #3159a5);
+    animation: policeWave 1.3s ease-in-out infinite alternate;
+}
+
+.police-call-wave i:nth-child(3n) { animation-delay: -.6s; }
+.police-call-wave i:nth-child(4n) { animation-delay: -.9s; }
+
+@keyframes policeWave {
+    to { transform: scaleY(.38); opacity: .45; }
+}
+
+.police-call-line {
+    padding: 16px;
+    border: 1px solid rgba(118, 148, 204, .2);
+    border-radius: 17px;
+    background: rgba(19, 29, 46, .88);
+}
+
+.police-call-line + .police-call-line {
+    margin-top: 10px;
+}
+
+.police-call-line small {
+    color: #75a4f8;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+}
+
+.police-call-line p {
+    margin: 7px 0 0;
+    color: #eef2f8;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.police-call-choices {
+    margin-top: 24px;
+    display: grid;
+    gap: 10px;
+}
+
+.police-call-choices button {
+    padding: 13px 14px;
+    border: 1px solid rgba(113, 148, 211, .24);
+    border-radius: 14px;
+    background: #111b2b;
+    color: #f1f4f9;
+    font: inherit;
+    font-size: 13px;
+    font-weight: 750;
+    line-height: 1.35;
+    text-align: left;
+}
+
+.police-call-choices button:active {
+    background: #1b2940;
+    transform: scale(.988);
+}
+
+.police-active-call > footer {
+    padding: 11px 18px max(15px, env(safe-area-inset-bottom));
+    border-top: 1px solid rgba(118, 144, 187, .15);
+    color: #718098;
+    font-size: 10px;
+    text-align: center;
+}
+
+.police-call-secure {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.police-end-call {
+    width: 100%;
+    margin-top: 24px;
+    padding: 13px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border: 0;
+    border-radius: 14px;
+    background: #b52e42;
+    color: white;
+    font: inherit;
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.police-end-call img {
+    width: 18px;
+    height: 18px;
+}
+
+.police-call-ended {
+    height: 100%;
+    display: grid;
+    place-content: center;
+    justify-items: center;
+    padding: 30px;
+    text-align: center;
+}
+
+.police-call-ended > div {
+    width: 68px;
+    height: 68px;
+    display: grid;
+    place-items: center;
+    border-radius: 22px;
+    background: #172a4b;
+}
+
+.police-call-ended img {
+    width: 32px;
+    height: 32px;
+}
+
+.police-call-ended h1 {
+    margin: 18px 0 6px;
+    font-size: 22px;
+}
+
+.police-call-ended p {
+    margin: 0;
+    color: #8491a5;
+    font-size: 12px;
+}
+
+@media (max-height: 720px) {
+    .police-call-badge { margin-top: 28px; }
+    .police-incoming { padding-top: 42px; }
+    .rf-request-thread > main { padding-top: 12px; }
+}

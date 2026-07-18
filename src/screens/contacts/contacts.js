@@ -3,7 +3,7 @@
 // ============================================
 
 import { stateManager } from '../../engine/stateManager.js';
-import { getCharacter, getCharacterColor, characters } from '../../data/characters.js?v=123';
+import { getCharacter, getCharacterColor, characters } from '../../data/characters.js?v=124';
 
 export function renderContactList({ onContactOpen, onBack }) {
     const fragment = document.createDocumentFragment();

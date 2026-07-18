@@ -3,7 +3,11 @@
 // ============================================
 
 const STATE_KEY = 'harper_act1_v4';
-const STORY_VERSION = 'harper_episode1_realistic_session_2026_07_18_v16';
+const STORY_VERSION = 'harper_episode2_opening_2026_07_18_v17';
+const COMPATIBLE_STORY_VERSIONS = new Set([
+    STORY_VERSION,
+    'harper_episode1_realistic_session_2026_07_18_v16'
+]);
 
 const defaultState = {
     storyVersion: STORY_VERSION,
@@ -271,9 +275,10 @@ class StateManager {
             const raw = localStorage.getItem(STATE_KEY);
             if (raw) {
                 const parsed = JSON.parse(raw);
-                if (parsed.storyVersion !== STORY_VERSION) {
+                if (!COMPATIBLE_STORY_VERSIONS.has(parsed.storyVersion)) {
                     return null;
                 }
+                parsed.storyVersion = STORY_VERSION;
                 // Merge with defaults to handle new fields
                 return this._migrateState({ ...defaultState, ...parsed });
             }

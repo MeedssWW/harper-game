@@ -4,7 +4,7 @@
 
 import { stateManager } from '../../engine/stateManager.js';
 import { storyEngine } from '../../engine/storyEngine.js?v=121';
-import { getCharacter, getCharacterColor } from '../../data/characters.js?v=123';
+import { getCharacter, getCharacterColor } from '../../data/characters.js?v=124';
 
 // Chat definitions
 const CHATS = {
@@ -57,6 +57,13 @@ const CHATS = {
         name: 'Неизвестный',
         type: 'private',
         characterId: 'unknown'
+    },
+    private_detective: {
+        id: 'private_detective',
+        name: 'Дэниел Рид',
+        type: 'private',
+        characterId: 'detective',
+        verified: true
     },
     group_larks: {
         id: 'group_larks',

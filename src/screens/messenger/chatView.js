@@ -3,8 +3,8 @@
 // ============================================
 
 import { stateManager } from '../../engine/stateManager.js';
-import { getCharacter, getCharacterColor } from '../../data/characters.js?v=123';
-import { CHATS, getActiveGroupMembers } from './chatList.js?v=123';
+import { getCharacter, getCharacterColor } from '../../data/characters.js?v=124';
+import { CHATS, getActiveGroupMembers } from './chatList.js?v=127';
 import { storyEngine } from '../../engine/storyEngine.js?v=121';
 
 export class ChatView {
@@ -538,6 +538,7 @@ export class ChatView {
             mia: '#76f0a5',
             brooke: '#f4f7ff',
             unknown: '#f4f7ff',
+            detective: '#93c5fd',
             harper: '#ffd58a'
         };
 

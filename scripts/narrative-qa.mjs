@@ -1,5 +1,6 @@
 import fs from 'node:fs';
 import { chapter1 } from '../src/data/chapter1.js';
+import { chapter2 } from '../src/data/chapter2Opening.js';
 
 const beats = chapter1.beats;
 const ids = beats.map(beat => beat.id);
@@ -11,6 +12,11 @@ const assert = (condition, message) => { if (!condition) fail(message); };
 
 assert(idSet.size === ids.length, 'В активной главе есть повторяющиеся id сцен.');
 
+const chapter2Beats = chapter2.beats || [];
+const chapter2Ids = chapter2Beats.map(beat => beat.id);
+const chapter2IdSet = new Set(chapter2Ids);
+assert(chapter2IdSet.size === chapter2Ids.length, 'Во втором эпизоде есть повторяющиеся id сцен.');
+
 for (const beat of beats) {
   for (const message of beat.messages || []) {
     for (const option of Array.isArray(message.options) ? message.options : []) {
@@ -20,6 +26,17 @@ for (const beat of beats) {
 
   for (const ref of triggerBeatIds(beat.trigger)) {
     assert(idSet.has(ref), `${beat.id} ожидает отсутствующую сцену ${ref}.`);
+  }
+}
+
+for (const beat of chapter2Beats) {
+  for (const message of beat.messages || []) {
+    for (const option of Array.isArray(message.options) ? message.options : []) {
+      if (option.next) assert(chapter2IdSet.has(option.next), `${beat.id} ведёт в отсутствующую сцену второго эпизода ${option.next}.`);
+    }
+  }
+  for (const ref of triggerBeatIds(beat.trigger)) {
+    assert(chapter2IdSet.has(ref), `${beat.id} ожидает отсутствующую сцену второго эпизода ${ref}.`);
   }
 }
 
@@ -166,13 +183,62 @@ for (const scenario of scenarios) {
   assert(result.flags.act1ViralPost === true, `В маршруте «${scenario.name}» не появилась публикация Ravenwood Truth.`);
 }
 
+const chapter2Scenarios = [
+  {
+    name: 'резко отвечает Мейсону и говорит полиции всё',
+    choices: {
+      ep2_mason_confronts: 0,
+      ep2_mason_threat: 0,
+      ep2_police_contact: 0,
+      ep2_derek_checks_in: 0,
+      ep2_derek_mason: 1,
+      ep2_derek_truth_context: 1,
+      ep2_olivia_city_break: 0
+    }
+  },
+  {
+    name: 'блокирует Мейсона и откладывает звонок',
+    choices: {
+      ep2_mason_confronts: 3,
+      ep2_police_contact: 2,
+      ep2_derek_checks_in: 2,
+      ep2_derek_truth_context: 0,
+      ep2_olivia_city_break: 2
+    }
+  },
+  {
+    name: 'провоцирует Мейсона и спрашивает о статусе',
+    choices: {
+      ep2_mason_confronts: 2,
+      ep2_mason_threat: 2,
+      ep2_police_contact: 1,
+      ep2_police_status: 0,
+      ep2_derek_checks_in: 1,
+      ep2_derek_truth_context: 2,
+      ep2_olivia_city_break: 1
+    }
+  }
+];
+
+for (const scenario of chapter2Scenarios) {
+  const result = simulateChapter2(scenario);
+  assert(result.completed.has('ep2_olivia_city_break'), `Второй эпизод, маршрут «${scenario.name}», не дошёл до Оливии.`);
+  assert(result.flags.episode2OpeningComplete === true, `Второй эпизод, маршрут «${scenario.name}», не завершил вступление.`);
+  assert(!result.unlockedChats.has('group_main'), `Во втором эпизоде маршрут «${scenario.name}» снова открыл «Семеро».`);
+}
+
+const chapter2Text = JSON.stringify(chapter2Beats).toLowerCase();
+for (const unwanted of ['сохрани оригинал', 'покажи оригинал', 'этот чат увидит полиция']) {
+  assert(!chapter2Text.includes(unwanted), `Во втором эпизоде осталась неестественная формулировка: ${unwanted}.`);
+}
+
 if (failures.length) {
   console.error(`Narrative QA: ${failures.length} problem(s)`);
   for (const problem of failures) console.error(`- ${problem}`);
   process.exit(1);
 }
 
-console.log(`Narrative QA passed: ${beats.length} active scenes, ${scenarios.length} complete routes.`);
+console.log(`Narrative QA passed: ${beats.length} episode-one scenes, ${chapter2Beats.length} episode-two opening scenes, ${scenarios.length + chapter2Scenarios.length} complete routes.`);
 
 function triggerBeatIds(trigger = '') {
   const parts = trigger.split(':');
@@ -235,6 +301,43 @@ function simulate(scenario) {
   return state;
 }
 
+function simulateChapter2(scenario) {
+  const state = {
+    completed: new Set(),
+    choices: new Map(),
+    flags: { chapter2Started: true },
+    trust: { oliviaTrust: 1, miaTrust: 1, derekTrust: 1 },
+    unlockedChats: new Set(['private_derek', 'private_olivia', 'private_mia', 'private_unknown'])
+  };
+
+  let progressed = true;
+  let guard = 0;
+  while (progressed && guard++ < 500) {
+    progressed = false;
+    for (const beat of chapter2Beats) {
+      if (state.completed.has(beat.id) || !canPlayIn(beat, state, chapter2Beats)) continue;
+      progressed = true;
+      state.unlockedChats.add(beat.chat);
+      for (const [flag, value] of Object.entries(beat.setFlags || {})) state.flags[flag] = value;
+
+      const choiceMessage = (beat.messages || []).find(message => message.type === 'choice' && Array.isArray(message.options));
+      if (choiceMessage) {
+        const requested = scenario.choices[beat.id] ?? 0;
+        const index = Math.min(requested, choiceMessage.options.length - 1);
+        const chosen = choiceMessage.options[index];
+        state.choices.set(beat.id, index);
+        if (chosen.setFlag) state.flags[chosen.setFlag] = true;
+      }
+
+      for (const message of beat.messages || []) {
+        if (message.type === 'wait_flag') state.flags[message.flag] = true;
+      }
+      state.completed.add(beat.id);
+    }
+  }
+  return state;
+}
+
 function canPlay(beat, state) {
   const trigger = beat.trigger || '';
   if (!trigger) return true;
@@ -272,4 +375,17 @@ function canPlay(beat, state) {
   }
   if (trigger.startsWith('flag:')) return Boolean(state.flags[trigger.slice(5)]);
   return false;
+}
+
+function canPlayIn(beat, state, actBeats) {
+  const trigger = beat.trigger || '';
+  if (!trigger) return true;
+  if (trigger === 'auto') return state.completed.size === 0 && actBeats[0]?.id === beat.id;
+  if (trigger.startsWith('after:')) return triggerBeatIds(trigger).some(id => state.completed.has(id));
+  if (trigger.startsWith('choice:')) {
+    const [, beatId, rawIndex] = trigger.split(':');
+    return state.choices.get(beatId) === Number(rawIndex);
+  }
+  if (trigger.startsWith('flag:')) return Boolean(state.flags[trigger.slice(5)]);
+  return canPlay(beat, state);
 }

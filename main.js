@@ -9,8 +9,8 @@ import { renderLockScreen } from './src/screens/lockScreen.js?v=70';
 import { renderBootScreen } from './src/screens/bootScreen.js?v=125';
 import { renderNameScreen } from './src/screens/nameScreen.js?v=126';
 import { renderHomeScreen } from './src/screens/homeScreen.js?v=140';
-import { CHATS, renderChatList } from './src/screens/messenger/chatList.js?v=126';
-import { ChatView } from './src/screens/messenger/chatView.js?v=126';
+import { CHATS, renderChatList } from './src/screens/messenger/chatList.js?v=127';
+import { ChatView } from './src/screens/messenger/chatView.js?v=127';
 import { renderTransitionScreen } from './src/screens/transitionScreen.js?v=70';
 import { renderContactList, renderContactProfile } from './src/screens/contacts/contacts.js?v=126';
 import { renderGallery } from './src/screens/gallery/gallery.js?v=126';
@@ -18,18 +18,20 @@ import { renderNotes } from './src/screens/notes/notes.js?v=126';
 import { renderMap } from './src/screens/map/map.js?v=126';
 import { renderMiaPhone } from './src/screens/miaPhone/miaPhone.js?v=143';
 import { renderBrowser } from './src/screens/browser/browser.js?v=126';
-import { renderSocial } from './src/screens/social/social.js?v=141';
+import { renderSocial } from './src/screens/social/social.js?v=143';
 import { renderClues } from './src/screens/clues/clues.js?v=126';
 import { renderCaseIntroTask } from './src/screens/caseFile/caseIntroTask.js?v=127';
 import { renderFrameAnalysis } from './src/screens/frameAnalysis/frameAnalysis.js?v=126';
 import { renderLizaPhone } from './src/screens/lizaPhone/lizaPhone.js?v=126';
-import { renderSettings } from './src/screens/settings/settings.js?v=142';
+import { renderSettings } from './src/screens/settings/settings.js?v=143';
 import { renderUnknownCall } from './src/screens/call/unknownCall.js?v=126';
+import { renderPoliceCall } from './src/screens/call/policeCall.js?v=1';
 import { renderPoliceDecision } from './src/screens/policeDecision/policeDecision.js?v=70';
-import { renderChapterEnd } from './src/screens/chapterEnd/chapterEnd.js?v=140';
+import { renderChapterEnd } from './src/screens/chapterEnd/chapterEnd.js?v=141';
 import { audioEngine } from './src/engine/audioEngine.js?v=124';
-import { characters } from './src/data/characters.js?v=123';
+import { characters } from './src/data/characters.js?v=124';
 import { chapter1 } from './src/data/chapter1.js?v=146';
+import { chapter2 } from './src/data/chapter2Opening.js?v=2';
 
 // ---- App State ----
 let activeChatView = null;
@@ -52,6 +54,10 @@ const STORY_CONTINUATION_FLAGS = new Set([
     'policeAnonymousTipSent',
     'ravenwatchPostPublished'
 ]);
+
+function getActiveChapter() {
+    return stateManager.hasFlag('chapter2Started') ? chapter2 : chapter1;
+}
 
 // ---- Initialize ----
 function init() {
@@ -95,7 +101,7 @@ function init() {
 function setupInvestigationCallbacks() {
     stateManager.on('flag', ({ flag, value }) => {
         if (!value || !STORY_CONTINUATION_FLAGS.has(flag)) return;
-        storyEngine.loadAct(chapter1);
+        storyEngine.loadAct(getActiveChapter());
         setTimeout(() => storyEngine.start(), 350);
     });
 }
@@ -110,7 +116,7 @@ function registerScreens() {
                 audioEngine.finishBootSequence();
                 if (params.resume) {
                     screenManager.navigate('home', {}, false);
-                    storyEngine.loadAct(chapter1);
+                    storyEngine.loadAct(getActiveChapter());
                     setTimeout(() => storyEngine.start(), 900);
                 } else {
                     screenManager.navigate('lock', {}, false);
@@ -236,6 +242,12 @@ function registerScreens() {
                 activeChatView.destroy();
                 activeChatView = null;
                 currentViewingChat = null;
+                screenManager.navigate('social');
+            } else if (message?.documentId === 'ravenfeed_city_guide') {
+                activeChatView.destroy();
+                activeChatView = null;
+                currentViewingChat = null;
+                stateManager.setFlag('openRavenFeedCityGuide', true);
                 screenManager.navigate('social');
             } else if (message?.analysisAction === 'frame_analysis') {
                 activeChatView.destroy();
@@ -376,6 +388,18 @@ function registerScreens() {
         });
     });
 
+    screenManager.register('policeCall', () => {
+        if (activeChatView) {
+            activeChatView.destroy();
+            activeChatView = null;
+        }
+        currentViewingChat = null;
+
+        return renderPoliceCall({
+            onDone: () => screenManager.navigate('chatList')
+        });
+    });
+
     screenManager.register('policeDecision', (params = {}) => {
         if (activeChatView) {
             activeChatView.destroy();
@@ -397,7 +421,12 @@ function registerScreens() {
         currentViewingChat = null;
 
         return renderChapterEnd({
-            onDone: () => screenManager.navigate('home')
+            onDone: () => {
+                stateManager.setFlag('chapter2Started', true);
+                screenManager.navigate('home');
+                storyEngine.loadAct(chapter2);
+                setTimeout(() => storyEngine.start(), 700);
+            }
         });
     });
 }
@@ -484,7 +513,7 @@ function setupStoryEngine() {
     storyEngine.onNotification = (from, text, chatId) => {
         if (currentViewingChat !== chatId) {
             // getCharacter is already imported at the top of this file
-            import('./src/data/characters.js?v=123').then(({ getCharacter: gc }) => {
+            import('./src/data/characters.js?v=124').then(({ getCharacter: gc }) => {
                 const char = gc(from);
                 const displayName = char ? char.name : from;
                 audioEngine.playNotification();
@@ -558,7 +587,7 @@ function showNotificationToast(title, text, options = {}) {
         if (options.chatId) {
             openChatFromNotification(options.chatId);
         } else if (options.app) {
-            openAppFromNotification(options.app);
+            openAppFromNotification(options.app, options);
         }
     };
 
@@ -594,13 +623,16 @@ function openChatFromNotification(chatId) {
     screenManager.navigate('chat', { chatId });
 }
 
-function openAppFromNotification(appId) {
+function openAppFromNotification(appId, options = {}) {
     if (!appId) return;
     if (activeChatView) {
         activeChatView.destroy();
         activeChatView = null;
     }
     currentViewingChat = null;
+    if (appId === 'social' && options.view === 'requests') {
+        stateManager.setFlag('openRavenFeedRequests', true);
+    }
     screenManager.navigate(appId);
 }
 
