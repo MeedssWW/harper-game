@@ -175,7 +175,7 @@ function openRecoveredChat(wrapper, onDone, restricted = false) {
     stateManager.setFlag('vid1842Found', true);
     wrapper.innerHTML = `
         <header class="mia-device-chat-header">
-            ${restricted ? '' : '<button class="mia-device-back" type="button" aria-label="Назад"><img class="ui-lucide is-light" src="src/assets/icons/lucide/chevron-left.svg" alt="" /></button>'}
+            <button class="mia-device-back" type="button" aria-label="${restricted ? 'Закрыть вложение' : 'Назад'}"><img class="ui-lucide is-light" src="src/assets/icons/lucide/chevron-left.svg" alt="" /></button>
             <div>
                 <h1>Неизвестный чат</h1>
                 <span>Контакт не сохранён · номер повреждён</span>
@@ -201,7 +201,13 @@ function openRecoveredChat(wrapper, onDone, restricted = false) {
         <footer class="mia-view-only">Режим просмотра. Ответить нельзя.</footer>
     `;
 
-    wrapper.querySelector('.mia-device-back')?.addEventListener('click', () => renderDeviceList(wrapper, onDone));
+    wrapper.querySelector('.mia-device-back')?.addEventListener('click', () => {
+        if (restricted) {
+            onDone?.();
+        } else {
+            renderDeviceList(wrapper, onDone);
+        }
+    });
     wrapper.querySelector('#open-video-file')?.addEventListener('click', () => startDownload(wrapper, onDone));
 }
 

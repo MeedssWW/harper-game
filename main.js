@@ -16,9 +16,9 @@ import { renderContactList, renderContactProfile } from './src/screens/contacts/
 import { renderGallery } from './src/screens/gallery/gallery.js?v=126';
 import { renderNotes } from './src/screens/notes/notes.js?v=126';
 import { renderMap } from './src/screens/map/map.js?v=126';
-import { renderMiaPhone } from './src/screens/miaPhone/miaPhone.js?v=144';
+import { renderMiaPhone } from './src/screens/miaPhone/miaPhone.js?v=145';
 import { renderBrowser } from './src/screens/browser/browser.js?v=126';
-import { renderSocial } from './src/screens/social/social.js?v=148';
+import { renderSocial } from './src/screens/social/social.js?v=151';
 import { renderClues } from './src/screens/clues/clues.js?v=126';
 import { renderCaseIntroTask } from './src/screens/caseFile/caseIntroTask.js?v=127';
 import { renderFrameAnalysis } from './src/screens/frameAnalysis/frameAnalysis.js?v=126';

@@ -170,11 +170,21 @@ function renderPost(post) {
     }
     const comments = (post.comments || []).map(([id, text]) => {
         const person = getSocialPerson(id);
-        return `<div class="rf-comment"><button class="rf-comment-avatar" data-profile="${id}" type="button" aria-label="${escapeHtml(person.name)}">${avatarMarkup(person.avatar, person.name)}</button><p><button class="rf-comment-author" data-profile="${id}" type="button">${escapeHtml(person.handle || person.name)}</button><span>${escapeHtml(text)}</span></p></div>`;
+        const profileAvailable = Boolean(getCharacter(id) || PEOPLE[id]);
+        const avatar = profileAvailable
+            ? `<button class="rf-comment-avatar" data-profile="${id}" type="button" aria-label="Открыть профиль ${escapeHtml(person.name)}">${avatarMarkup(person.avatar, person.name)}</button>`
+            : `<span class="rf-comment-avatar">${avatarMarkup(person.avatar, person.name)}</span>`;
+        const author = profileAvailable
+            ? `<button class="rf-comment-author" data-profile="${id}" type="button">${escapeHtml(person.handle || person.name)}</button>`
+            : `<strong class="rf-comment-author">${escapeHtml(person.handle || person.name)}</strong>`;
+        return `<div class="rf-comment">${avatar}<p>${author}<span>${escapeHtml(text)}</span></p></div>`;
     }).join('');
-    const media = post.image || post.playerFallback ? `<div class="rf-media ${post.playerFallback ? 'rf-player-media' : ''} ${post.mediaClass || ''}">${post.image ? `<img src="${post.image}" alt="" onerror="this.hidden=true;this.parentElement.classList.add('missing')">` : ''}<div class="rf-photo-fallback"><img src="src/assets/icons/lucide/user-round.svg" alt=""><span>playerHackPhoto.jpg</span></div></div>` : '';
+    const media = post.image || post.playerFallback ? `<div class="rf-media ${post.playerFallback ? 'rf-player-media' : ''} ${post.mediaClass || ''}">${post.image ? `<img src="${post.image}" alt="Изображение из публикации ${escapeHtml(post.author)}" onerror="this.hidden=true;this.parentElement.classList.add('missing')">` : ''}<div class="rf-photo-fallback"><img src="src/assets/icons/lucide/user-round.svg" alt=""><span>playerHackPhoto.jpg</span></div></div>` : '';
     const responsePanel = post.responsePanel ? renderPublicResponsePanel() : '';
-    return `<article class="social-post rf-post ${post.danger ? 'is-danger' : ''}" data-open-post="${post.id}"><div class="social-post-head rf-post-head"><button class="social-avatar" data-profile="${post.profile || ''}" type="button">${avatarMarkup(post.avatar, post.author)}</button><div><strong>${escapeHtml(post.author)}</strong><small>${escapeHtml(post.handle)} · ${escapeHtml(post.age)}</small></div><button class="rf-more" type="button" aria-label="Ещё"><img class="ui-lucide is-light" src="src/assets/icons/lucide/ellipsis.svg" alt=""></button></div><p class="rf-copy">${escapeHtml(post.text)}</p>${media}<div class="rf-actions"><button class="rf-like" data-likes="${post.likes}" type="button"><img class="ui-lucide is-light" src="src/assets/icons/lucide/heart.svg" alt=""><span>${post.likes}</span></button><span><img class="ui-lucide is-light" src="src/assets/icons/lucide/message-circle.svg" alt="">${post.comments?.length || 0}</span><span><img class="ui-lucide is-light" src="src/assets/icons/lucide/send-horizontal.svg" alt=""></span></div><div class="social-comments rf-comments">${comments}</div>${responsePanel}</article>`;
+    const postAvatar = post.profile
+        ? `<button class="social-avatar" data-profile="${post.profile}" type="button" aria-label="Открыть профиль ${escapeHtml(post.author)}">${avatarMarkup(post.avatar, post.author)}</button>`
+        : `<span class="social-avatar">${avatarMarkup(post.avatar, post.author)}</span>`;
+    return `<article class="social-post rf-post ${post.danger ? 'is-danger' : ''}" data-open-post="${post.id}"><div class="social-post-head rf-post-head">${postAvatar}<div><strong>${escapeHtml(post.author)}</strong><small>${escapeHtml(post.handle)} · ${escapeHtml(post.age)}</small></div><span class="rf-more" aria-hidden="true"><img class="ui-lucide is-light" src="src/assets/icons/lucide/ellipsis.svg" alt=""></span></div><p class="rf-copy">${escapeHtml(post.text)}</p>${media}<div class="rf-actions"><button class="rf-like" data-likes="${post.likes}" type="button" aria-label="Нравится: ${post.likes}"><img class="ui-lucide is-light" src="src/assets/icons/lucide/heart.svg" alt=""><span>${post.likes}</span></button><span><img class="ui-lucide is-light" src="src/assets/icons/lucide/message-circle.svg" alt="">${post.comments?.length || 0}</span><span><img class="ui-lucide is-light" src="src/assets/icons/lucide/send-horizontal.svg" alt=""></span></div><div class="social-comments rf-comments">${comments}</div>${responsePanel}</article>`;
 }
 
 function renderPublicResponsePanel() {
@@ -239,7 +249,7 @@ function openRequest(wrapper, id, onClose) {
         wrapper.innerHTML = `
             <section class="rf-request-thread">
                 <header>
-                    <button id="rf-request-back" class="rf-round" type="button"><img class="ui-lucide is-light" src="src/assets/icons/lucide/chevron-left.svg" alt=""></button>
+                    <button id="rf-request-back" class="rf-round" type="button" aria-label="Назад к запросам"><img class="ui-lucide is-light" src="src/assets/icons/lucide/chevron-left.svg" alt=""></button>
                     <span class="rf-request-avatar">${avatarMarkup(person.avatar, person.name)}</span>
                     <div><strong>${escapeHtml(person.name)}</strong><small>${escapeHtml(person.handle)} · запрос</small></div>
                 </header>
@@ -326,8 +336,45 @@ function renderPeople() {
 
 function openProfile(wrapper, id, onClose) {
     if (!id) return; const char = getCharacter(id); const local = PEOPLE[id]; if (!char && !local) return; const person = char || local; const gallery = char?.gallery?.length ? char.gallery : [char?.avatarImage || local?.avatar].filter(Boolean);
-    wrapper.innerHTML = `<section class="rf-profile"><header><button id="rf-profile-back" class="rf-round" type="button"><img class="ui-lucide is-light" src="src/assets/icons/lucide/chevron-left.svg" alt=""></button><strong>${escapeHtml(person.handle || person.name)}</strong></header><div class="rf-profile-hero"><img src="${char?.socialPhoto || gallery[0]}" alt=""></div><div class="rf-profile-card"><div class="rf-profile-avatar">${avatarMarkup(person.avatarImage || person.avatar, person.name)}</div><h1>${escapeHtml(person.name)}</h1><span>${escapeHtml(person.handle || '')}</span><p>${escapeHtml(person.bio || local.bio)}</p><div><b>${gallery.length}</b> публикации <b>${char ? 128 + id.length * 17 : 64 + id.length * 9}</b> подписчиков</div></div><div class="rf-profile-grid">${gallery.map(src => `<button type="button"><img src="${src}" alt=""></button>`).join('')}</div></section>`;
-    wrapper.querySelector('#rf-profile-back')?.addEventListener('click', onClose); stateManager.setFlag(`ravenFeedProfile_${id}`, true);
+    wrapper.innerHTML = `<section class="rf-profile"><header><button id="rf-profile-back" class="rf-round" type="button" aria-label="Назад к людям"><img class="ui-lucide is-light" src="src/assets/icons/lucide/chevron-left.svg" alt=""></button><strong>${escapeHtml(person.handle || person.name)}</strong></header><div class="rf-profile-hero"><img src="${char?.socialPhoto || gallery[0]}" alt=""></div><div class="rf-profile-card"><div class="rf-profile-avatar">${avatarMarkup(person.avatarImage || person.avatar, person.name)}</div><h1>${escapeHtml(person.name)}</h1><span>${escapeHtml(person.handle || '')}</span><p>${escapeHtml(person.bio || local.bio)}</p><div><b>${gallery.length}</b> ${formatPublicationCount(gallery.length)} <b>${char ? 128 + id.length * 17 : 64 + id.length * 9}</b> подписчиков</div></div><div class="rf-profile-grid">${gallery.map((src, index) => `<button type="button" data-rf-profile-photo="${index}" aria-label="Открыть фотографию ${index + 1}"><img src="${src}" alt=""></button>`).join('')}</div></section>`;
+    wrapper.querySelector('#rf-profile-back')?.addEventListener('click', onClose);
+    wrapper.querySelectorAll('[data-rf-profile-photo]').forEach(button => {
+        button.addEventListener('click', () => {
+            const photoIndex = Number(button.dataset.rfProfilePhoto);
+            const src = gallery[photoIndex];
+            if (src) openSocialImageViewer(wrapper, src, `${person.name} · фото ${photoIndex + 1}`);
+        });
+    });
+    stateManager.setFlag(`ravenFeedProfile_${id}`, true);
+}
+
+function openSocialImageViewer(wrapper, src, label) {
+    wrapper.querySelector('.rf-image-viewer')?.remove();
+
+    const viewer = document.createElement('div');
+    viewer.className = 'image-viewer-overlay rf-image-viewer';
+    viewer.setAttribute('role', 'dialog');
+    viewer.setAttribute('aria-label', label);
+    viewer.innerHTML = `
+        <button class="image-viewer-close" type="button" aria-label="Закрыть фотографию"><img class="ui-lucide is-light" src="src/assets/icons/lucide/x.svg" alt=""></button>
+        <div class="image-viewer-frame"><img src="${escapeHtml(src)}" alt="${escapeHtml(label)}"></div>
+    `;
+
+    const close = () => viewer.remove();
+    viewer.addEventListener('click', event => {
+        if (event.target === viewer) close();
+    });
+    viewer.querySelector('.image-viewer-close')?.addEventListener('click', close);
+    wrapper.appendChild(viewer);
+}
+
+function formatPublicationCount(count) {
+    const lastTwo = count % 100;
+    const last = count % 10;
+    if (lastTwo >= 11 && lastTwo <= 14) return 'публикаций';
+    if (last === 1) return 'публикация';
+    if (last >= 2 && last <= 4) return 'публикации';
+    return 'публикаций';
 }
 
 function getSocialPerson(id) { const char = getCharacter(id); if (char) return { name: char.name, handle: char.handle, avatar: char.avatarImage }; if (id === 'harper') return { name: 'Харпер Вэнс', handle: '@harper.v' }; if (id === 'player') return { name: stateManager.getPlayerName(), handle: `@${playerHandle()}` }; return PEOPLE[id] || { name: id, handle: `@${id}` }; }
