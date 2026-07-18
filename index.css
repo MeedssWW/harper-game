@@ -120,9 +120,13 @@
 .rf-actions img { width:20px; height:20px; opacity:.84; }
 .rf-like.liked { color:#ff536d; }
 .rf-like.liked img { filter:brightness(0) saturate(100%) invert(47%) sepia(95%) saturate(2341%) hue-rotate(321deg) brightness(103%); }
-.rf-comments { padding:5px 17px 0!important; display:grid; gap:8px; }
-.rf-comment { display:grid; grid-template-columns:max-content 1fr; gap:7px; align-items:start; font-size:12px; line-height:1.35; color:#b8c0cd; }
-.rf-comment button { border:0; padding:0; background:transparent; color:#91a9e9; font:800 12px/1.35 inherit; text-align:left; }
+.rf-comments { padding:7px 17px 0!important; display:grid; gap:11px; }
+.rf-comment { display:grid; grid-template-columns:29px minmax(0,1fr); gap:9px; align-items:start; font-size:12px; line-height:1.38; color:#b8c0cd; }
+.rf-comment-avatar { width:29px; height:29px; overflow:hidden; display:grid; place-items:center; border:1px solid #283244; border-radius:50%; padding:0; background:#151d29; color:#dbe5f7; font:800 11px/1 inherit; }
+.rf-comment-avatar img { width:100%; height:100%; display:block; object-fit:cover; }
+.rf-comment p { min-width:0; margin:1px 0 0; }
+.rf-comment-author { margin:0 6px 0 0; border:0; padding:0; background:transparent; color:#91a9e9; font:800 12px/1.38 inherit; text-align:left; }
+.rf-comment span { overflow-wrap:anywhere; }
 .rf-people { padding:23px 16px 40px; }
 .rf-people h2 { margin:0; font-size:22px; }
 .rf-people>p { margin:7px 0 20px; color:#778397; font-size:12px; }

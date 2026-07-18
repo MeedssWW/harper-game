@@ -13,8 +13,8 @@ The opening is about consequences, not a sudden new search for Harper. Ravenwood
 5. Ravenwood Truth posts a cropped photograph and claims that the player may have been seen at North Lot.
 6. June Pak recognises the old school match and contacts the player through RavenFeed requests. She finds the full two-year-old post, proving that the distant person is not the player.
 7. Ravenwood Truth removes the North Lot publication without explaining the false claim.
-8. Detective Daniel Reed contacts the player through the phone number Derek already gave police. His account is a verified service contact, not a RavenFeed direct message.
-9. The player may disclose the external session and Unknown, disclose only the access log, withhold details or defer the call.
+8. Detective Daniel Reed contacts the player through the phone number Derek already gave police. His account is a verified service chat in Messenger, not a RavenFeed direct message.
+9. Reed records the player's statement in writing. The player may disclose the external session and Unknown, disclose only the access log or withhold details.
 10. Derek reacts to the deleted post and may learn about Mason's threat only if the player tells him.
 11. Olivia shares a calmer city feed to give the player and the episode a short ordinary-life pause.
 
@@ -32,7 +32,7 @@ The opening is about consequences, not a sudden new search for Harper. Ravenwood
 - The public response is preserved in the framing post; silence leaves no player comment.
 - Blocking Mason prevents further private messages from him. Asking Derek to intervene can create a later public conflict.
 - RavenFeed request replies are stored separately for Nate, Noah and June.
-- The police call records whether the player confirmed the basic statement, disclosed the stolen photo, named Unknown or withheld details.
+- The police chat records whether the player confirmed the basic statement, disclosed the stolen photo, named Unknown or withheld details.
 - Olivia's city-guide response can increase trust but does not block the route.
 
 ## Visual assets

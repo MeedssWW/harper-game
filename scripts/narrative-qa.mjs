@@ -185,11 +185,14 @@ for (const scenario of scenarios) {
 
 const chapter2Scenarios = [
   {
-    name: 'резко отвечает Мейсону и говорит полиции всё',
+    name: 'резко отвечает Мейсону и рассказывает следователю всё',
     choices: {
       ep2_mason_confronts: 0,
       ep2_mason_threat: 0,
       ep2_police_contact: 0,
+      ep2_police_statement: 0,
+      ep2_police_photo: 0,
+      ep2_police_unknown: 0,
       ep2_derek_checks_in: 0,
       ep2_derek_mason: 1,
       ep2_derek_truth_context: 1,
@@ -197,10 +200,13 @@ const chapter2Scenarios = [
     }
   },
   {
-    name: 'блокирует Мейсона и откладывает звонок',
+    name: 'блокирует Мейсона и скрывает детали взлома',
     choices: {
       ep2_mason_confronts: 3,
       ep2_police_contact: 2,
+      ep2_police_statement: 1,
+      ep2_police_photo: 2,
+      ep2_police_unknown: 2,
       ep2_derek_checks_in: 2,
       ep2_derek_truth_context: 0,
       ep2_olivia_city_break: 2
@@ -212,7 +218,9 @@ const chapter2Scenarios = [
       ep2_mason_confronts: 2,
       ep2_mason_threat: 2,
       ep2_police_contact: 1,
-      ep2_police_status: 0,
+      ep2_police_statement: 2,
+      ep2_police_photo: 1,
+      ep2_police_unknown: 1,
       ep2_derek_checks_in: 1,
       ep2_derek_truth_context: 2,
       ep2_olivia_city_break: 1
@@ -224,11 +232,12 @@ for (const scenario of chapter2Scenarios) {
   const result = simulateChapter2(scenario);
   assert(result.completed.has('ep2_olivia_city_break'), `Второй эпизод, маршрут «${scenario.name}», не дошёл до Оливии.`);
   assert(result.flags.episode2OpeningComplete === true, `Второй эпизод, маршрут «${scenario.name}», не завершил вступление.`);
+  assert(result.flags.policeChatCompleted === true, `Второй эпизод, маршрут «${scenario.name}», не завершил переписку со следователем.`);
   assert(!result.unlockedChats.has('group_main'), `Во втором эпизоде маршрут «${scenario.name}» снова открыл «Семеро».`);
 }
 
 const chapter2Text = JSON.stringify(chapter2Beats).toLowerCase();
-for (const unwanted of ['сохрани оригинал', 'покажи оригинал', 'этот чат увидит полиция']) {
+for (const unwanted of ['сохрани оригинал', 'покажи оригинал', 'этот чат увидит полиция', 'принять звонок', 'сейчас наберу']) {
   assert(!chapter2Text.includes(unwanted), `Во втором эпизоде осталась неестественная формулировка: ${unwanted}.`);
 }
 

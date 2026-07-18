@@ -139,50 +139,157 @@ export const chapter2OpeningBeats = [
       { type: 'system', text: 'Подтверждённый служебный контакт.', delay: 350 },
       say('detective', 'Здравствуйте, {player}. Меня зовут Дэниел Рид, я занимаюсь делом Харпер Вэнс.'),
       say('detective', 'Ваш номер нам передал Дерек Миллер.'),
-      say('detective', 'Нужно поговорить о сообщении с телефона Харпер и о сегодняшней публикации. Когда вам будет удобно принять звонок?'),
+      say('detective', 'Мне нужно уточнить несколько вещей по сообщению с телефона Харпер и сегодняшней публикации.'),
       { type: 'choice', options: [
-        choice('Можете звонить сейчас.', 'ep2_police_call_now', { setFlag: 'policeCallRequested' }),
+        choice('Хорошо. Спрашивайте.', 'ep2_police_ready'),
         choice('Сначала скажите, я в чём-то подозреваюсь?', 'ep2_police_status'),
-        choice('Сейчас не могу. Напишите позже.', 'ep2_police_defer', { setFlag: 'policeCallDeferred' })
+        choice('Я уже всё объяснял Дереку.', 'ep2_police_already_told')
       ] }
     ]
+  },
+  {
+    id: 'ep2_police_ready',
+    chat: 'private_detective',
+    trigger: 'choice:ep2_police_contact:0',
+    messages: [say('detective', 'Хорошо.')]
   },
   {
     id: 'ep2_police_status',
     chat: 'private_detective',
     trigger: 'choice:ep2_police_contact:1',
     messages: [
-      say('detective', 'Нет. Сейчас мы просто проверяем, почему ваш номер отправили с телефона Харпер.'),
-      say('detective', 'И откуда Ravenwood Truth получил вашу фотографию.'),
+      say('detective', 'Нет. Пока мы просто проверяем, почему ваш номер отправили с телефона Харпер.'),
+      say('detective', 'И откуда Ravenwood Truth получил вашу фотографию.')
+    ]
+  },
+  {
+    id: 'ep2_police_already_told',
+    chat: 'private_detective',
+    trigger: 'choice:ep2_police_contact:2',
+    messages: [
+      say('detective', 'Я видел сообщения, которые передал Дерек.'),
+      say('detective', 'Но мне нужны ваши ответы, а не его пересказ.')
+    ]
+  },
+  {
+    id: 'ep2_police_statement',
+    chat: 'private_detective',
+    trigger: 'after:ep2_police_ready|ep2_police_status|ep2_police_already_told',
+    messages: [
+      say('detective', 'Тогда начнём с главного.'),
+      say('detective', 'Вы подтверждаете, что никогда не были в Рейвенвуде и раньше не общались с Харпер Вэнс?'),
       { type: 'choice', options: [
-        choice('Ладно. Звоните.', 'ep2_police_call_now', { setFlag: 'policeCallRequested' }),
-        choice('Тогда позже. Сейчас не могу говорить.', 'ep2_police_defer', { setFlag: 'policeCallDeferred' })
+        choice('Да. Я никогда там не был и Харпер не знаю.', 'ep2_police_statement_plain', { setFlag: 'policeStatementConfirmed' }),
+        choice('Да. Уже не знаю, как ещё это повторить.', 'ep2_police_statement_tired', { setFlag: 'policeStatementConfirmed' }),
+        choice('Если бы я её знал, я бы так и сказал.', 'ep2_police_statement_direct', { setFlag: 'policeStatementConfirmed' })
       ] }
     ]
   },
   {
-    id: 'ep2_police_call_now',
+    id: 'ep2_police_statement_plain',
     chat: 'private_detective',
-    trigger: 'flag:policeCallRequested',
+    trigger: 'choice:ep2_police_statement:0',
+    messages: [say('detective', 'Принял.')]
+  },
+  {
+    id: 'ep2_police_statement_tired',
+    chat: 'private_detective',
+    trigger: 'choice:ep2_police_statement:1',
+    messages: [say('detective', 'Понимаю. Я должен зафиксировать это отдельно.')]
+  },
+  {
+    id: 'ep2_police_statement_direct',
+    chat: 'private_detective',
+    trigger: 'choice:ep2_police_statement:2',
+    messages: [say('detective', 'Хорошо. Я это зафиксировал.')]
+  },
+  {
+    id: 'ep2_police_photo',
+    chat: 'private_detective',
+    trigger: 'after:ep2_police_statement_plain|ep2_police_statement_tired|ep2_police_statement_direct',
     messages: [
-      say('detective', 'Хорошо. Сейчас наберу.'),
-      { type: 'pause', delay: 500 },
-      { type: 'navigate', screen: 'policeCall', delay: 400 },
-      { type: 'wait_flag', flag: 'policeCallCompleted', delay: 300 }
+      say('detective', 'Теперь про фотографию из публикации.'),
+      say('detective', 'Её сделал ваш телефон?'),
+      { type: 'choice', options: [
+        choice('Да. Камера включилась во время взлома.', 'ep2_police_photo_hack', { setFlag: 'policeKnowsPhotoWasStolen' }),
+        choice('Да, но я никому её не отправлял.', 'ep2_police_photo_not_sent', { setFlag: 'policeKnowsPhotoWasStolen' }),
+        choice('Я пока не хочу об этом говорить.', 'ep2_police_photo_withheld', { setFlag: 'playerWithheldHackFromPolice' })
+      ] }
     ]
   },
   {
-    id: 'ep2_police_defer',
+    id: 'ep2_police_photo_hack',
     chat: 'private_detective',
-    trigger: 'flag:policeCallDeferred',
-    setFlags: { policeCallDeferred: true },
-    messages: [say('detective', 'Хорошо. Напишите сюда, когда сможете говорить.')]
+    trigger: 'choice:ep2_police_photo:0',
+    messages: [
+      say('detective', 'Понял.'),
+      say('detective', 'После взлома вам кто-нибудь писал?')
+    ]
+  },
+  {
+    id: 'ep2_police_photo_not_sent',
+    chat: 'private_detective',
+    trigger: 'choice:ep2_police_photo:1',
+    messages: [
+      say('detective', 'Хорошо.'),
+      say('detective', 'После этого вам кто-нибудь писал?')
+    ]
+  },
+  {
+    id: 'ep2_police_photo_withheld',
+    chat: 'private_detective',
+    trigger: 'choice:ep2_police_photo:2',
+    messages: [
+      say('detective', 'Хорошо. Отмечу, что вы не захотели обсуждать обстоятельства.'),
+      say('detective', 'После этого вам кто-нибудь писал?')
+    ]
+  },
+  {
+    id: 'ep2_police_unknown',
+    chat: 'private_detective',
+    trigger: 'after:ep2_police_photo_hack|ep2_police_photo_not_sent|ep2_police_photo_withheld',
+    messages: [
+      { type: 'choice', options: [
+        choice('Да. Неизвестный контакт сказал, что остановил подключение.', 'ep2_police_unknown_told', { setFlag: 'unknownReportedToPolice' }),
+        choice('Я сам увидел чужое подключение в журнале.', 'ep2_police_log_told', { setFlag: 'unknownHiddenFromPolice' }),
+        choice('Об этом я тоже пока не хочу говорить.', 'ep2_police_unknown_withheld', { setFlag: 'unknownHiddenFromPolice' })
+      ] }
+    ]
+  },
+  {
+    id: 'ep2_police_unknown_told',
+    chat: 'private_detective',
+    trigger: 'choice:ep2_police_unknown:0',
+    messages: [say('detective', 'Пришлите сюда скриншоты переписки с этим контактом. Ничего не удаляйте.')]
+  },
+  {
+    id: 'ep2_police_log_told',
+    chat: 'private_detective',
+    trigger: 'choice:ep2_police_unknown:1',
+    messages: [say('detective', 'Пришлите журнал подключений. Желательно без обрезки.')]
+  },
+  {
+    id: 'ep2_police_unknown_withheld',
+    chat: 'private_detective',
+    trigger: 'choice:ep2_police_unknown:2',
+    messages: [say('detective', 'Понял. Если передумаете, напишите сюда.')]
+  },
+  {
+    id: 'ep2_police_finish',
+    chat: 'private_detective',
+    trigger: 'after:ep2_police_unknown_told|ep2_police_log_told|ep2_police_unknown_withheld',
+    setFlags: { policeChatCompleted: true },
+    messages: [
+      say('detective', 'На этом пока всё.'),
+      say('detective', 'Если Ravenwood Truth снова что-нибудь выложит или вам напишут с угрозами, сохраните сообщения и сообщите мне.'),
+      { type: 'system', text: 'Дэниел Рид не в сети.', delay: 420, characterStatus: { id: 'detective', online: false } }
+    ]
   },
 
   {
     id: 'ep2_derek_checks_in',
     chat: 'private_derek',
-    trigger: 'after:ep2_police_call_now|ep2_police_defer',
+    trigger: 'after:ep2_police_finish',
     messages: [
       { type: 'pause', delay: 850 },
       { type: 'system', text: 'Дерек в сети.', delay: 350, characterStatus: { id: 'derek', online: true } },

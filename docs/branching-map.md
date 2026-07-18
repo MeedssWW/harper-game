@@ -42,7 +42,7 @@ All four QA routes must reach the same final publication without reactivating «
 
 # Episode 2 opening branching map
 
-`RavenFeed public response → Mason threat/block → North Lot false post → June request/full image → verified police contact/call or defer → Derek reaction → Olivia city break`
+`RavenFeed public response → Mason threat/block → North Lot false post → June request/full image → verified police chat → Derek reaction → Olivia city break`
 
 ## Public response
 
@@ -66,9 +66,9 @@ All four QA routes must reach the same final publication without reactivating «
 
 ## Police
 
-- `policeCallDeferred`: the player postpones or declines the call.
+- `policeChatCompleted`: the written service conversation reaches Reed's closing instructions.
 - `policeStatementConfirmed`: the player formally repeats that they have never visited Ravenwood and did not know Harper.
-- `policeKnowsPhotoWasStolen`: the player explains that the phone created the photo during the external session.
+- `policeKnowsPhotoWasStolen`: the player explains in writing that the phone created the photo during the external session.
 - `unknownReportedToPolice`: the player tells Reed about Unknown.
-- `unknownHiddenFromPolice`: the player describes only the visible access log.
-- `playerWithheldHackFromPolice`: the player refuses to explain the compromise during the call.
+- `unknownHiddenFromPolice`: the player describes only the visible access log or withholds Unknown.
+- `playerWithheldHackFromPolice`: the player refuses to explain the compromise in chat.
