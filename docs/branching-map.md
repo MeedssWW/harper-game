@@ -72,6 +72,9 @@ All four QA routes must reach the same final publication without reactivating «
 - `unknownReportedToPolice`: the player tells Reed about Unknown.
 - `unknownHiddenFromPolice`: the player describes only the visible access log or withholds Unknown.
 - `playerWithheldHackFromPolice`: the player refuses to explain the compromise in chat.
+- `policeReceivedUnknownScreenshots`: Reed received three screenshots of the Unknown chat.
+- `policeReceivedAccessLog`: Reed received the full external-session log.
+- `policeEvidenceDeferred`: the player agreed to send the requested material later.
 
 ## Olivia's Ravenwood walk
 

@@ -35,6 +35,7 @@ The opening is about consequences, not a sudden new search for Harper. Ravenwood
 - Blocking Mason prevents further private messages from him. Asking Derek to intervene can create a later public conflict.
 - RavenFeed request replies are stored separately for Nate, Noah and June.
 - The police chat records whether the player confirmed the basic statement, disclosed the stolen photo, named Unknown or withheld details.
+- If Reed requests screenshots or the access log, the player explicitly sends the attachment or records that it will be sent later; the paperclip is never required to advance the scene.
 - Olivia's reaction, the chosen walk and the closing response are remembered. Choosing her personal place or responding warmly can increase trust but no route blocks the story.
 - `ep2SawCrossingSeven` means only that the player has seen the crossing in Olivia's photograph. It is not evidence and Olivia does not connect it to any investigation.
 

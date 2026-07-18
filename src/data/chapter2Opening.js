@@ -260,13 +260,25 @@ export const chapter2OpeningBeats = [
     id: 'ep2_police_unknown_told',
     chat: 'private_detective',
     trigger: 'choice:ep2_police_unknown:0',
-    messages: [say('detective', 'Пришлите сюда скриншоты переписки с этим контактом. Ничего не удаляйте.')]
+    messages: [
+      say('detective', 'Пришлите сюда скриншоты переписки с этим контактом. Ничего не удаляйте.'),
+      { type: 'choice', options: [
+        choice('Отправить скриншоты сейчас.', 'ep2_police_unknown_screens_sent', { setFlag: 'policeReceivedUnknownScreenshots' }),
+        choice('Сейчас не могу. Отправлю позже.', 'ep2_police_unknown_screens_later', { setFlag: 'policeEvidenceDeferred' })
+      ] }
+    ]
   },
   {
     id: 'ep2_police_log_told',
     chat: 'private_detective',
     trigger: 'choice:ep2_police_unknown:1',
-    messages: [say('detective', 'Пришлите журнал подключений. Желательно без обрезки.')]
+    messages: [
+      say('detective', 'Пришлите журнал подключений. Желательно без обрезки.'),
+      { type: 'choice', options: [
+        choice('Отправить журнал подключений.', 'ep2_police_log_sent', { setFlag: 'policeReceivedAccessLog' }),
+        choice('Отправлю позже.', 'ep2_police_log_later', { setFlag: 'policeEvidenceDeferred' })
+      ] }
+    ]
   },
   {
     id: 'ep2_police_unknown_withheld',
@@ -275,9 +287,39 @@ export const chapter2OpeningBeats = [
     messages: [say('detective', 'Понял. Если передумаете, напишите сюда.')]
   },
   {
+    id: 'ep2_police_unknown_screens_sent',
+    chat: 'private_detective',
+    trigger: 'choice:ep2_police_unknown_told:0',
+    messages: [
+      { from: 'player', type: 'document', title: 'Переписка с Неизвестным', subtitle: '3 снимка экрана · отправлено', text: 'Скриншоты переписки', delay: 550 },
+      say('detective', 'Получил. Я сохраню их вместе с вашим объяснением.')
+    ]
+  },
+  {
+    id: 'ep2_police_unknown_screens_later',
+    chat: 'private_detective',
+    trigger: 'choice:ep2_police_unknown_told:1',
+    messages: [say('detective', 'Хорошо. Отправьте, когда сможете, и не редактируйте изображения.')]
+  },
+  {
+    id: 'ep2_police_log_sent',
+    chat: 'private_detective',
+    trigger: 'choice:ep2_police_log_told:0',
+    messages: [
+      { from: 'player', type: 'document', title: 'Журнал подключений', subtitle: 'Полный снимок · отправлено', text: 'Журнал внешнего сеанса', delay: 550 },
+      say('detective', 'Получил. Время подключения и адрес сервера видны.')
+    ]
+  },
+  {
+    id: 'ep2_police_log_later',
+    chat: 'private_detective',
+    trigger: 'choice:ep2_police_log_told:1',
+    messages: [say('detective', 'Хорошо. Тогда пришлите полный снимок позже.')]
+  },
+  {
     id: 'ep2_police_finish',
     chat: 'private_detective',
-    trigger: 'after:ep2_police_unknown_told|ep2_police_log_told|ep2_police_unknown_withheld',
+    trigger: 'after:ep2_police_unknown_screens_sent|ep2_police_unknown_screens_later|ep2_police_log_sent|ep2_police_log_later|ep2_police_unknown_withheld',
     setFlags: { policeChatCompleted: true },
     messages: [
       say('detective', 'На этом пока всё.'),

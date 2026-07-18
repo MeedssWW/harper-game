@@ -479,6 +479,12 @@ export class ChatView {
         });
 
         wrapper.querySelectorAll('.message-document, .message-app-card').forEach(doc => {
+            if (!message.documentId) {
+                doc.classList.add('is-static');
+                doc.setAttribute('aria-disabled', 'true');
+                doc.setAttribute('tabindex', '-1');
+                return;
+            }
             doc.addEventListener('click', () => {
                 if (this.onOpenDocument) {
                     this.onOpenDocument(message);
