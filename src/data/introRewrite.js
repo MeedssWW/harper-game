@@ -70,8 +70,8 @@ export const introRewriteBeats = [
       { from: "derek", text: "А сегодня с её номера пришло сообщение, где был только твой номер.", delay: 1200 },
       { from: "derek", text: "Ни текста, ничего.", delay: 750 },
       { type: "choice", options: [
-        { text: "Подожди... Я вообще впервые слышу о ней.", loyalty: {}, next: "intro_derek_error_answer" },
-        { text: "Похоже на какую-то ошибку. Мы с ней даже не знакомы.", loyalty: {}, next: "intro_derek_sender_uncertain" },
+        { text: "Подожди, я вообще впервые слышу о ней.", loyalty: {}, next: "intro_derek_error_answer" },
+        { text: "Похоже на какую-то ошибку, мы с ней даже не знакомы.", loyalty: {}, next: "intro_derek_sender_uncertain" },
         { text: "Честно, я даже не знаю, что тебе на это ответить.", loyalty: {}, next: "intro_derek_phone_other" }
       ] }
     ]
@@ -257,7 +257,7 @@ export const introRewriteBeats = [
       { from: "derek", text: "Да.", delay: 600 },
       { from: "derek", text: "Именно он.", delay: 650 },
       { from: "narrator", text: "Дерек отправил снимок экрана.", delay: 700 },
-      { from: "narrator", text: "На снимке — сообщение с номера Харпер. Внутри только номер {player}.", delay: 850 },
+      { from: "narrator", text: "На снимке сообщение с номера Харпер, и в нём только номер {player}.", delay: 850 },
       { from: "mia", text: "И он правда ничего не знает?", delay: 900 },
       { from: "derek", text: "Так говорит.", delay: 750 },
       { type: "system", text: "Оливия в сети.", delay: 450, characterStatus: { id: "olivia", online: true } },

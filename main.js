@@ -3,20 +3,20 @@
 // ============================================
 
 import { stateManager } from './src/engine/stateManager.js';
-import { storyEngine } from './src/engine/storyEngine.js?v=121';
+import { storyEngine } from './src/engine/storyEngine.js?v=122';
 import { screenManager } from './src/screens/screenManager.js';
 import { renderLockScreen } from './src/screens/lockScreen.js?v=70';
 import { renderBootScreen } from './src/screens/bootScreen.js?v=125';
 import { renderNameScreen } from './src/screens/nameScreen.js?v=126';
 import { renderHomeScreen } from './src/screens/homeScreen.js?v=140';
-import { CHATS, renderChatList } from './src/screens/messenger/chatList.js?v=127';
-import { ChatView } from './src/screens/messenger/chatView.js?v=127';
+import { CHATS, renderChatList } from './src/screens/messenger/chatList.js?v=128';
+import { ChatView } from './src/screens/messenger/chatView.js?v=128';
 import { renderTransitionScreen } from './src/screens/transitionScreen.js?v=70';
 import { renderContactList, renderContactProfile } from './src/screens/contacts/contacts.js?v=126';
 import { renderGallery } from './src/screens/gallery/gallery.js?v=126';
 import { renderNotes } from './src/screens/notes/notes.js?v=126';
 import { renderMap } from './src/screens/map/map.js?v=126';
-import { renderMiaPhone } from './src/screens/miaPhone/miaPhone.js?v=143';
+import { renderMiaPhone } from './src/screens/miaPhone/miaPhone.js?v=144';
 import { renderBrowser } from './src/screens/browser/browser.js?v=126';
 import { renderSocial } from './src/screens/social/social.js?v=146';
 import { renderClues } from './src/screens/clues/clues.js?v=126';
@@ -29,8 +29,8 @@ import { renderPoliceDecision } from './src/screens/policeDecision/policeDecisio
 import { renderChapterEnd } from './src/screens/chapterEnd/chapterEnd.js?v=141';
 import { audioEngine } from './src/engine/audioEngine.js?v=124';
 import { characters } from './src/data/characters.js?v=124';
-import { chapter1 } from './src/data/chapter1.js?v=146';
-import { chapter2 } from './src/data/chapter2Opening.js?v=3';
+import { chapter1 } from './src/data/chapter1.js?v=147';
+import { chapter2 } from './src/data/chapter2Opening.js?v=4';
 
 // ---- App State ----
 let activeChatView = null;

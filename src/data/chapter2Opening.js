@@ -315,7 +315,7 @@ export const chapter2OpeningBeats = [
       ] }
     ]
   },
-  { id: 'ep2_derek_mason_leave', chat: 'private_derek', trigger: 'choice:ep2_derek_mason:0', setFlags: { derekRespectedMasonBoundary: true }, messages: [say('derek', 'Ладно. Не полезу.'), say('derek', 'Если снова начнёт — просто не отвечай ему.')] },
+  { id: 'ep2_derek_mason_leave', chat: 'private_derek', trigger: 'choice:ep2_derek_mason:0', setFlags: { derekRespectedMasonBoundary: true }, messages: [say('derek', 'Ладно, не полезу.'), say('derek', 'Если снова начнёт, просто не отвечай ему.')] },
   { id: 'ep2_derek_mason_talk', chat: 'private_derek', trigger: 'choice:ep2_derek_mason:1', setFlags: { derekWillConfrontMason: true }, messages: [say('derek', 'Хорошо.'), say('derek', 'Но не обещаю, что он меня услышит.')] },
   { id: 'ep2_derek_city', chat: 'private_derek', trigger: 'choice:ep2_derek_checks_in:1', messages: [say('derek', 'Да уж.'), say('derek', 'Ты здесь никогда не был, но тебя уже успели «увидеть» у North Lot.')] },
   { id: 'ep2_derek_not_now', chat: 'private_derek', trigger: 'choice:ep2_derek_checks_in:2', messages: [say('derek', 'Понял.'), say('derek', 'Просто знай, я в ту фотографию не верю.')] },
@@ -341,24 +341,203 @@ export const chapter2OpeningBeats = [
     id: 'ep2_olivia_city_break',
     chat: 'private_olivia',
     trigger: 'after:ep2_derek_truth_scheme|ep2_derek_truth_target|ep2_derek_truth_belief',
-    setFlags: { ep2CityGuideLive: true },
     messages: [
       { type: 'pause', delay: 950 },
       { type: 'system', text: 'Оливия в сети.', delay: 350, characterStatus: { id: 'olivia', online: true } },
       say('olivia', 'Вижу, пост про North Lot уже удалили.'),
-      say('olivia', 'Не знаю, кто им написал, но хоть одна ложь сегодня прожила недолго.'),
-      say('olivia', 'И раз тебе уже приписали поездку в Рейвенвуд, держи нормальную версию города.'),
-      { from: 'olivia', type: 'app', title: 'RavenFeed', subtitle: 'Люди и места без Ravenwood Truth', text: 'Открыть городскую ленту', documentId: 'ravenfeed_city_guide', delay: 650 },
+      say('olivia', 'Извиняться они, конечно, не стали.'),
+      say('olivia', 'А комментарии под первым постом так и висят.'),
+      say('olivia', 'Ты как?'),
       { type: 'choice', options: [
-        choice('Поздно. Я уже знаю про Пончика.', 'ep2_olivia_dog'),
-        choice('Только без анонимных разоблачений.', 'ep2_olivia_no_truth'),
-        choice('Спасибо. Сейчас посмотрю.', 'ep2_olivia_thanks', { trust: { oliviaTrust: 1 } })
+        choice('Злюсь, потому что они выложили моё лицо, а потом ещё придумали, что я был у вас.', 'ep2_olivia_reaction_angry'),
+        choice('Если честно, я уже не понимаю, чему удивляться.', 'ep2_olivia_reaction_tired'),
+        choice('Всё отлично, осталось обвинить меня в краже городской вывески.', 'ep2_olivia_reaction_joke')
       ] }
     ]
   },
-  { id: 'ep2_olivia_dog', chat: 'private_olivia', trigger: 'choice:ep2_olivia_city_break:0', setFlags: { episode2OpeningComplete: true }, messages: [say('olivia', 'Тогда главное ты уже видел.'), say('olivia', 'Остальное можно не открывать.')] },
-  { id: 'ep2_olivia_no_truth', chat: 'private_olivia', trigger: 'choice:ep2_olivia_city_break:1', setFlags: { episode2OpeningComplete: true }, messages: [say('olivia', 'Обещаю.'), say('olivia', 'Там максимум кофе, собака и вечные жалобы на N7.')] },
-  { id: 'ep2_olivia_thanks', chat: 'private_olivia', trigger: 'choice:ep2_olivia_city_break:2', setFlags: { episode2OpeningComplete: true }, messages: [say('olivia', 'Не за что.'), say('olivia', 'После сегодняшнего тебе пригодится что-нибудь обычное.')] }
+  {
+    id: 'ep2_olivia_reaction_angry',
+    chat: 'private_olivia',
+    trigger: 'choice:ep2_olivia_city_break:0',
+    messages: [
+      say('olivia', 'Я бы тоже злилась, особенно потому, что они просто удалили пост и сделали вид, что его не было.')
+    ]
+  },
+  {
+    id: 'ep2_olivia_reaction_tired',
+    chat: 'private_olivia',
+    trigger: 'choice:ep2_olivia_city_break:1',
+    messages: [
+      say('olivia', 'Понимаю, на тебя тут уже свалилось больше, чем на большинство людей здесь за год.')
+    ]
+  },
+  {
+    id: 'ep2_olivia_reaction_joke',
+    chat: 'private_olivia',
+    trigger: 'choice:ep2_olivia_city_break:2',
+    messages: [
+      say('olivia', 'Только не подсказывай им, у нас как раз недавно пропала табличка с автобусной остановки.')
+    ]
+  },
+  {
+    id: 'ep2_olivia_walk_offer',
+    chat: 'private_olivia',
+    trigger: 'after:ep2_olivia_reaction_angry|ep2_olivia_reaction_tired|ep2_olivia_reaction_joke',
+    messages: [
+      say('olivia', 'Я сейчас вышла пройтись, потому что дома уже надоело сидеть.'),
+      say('olivia', 'Ты ведь Рейвенвуд видел только в RavenFeed.'),
+      say('olivia', 'Могу показать, как он выглядит без Ravenwood Truth и чужих комментариев.'),
+      { type: 'choice', options: [
+        choice('Давай, хочу увидеть хоть что-нибудь нормальное.', 'ep2_olivia_walk_normal'),
+        choice('Показывай, а то пока ваш город состоит из одних скандалов.', 'ep2_olivia_walk_scandals'),
+        choice('Если это попытка меня отвлечь, то она работает.', 'ep2_olivia_walk_distraction', { trust: { oliviaTrust: 1 } })
+      ] }
+    ]
+  },
+  {
+    id: 'ep2_olivia_walk_normal',
+    chat: 'private_olivia',
+    trigger: 'choice:ep2_olivia_walk_offer:0',
+    messages: [say('olivia', 'Тогда начнём с центра.')]
+  },
+  {
+    id: 'ep2_olivia_walk_scandals',
+    chat: 'private_olivia',
+    trigger: 'choice:ep2_olivia_walk_offer:1',
+    messages: [say('olivia', 'Не только из скандалов, хотя иногда кажется, что именно из них.')]
+  },
+  {
+    id: 'ep2_olivia_walk_distraction',
+    chat: 'private_olivia',
+    trigger: 'choice:ep2_olivia_walk_offer:2',
+    messages: [say('olivia', 'Я на это и рассчитывала.')]
+  },
+  {
+    id: 'ep2_olivia_river_street',
+    chat: 'private_olivia',
+    trigger: 'after:ep2_olivia_walk_normal|ep2_olivia_walk_scandals|ep2_olivia_walk_distraction',
+    messages: [
+      { from: 'olivia', type: 'image', src: 'src/assets/story/ravenwood_walk/river_street_orpheum.webp', caption: 'River Street · Orpheum', delay: 700 },
+      say('olivia', 'Это River Street, здесь у нас центр.'),
+      say('olivia', 'И да, это почти весь центр.'),
+      say('olivia', 'А это Orpheum, он закрыт столько, что я вообще не помню его открытым.'),
+      { type: 'choice', options: [
+        choice('По фото город выглядит спокойнее, чем по комментариям.', 'ep2_olivia_center_calm'),
+        choice('И вы всё это называете центром?', 'ep2_olivia_center_small'),
+        choice('У вас правда всё мокрое.', 'ep2_olivia_center_rain')
+      ] }
+    ]
+  },
+  {
+    id: 'ep2_olivia_center_calm',
+    chat: 'private_olivia',
+    trigger: 'choice:ep2_olivia_river_street:0',
+    messages: [say('olivia', 'Потому что на фотографии никто не пишет.')]
+  },
+  {
+    id: 'ep2_olivia_center_small',
+    chat: 'private_olivia',
+    trigger: 'choice:ep2_olivia_river_street:1',
+    messages: [say('olivia', 'Не начинай, у нас есть ещё две улицы.')]
+  },
+  {
+    id: 'ep2_olivia_center_rain',
+    chat: 'private_olivia',
+    trigger: 'choice:ep2_olivia_river_street:2',
+    messages: [say('olivia', 'У нас дождь обычно ненадолго прекращается.')]
+  },
+  {
+    id: 'ep2_olivia_route_choice',
+    chat: 'private_olivia',
+    trigger: 'after:ep2_olivia_center_calm|ep2_olivia_center_small|ep2_olivia_center_rain',
+    messages: [
+      say('olivia', 'Я дошла до перекрёстка и могу свернуть к Riverwalk, к старому переезду или пройти через обычный жилой квартал.'),
+      say('olivia', 'Выбирай.'),
+      { type: 'choice', options: [
+        choice('Покажи место, которое нравится тебе.', 'ep2_olivia_route_favorite', { trust: { oliviaTrust: 1 } }),
+        choice('Давай старый переезд, звучит хотя бы странно.', 'ep2_olivia_route_crossing'),
+        choice('Покажи обычный район без достопримечательностей.', 'ep2_olivia_route_ordinary')
+      ] }
+    ]
+  },
+  {
+    id: 'ep2_olivia_route_favorite',
+    chat: 'private_olivia',
+    trigger: 'choice:ep2_olivia_route_choice:0',
+    setFlags: { ep2OliviaRouteFavorite: true },
+    messages: [
+      { from: 'olivia', type: 'image', src: 'src/assets/story/ravenwood_walk/riverwalk_steps.webp', caption: 'Riverwalk', delay: 700 },
+      say('olivia', 'Это ступени у Riverwalk, я прихожу сюда, когда дома уже не сидится.'),
+      say('olivia', 'Летом здесь шумно, а после дождя почти никого.')
+    ]
+  },
+  {
+    id: 'ep2_olivia_route_crossing',
+    chat: 'private_olivia',
+    trigger: 'choice:ep2_olivia_route_choice:1',
+    setFlags: { ep2SawCrossingSeven: true },
+    messages: [
+      { from: 'olivia', type: 'image', src: 'src/assets/story/ravenwood_walk/crossing_n7.webp', caption: 'Переезд N7', delay: 700 },
+      say('olivia', 'Это переезд номер семь, но все зовут его N7.'),
+      say('olivia', 'Поезда здесь проходят редко, но шлагбаум иногда закрывается просто так, по крайней мере, так все говорят.')
+    ]
+  },
+  {
+    id: 'ep2_olivia_route_ordinary',
+    chat: 'private_olivia',
+    trigger: 'choice:ep2_olivia_route_choice:2',
+    setFlags: { ep2OliviaRouteOrdinary: true },
+    messages: [
+      { from: 'olivia', type: 'image', src: 'src/assets/story/ravenwood_walk/ordinary_block.webp', caption: 'Maple Avenue', delay: 700 },
+      say('olivia', 'Вот обычный Рейвенвуд, здесь пекарня, прачечная и остановка, где автобус приходит когда хочет.'),
+      say('olivia', 'А те двое впереди уже минут пять обсуждают цену на кофе.')
+    ]
+  },
+  {
+    id: 'ep2_olivia_overlook',
+    chat: 'private_olivia',
+    trigger: 'after:ep2_olivia_route_favorite|ep2_olivia_route_crossing|ep2_olivia_route_ordinary',
+    setFlags: { ep2CityWalkCompleted: true },
+    messages: [
+      say('olivia', 'Я поднялась к старой смотровой.'),
+      { from: 'olivia', type: 'image', src: 'src/assets/story/ravenwood_walk/town_overlook.webp', caption: 'Рейвенвуд со старой смотровой', delay: 700 },
+      say('olivia', 'Отсюда почти весь город видно, внизу River Street, справа река, а пути уходят за холм.'),
+      say('olivia', 'Небольшой, да?'),
+      { type: 'choice', options: [
+        choice('Спасибо, теперь хотя бы понимаю, где вы все живёте.', 'ep2_olivia_walk_end_places', { trust: { oliviaTrust: 1 } }),
+        choice('Красиво, жаль, что познакомился с ним через весь этот бред.', 'ep2_olivia_walk_end_bad_start'),
+        choice('Ну всё, теперь я почти местный.', 'ep2_olivia_walk_end_local')
+      ] }
+    ]
+  },
+  {
+    id: 'ep2_olivia_walk_end_places',
+    chat: 'private_olivia',
+    trigger: 'choice:ep2_olivia_overlook:0',
+    messages: [say('olivia', 'Вот и хорошо, а то мы говорим названиями улиц, будто ты обязан их знать.')]
+  },
+  {
+    id: 'ep2_olivia_walk_end_bad_start',
+    chat: 'private_olivia',
+    trigger: 'choice:ep2_olivia_overlook:1',
+    messages: [say('olivia', 'Мне тоже жаль, но теперь ты видел хотя бы не только посты о себе.')]
+  },
+  {
+    id: 'ep2_olivia_walk_end_local',
+    chat: 'private_olivia',
+    trigger: 'choice:ep2_olivia_overlook:2',
+    messages: [say('olivia', 'Не спеши, тебя ещё не ругал водитель автобуса N4.')]
+  },
+  {
+    id: 'ep2_olivia_walk_close',
+    chat: 'private_olivia',
+    trigger: 'after:ep2_olivia_walk_end_places|ep2_olivia_walk_end_bad_start|ep2_olivia_walk_end_local',
+    setFlags: { episode2OpeningComplete: true },
+    messages: [
+      say('olivia', 'Я ещё немного пройдусь, а если Ravenwood Truth снова что-нибудь выложит, сначала напиши мне.'),
+      { type: 'system', text: 'Оливия не в сети.', delay: 420, characterStatus: { id: 'olivia', online: false } }
+    ]
+  }
 ];
 
 export const chapter2 = {

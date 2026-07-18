@@ -361,6 +361,7 @@ async function showCameraCapture(wrapper) {
                 <button type="button" id="camera-permission-btn">Разрешить для этой сцены</button>
                 <em id="camera-permission-hint" hidden>Камера недоступна. Можно сделать снимок системной камерой.</em>
                 <button type="button" id="camera-file-btn" hidden>Открыть системную камеру</button>
+                <button type="button" id="camera-skip-btn">Продолжить без камеры</button>
                 <input id="camera-file-input" type="file" accept="image/*" capture="user">
             </div>
         </section>
@@ -437,7 +438,8 @@ async function requestCameraStream(video) {
         throw new Error('camera api unavailable');
     }
 
-    const stream = await navigator.mediaDevices.getUserMedia({
+    let requestTimedOut = false;
+    const mediaRequest = navigator.mediaDevices.getUserMedia({
         video: {
             facingMode: 'user',
             width: { ideal: 720 },
@@ -445,6 +447,19 @@ async function requestCameraStream(video) {
         },
         audio: false
     });
+    const timeout = new Promise((_, reject) => {
+        setTimeout(() => {
+            requestTimedOut = true;
+            reject(new Error('camera permission timeout'));
+        }, 3500);
+    });
+    const stream = await Promise.race([mediaRequest, timeout]);
+
+    mediaRequest.then(lateStream => {
+        if (requestTimedOut && lateStream) {
+            lateStream.getTracks().forEach(track => track.stop());
+        }
+    }).catch(() => {});
 
     if (video && stream) {
         video.srcObject = stream;
@@ -460,6 +475,7 @@ function waitForManualCameraCapture(wrapper) {
     const panel = wrapper.querySelector('.camera-permission');
     const button = wrapper.querySelector('#camera-permission-btn');
     const fileButton = wrapper.querySelector('#camera-file-btn');
+    const skipButton = wrapper.querySelector('#camera-skip-btn');
     const hint = wrapper.querySelector('#camera-permission-hint');
     const input = wrapper.querySelector('#camera-file-input');
     const video = wrapper.querySelector('.camera-video');
@@ -495,6 +511,10 @@ function waitForManualCameraCapture(wrapper) {
 
         input?.addEventListener('change', () => finishWithFile(input.files?.[0]), { once: true });
         fileButton?.addEventListener('click', () => input?.click());
+        skipButton?.addEventListener('click', () => {
+            stateManager.setFlag('frontCameraCaptureMode', 'skipped');
+            resolve(false);
+        }, { once: true });
         button?.addEventListener('click', async () => {
             try {
                 const stream = await requestCameraStream(video);

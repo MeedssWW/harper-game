@@ -5,7 +5,7 @@
 import { stateManager } from '../../engine/stateManager.js';
 import { getCharacter, getCharacterColor } from '../../data/characters.js?v=124';
 import { CHATS, getActiveGroupMembers } from './chatList.js?v=127';
-import { storyEngine } from '../../engine/storyEngine.js?v=121';
+import { storyEngine } from '../../engine/storyEngine.js?v=122';
 
 export class ChatView {
     constructor(chatId, container, onBack, onOpenDocument = null) {
@@ -428,6 +428,7 @@ export class ChatView {
         }
 
         const isOutgoing = message.from === 'player' || message.from === 'gg';
+        const isNarratorRichCard = message.from === 'narrator';
         const char = isOutgoing ? null : getCharacter(message.from);
         const avatarBg = isOutgoing ? '#2a3f6f' : (getCharacterColor(message.from) || '#1f2937');
         const avatarText = isOutgoing
@@ -435,13 +436,15 @@ export class ChatView {
             : (char ? char.name.charAt(0) : '?');
         const senderColor = isOutgoing ? '' : this._getSenderColor(message.from);
 
-        let avatarHtml = `<div class="message-avatar-small" style="background:${avatarBg}" ${!isOutgoing && char ? `data-profile-character="${message.from}"` : ''}>${avatarText}</div>`;
+        let avatarHtml = isNarratorRichCard
+            ? ''
+            : `<div class="message-avatar-small" style="background:${avatarBg}" ${!isOutgoing && char ? `data-profile-character="${message.from}"` : ''}>${avatarText}</div>`;
         if (char && char.avatarImage && !this._shouldHideAvatar(message.from)) {
             avatarHtml = `<img class="message-avatar-small message-avatar-img" src="${char.avatarImage}" alt="${char.name}" data-profile-character="${message.from}" />`;
         }
 
         const wrapper = document.createElement('div');
-        wrapper.className = `message-wrapper ${isOutgoing ? 'outgoing' : 'incoming'} message-type-${message.type || 'text'}`;
+        wrapper.className = `message-wrapper ${isOutgoing ? 'outgoing' : 'incoming'} message-type-${message.type || 'text'}${isNarratorRichCard ? ' narrator-rich-card' : ''}`;
         wrapper.dataset.sender = message.from || '';
         const previousMessage = this.messagesEl.querySelector('.message-wrapper:last-of-type');
         if (previousMessage?.dataset.sender === wrapper.dataset.sender) {

@@ -295,6 +295,21 @@ class StateManager {
             if (!Array.isArray(history)) continue;
 
             for (const message of history) {
+                // Builds before v18 flattened narrator-owned app cards into plain
+                // narrator text. Restore the attachment metadata so an existing
+                // save paused on wait_flag can continue after a page refresh.
+                if (
+                    message?.type === 'narrator' &&
+                    /^ep1_backup_decline(?:_unsure)?_msg_/.test(message.id || '') &&
+                    message.text === 'Открыть вложение'
+                ) {
+                    message.type = 'app';
+                    message.from = 'narrator';
+                    message.title = 'VID_1842.mp4';
+                    message.subtitle = 'Отправитель не определён · внешний сервер';
+                    message.documentId = 'mia_remote_access';
+                }
+
                 if (
                     message?.type === 'image' &&
                     message.caption === 'Харпер Вэнс' &&

@@ -335,7 +335,7 @@ export const episode1LivingRewriteBeats = [
     ]
   },
   { id: 'ep1_unknown_photo', chat: 'private_unknown', trigger: 'choice:ep1_unknown_explains:0', messages: [say('unknown', 'Да.'), say('unknown', 'Я отозвал ключ на шестидесяти четырёх процентах.'), say('unknown', 'Это не значит, что сервер ничего не сохранил.') ] },
-  { id: 'ep1_unknown_stolen', chat: 'private_unknown', trigger: 'choice:ep1_unknown_explains:1', messages: [say('unknown', 'Точно не скажу.'), say('unknown', 'Они прочитали названия чатов и последние сообщения.'), say('unknown', 'Заметку открыли целиком. Потом запросили камеру.') ] },
+  { id: 'ep1_unknown_stolen', chat: 'private_unknown', trigger: 'choice:ep1_unknown_explains:1', messages: [say('unknown', 'Точно не скажу.'), say('unknown', 'Они прочитали названия чатов и последние сообщения.'), say('unknown', 'Заметку открыли целиком, а потом запросили камеру.') ] },
   { id: 'ep1_unknown_server', chat: 'private_unknown', trigger: 'choice:ep1_unknown_explains:2', messages: [say('unknown', 'Я следил за адресом из удалённого чата.'), say('unknown', 'Когда появился новый ключ, я увидел его в журнале и отозвал.'), say('unknown', 'Почему у меня есть доступ к журналу, пока не спрашивай.') ] },
   {
     id: 'ep1_unknown_warning', chat: 'private_unknown', trigger: 'after:ep1_unknown_photo|ep1_unknown_stolen|ep1_unknown_server',
@@ -351,8 +351,8 @@ export const episode1LivingRewriteBeats = [
     ]
   },
   { id: 'ep1_unknown_trust', chat: 'private_unknown', trigger: 'choice:ep1_unknown_warning:0', messages: [say('unknown', 'Не должен.'), say('unknown', 'Но журнал ты видел сам: ключ отозвали уже после запросов к приложениям.') ] },
-  { id: 'ep1_unknown_mia', chat: 'private_unknown', trigger: 'choice:ep1_unknown_warning:1', messages: [say('unknown', 'Про внешний сеанс скажи.'), say('unknown', 'Про меня пока лучше промолчи. Если владелец сервера поймёт, что журнал читают, он его закроет.') ] },
-  { id: 'ep1_unknown_side', chat: 'private_unknown', trigger: 'choice:ep1_unknown_warning:2', messages: [say('unknown', 'И правильно. После такого никому не верь сразу.'), say('unknown', 'Просто не путай два подключения: сначала был внешний просмотрщик, потом я отозвал его ключ.') ] },
+  { id: 'ep1_unknown_mia', chat: 'private_unknown', trigger: 'choice:ep1_unknown_warning:1', messages: [say('unknown', 'Про внешний сеанс скажи, а про меня пока лучше промолчи.'), say('unknown', 'Если владелец сервера поймёт, что журнал читают, он его закроет.') ] },
+  { id: 'ep1_unknown_side', chat: 'private_unknown', trigger: 'choice:ep1_unknown_warning:2', messages: [say('unknown', 'И правильно, после такого никому сразу не верь.'), say('unknown', 'Только не путай два подключения: сначала был внешний просмотрщик, потом я отозвал его ключ.') ] },
   { id: 'ep1_unknown_blocked', chat: 'private_unknown', trigger: 'choice:ep1_unknown_warning:3', messages: [{ type: 'system', text: 'Контакт заблокирован.', delay: 650 }, { type: 'system', text: 'Неизвестный не в сети.', delay: 500, characterStatus: { id: 'unknown', online: false } }] },
   { id: 'ep1_unknown_offline', chat: 'private_unknown', trigger: 'after:ep1_unknown_trust|ep1_unknown_mia|ep1_unknown_side', messages: [say('unknown', 'Я напишу, если пойму, кому принадлежит внешний узел.'), { type: 'system', text: 'Неизвестный не в сети.', delay: 650, characterStatus: { id: 'unknown', online: false } }] },
 

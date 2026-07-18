@@ -405,9 +405,17 @@ class StoryEngine {
             // Narrator
             if (msg.from === 'narrator') {
                 const playerName = stateManager.getPlayerName();
+                const {
+                    delay,
+                    typingDuration: _typingDuration,
+                    text: _rawText,
+                    ...extraFields
+                } = msg;
                 const narratorMsg = {
+                    ...extraFields,
                     id: msgId,
-                    type: 'narrator',
+                    type: msg.type || 'narrator',
+                    from: 'narrator',
                     text: (msg.text || '').replace(/\{player\}/g, playerName),
                     timestamp: this._getTimestamp()
                 };

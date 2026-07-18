@@ -16,7 +16,9 @@ The opening is about consequences, not a sudden new search for Harper. Ravenwood
 8. Detective Daniel Reed contacts the player through the phone number Derek already gave police. His account is a verified service chat in Messenger, not a RavenFeed direct message.
 9. Reed records the player's statement in writing. The player may disclose the external session and Unknown, disclose only the access log or withhold details.
 10. Derek reacts to the deleted post and may learn about Mason's threat only if the player tells him.
-11. Olivia shares a calmer city feed to give the player and the episode a short ordinary-life pause.
+11. Olivia reacts only to the public accusations and the deleted North Lot post. She does not know who corrected the photograph unless the player tells her later.
+12. Olivia is already outside and offers to show Ravenwood through photographs from her walk instead of sending RavenFeed again.
+13. The player chooses one of three routes: Olivia's favourite Riverwalk steps, the old N7 crossing or an ordinary residential block. All routes finish at the same overlook and keep the main story open.
 
 ## Information boundaries
 
@@ -33,7 +35,8 @@ The opening is about consequences, not a sudden new search for Harper. Ravenwood
 - Blocking Mason prevents further private messages from him. Asking Derek to intervene can create a later public conflict.
 - RavenFeed request replies are stored separately for Nate, Noah and June.
 - The police chat records whether the player confirmed the basic statement, disclosed the stolen photo, named Unknown or withheld details.
-- Olivia's city-guide response can increase trust but does not block the route.
+- Olivia's reaction, the chosen walk and the closing response are remembered. Choosing her personal place or responding warmly can increase trust but no route blocks the story.
+- `ep2SawCrossingSeven` means only that the player has seen the crossing in Olivia's photograph. It is not evidence and Olivia does not connect it to any investigation.
 
 ## Visual assets
 
@@ -41,3 +44,5 @@ The opening is about consequences, not a sudden new search for Harper. Ravenwood
 - The North Lot accusation and June's correction use the same generated full-frame sports photograph. Ravenwood Truth shows a misleading crop; June shows the contextual full image.
 - June and the other residents retain their existing distinct generated faces.
 - Page avatars are separate generated identity images. They must never reuse the photograph attached to a publication.
+- Olivia's walk uses five separate vertical phone photographs: River Street and Orpheum, the Riverwalk steps, N7, an ordinary Maple Avenue block and the town overlook.
+- The photographs show the same wet northwestern town in ordinary daylight. They contain no green sedan, suspect or active crime scene.

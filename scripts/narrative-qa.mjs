@@ -196,7 +196,11 @@ const chapter2Scenarios = [
       ep2_derek_checks_in: 0,
       ep2_derek_mason: 1,
       ep2_derek_truth_context: 1,
-      ep2_olivia_city_break: 0
+      ep2_olivia_city_break: 0,
+      ep2_olivia_walk_offer: 0,
+      ep2_olivia_river_street: 0,
+      ep2_olivia_route_choice: 0,
+      ep2_olivia_overlook: 0
     }
   },
   {
@@ -209,7 +213,11 @@ const chapter2Scenarios = [
       ep2_police_unknown: 2,
       ep2_derek_checks_in: 2,
       ep2_derek_truth_context: 0,
-      ep2_olivia_city_break: 2
+      ep2_olivia_city_break: 2,
+      ep2_olivia_walk_offer: 2,
+      ep2_olivia_river_street: 2,
+      ep2_olivia_route_choice: 1,
+      ep2_olivia_overlook: 2
     }
   },
   {
@@ -223,7 +231,11 @@ const chapter2Scenarios = [
       ep2_police_unknown: 1,
       ep2_derek_checks_in: 1,
       ep2_derek_truth_context: 2,
-      ep2_olivia_city_break: 1
+      ep2_olivia_city_break: 1,
+      ep2_olivia_walk_offer: 1,
+      ep2_olivia_river_street: 1,
+      ep2_olivia_route_choice: 2,
+      ep2_olivia_overlook: 1
     }
   }
 ];
@@ -236,9 +248,31 @@ for (const scenario of chapter2Scenarios) {
   assert(!result.unlockedChats.has('group_main'), `Во втором эпизоде маршрут «${scenario.name}» снова открыл «Семеро».`);
 }
 
+assert(simulateChapter2(chapter2Scenarios[0]).flags.ep2OliviaRouteFavorite === true, 'Маршрут к личному месту Оливии не сохраняется.');
+assert(simulateChapter2(chapter2Scenarios[1]).flags.ep2SawCrossingSeven === true, 'Маршрут к N7 не сохраняется.');
+assert(simulateChapter2(chapter2Scenarios[2]).flags.ep2OliviaRouteOrdinary === true, 'Маршрут по обычному району не сохраняется.');
+
 const chapter2Text = JSON.stringify(chapter2Beats).toLowerCase();
 for (const unwanted of ['сохрани оригинал', 'покажи оригинал', 'этот чат увидит полиция', 'принять звонок', 'сейчас наберу']) {
   assert(!chapter2Text.includes(unwanted), `Во втором эпизоде осталась неестественная формулировка: ${unwanted}.`);
+}
+
+const allActiveDialogue = `${activeText}\n${chapter2Text}`;
+for (const cliche of ['нам пока — ничего', 'не испуганной. напряж', 'не отвечай мне сразу', 'на снимке — сообщение', 'внутри только твой номер']) {
+  assert(!allActiveDialogue.includes(cliche), `В активных диалогах вернулось нейросетевое клише: ${cliche}.`);
+}
+
+const oliviaOpeningText = JSON.stringify(chapter2Beats.filter(beat => beat.id.startsWith('ep2_olivia_'))).toLowerCase();
+for (const forbiddenKnowledge of ['джун', 'фото было старым', 'старое фото']) {
+  assert(!oliviaOpeningText.includes(forbiddenKnowledge), `Оливия преждевременно знает чужую информацию: ${forbiddenKnowledge}.`);
+}
+
+for (const beat of chapter2Beats) {
+  for (const message of beat.messages || []) {
+    if (!message.src || /^https?:/u.test(message.src)) continue;
+    const assetPath = new URL(`../${message.src.split('?')[0]}`, import.meta.url);
+    assert(fs.existsSync(assetPath), `Во втором эпизоде отсутствует файл ${message.src}.`);
+  }
 }
 
 if (failures.length) {

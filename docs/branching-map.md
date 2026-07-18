@@ -42,7 +42,7 @@ All four QA routes must reach the same final publication without reactivating «
 
 # Episode 2 opening branching map
 
-`RavenFeed public response → Mason threat/block → North Lot false post → June request/full image → verified police chat → Derek reaction → Olivia city break`
+`RavenFeed public response → Mason threat/block → North Lot false post → June request/full image → verified police chat → Derek reaction → Olivia reacts → Ravenwood photo walk → overlook`
 
 ## Public response
 
@@ -72,3 +72,13 @@ All four QA routes must reach the same final publication without reactivating «
 - `unknownReportedToPolice`: the player tells Reed about Unknown.
 - `unknownHiddenFromPolice`: the player describes only the visible access log or withholds Unknown.
 - `playerWithheldHackFromPolice`: the player refuses to explain the compromise in chat.
+
+## Olivia's Ravenwood walk
+
+- Olivia knows only that the public North Lot post disappeared. June's private correction is not silently transferred to her.
+- The walk replaces the repeated RavenFeed city-guide card.
+- `ep2OliviaRouteFavorite`: the player asked for Olivia's personal place and saw the Riverwalk steps.
+- `ep2SawCrossingSeven`: the player asked for the odd route and saw N7 before any later video comparison.
+- `ep2OliviaRouteOrdinary`: the player asked to see everyday Ravenwood and saw Maple Avenue.
+- `ep2CityWalkCompleted`: one route and the final overlook were shown.
+- `episode2OpeningComplete`: Olivia has finished the walk and gone offline.
